@@ -1,6 +1,6 @@
-import classes from "./app.module.scss";
+import classes from "./home.module.scss";
 
-export const App = () => {
+export const Home = () => {
   return (
     <div>
       <div className={classes.container}>

@@ -1,5 +1,9 @@
 .container {
-  h1 {
-    color: red;
-  }
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }
