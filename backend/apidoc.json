@@ -1,0 +1,8 @@
+{
+  "name": "Caritbot API documentation",
+  "version": "1.0.0",
+  "description": "API Caritbot Application",
+  "template": {
+    "forceLanguage": "en"
+  }
+}
