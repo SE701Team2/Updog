@@ -6,6 +6,9 @@ labels: ''
 assignees: ''
 ---
 
+# Description:
+Please provide a summary of changes made and relevant issue that has been worked on. Also list any major changes made to project structure/dependencies if applicable
+
 ### All Submissions:
 
 * [ ] Have you followed the guidelines in our [Contributing docment](../CONTRIBUTING.md)?
@@ -15,6 +18,7 @@ assignees: ''
 
 1. [ ] Does your submission pass tests?
 2. [ ] Have you lint your code locally prior to submission?
+3. [ ] Have you commented your code?
 
 ### Changes to Core Features:
 
