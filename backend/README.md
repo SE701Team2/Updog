@@ -1,4 +1,4 @@
-# Create mysql db connection with the following config
+# 1. Create mysql db connection with the following config
 `username: 'updogDev'`,
 
 `password: 'password'`,
@@ -11,15 +11,15 @@
 
 You do not need to create any table, we just need a working db server
 
-# Migrate models to DB so tables would be created
+# 2. Migrate models to DB so tables would be created
 
 `sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
 
-# Install dependencies
+# 3. Install dependencies
 
 `npm install`
 
-# Run project
+# 4. Run project
 
 `npm start`
 
