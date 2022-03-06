@@ -12,4 +12,6 @@ router.route('/users/:id').get(user.getUsersById);
 
 router.route('/test').get(test.helloWorld)
 
+router.route('/users/authenticate').post(user.authenticateUser);
+
 export default router;
