@@ -7,11 +7,11 @@ assignees: ''
 ---
 
 # Description:
-Please provide a summary of changes made and relevant issue that has been worked on. Also list any major changes made to project structure/dependencies if applicable
+Please provide a summary of changes made and the relevant issue that has been worked on. Also list any major changes made to project structure/dependencies if applicable
 
 ### All Submissions:
 
-* [ ] Have you followed the guidelines in our [Contributing docment](../CONTRIBUTING.md)?
+* [ ] Have you followed the guidelines in our [Contributing document](../CONTRIBUTING.md)?
 * [ ] Have you checked to ensure there aren't other open [Pull Requests](../../../pulls) for the same update/change?
 
 ### New Feature Submissions:
