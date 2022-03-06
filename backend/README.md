@@ -2,6 +2,8 @@
 
 Node version: v14.17.3
 
+MySQL version: v8.0.28
+
 Node dependencies: 
 
         •	@babel/cli@7.12.10

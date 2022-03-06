@@ -1,7 +1,7 @@
 {
-  "name": "Caritbot API documentation",
+  "name": "Updog API documentation",
   "version": "1.0.0",
-  "description": "API Caritbot Application",
+  "description": "API Updog Application",
   "template": {
     "forceLanguage": "en"
   }
