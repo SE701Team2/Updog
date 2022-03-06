@@ -9,7 +9,8 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.3",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "2.5.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/seanhogunkim/Updog/issues"
   },
-  "homepage": "https://github.com/seanhogunkim/Updog#readme"
+  "homepage": "https://github.com/seanhogunkim/Updog#readme",
+  "dependencies": {
+    "eslint-config-prettier": "^8.5.0"
+  }
 }
