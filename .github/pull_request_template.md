@@ -1,11 +1,3 @@
----
-name: Pull request
-about: Creating a pull request for other contributors to review 
-title: ''
-labels: ''
-assignees: ''
----
-
 # Description:
 Please provide a summary of changes made and the relevant issue that has been worked on. Also list any major changes made to project structure/dependencies if applicable
 
