@@ -1,0 +1,1 @@
+export const BasicSub = (a, b) => a - b;
