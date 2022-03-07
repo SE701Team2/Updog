@@ -17,15 +17,6 @@ export const addUser = async (req, res) => {
   }
 };
 
-export const getUsers = async (req, res) => {
-  try {
-    const users = await models.users.findAll();
-    res.status(200).send(users);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-
 export const getUsersById = async (req, res) => {
   try {
     const { params } = req;
