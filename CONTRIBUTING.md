@@ -20,7 +20,7 @@ Before a PR can be completed, it must pass a code review process, in which a tea
 Once all raised issues have been resolved and any merge conflicts have been fixed, the commits should be squashed and merged into master by the creator of the PR.
 
 ## Adding to the Wiki
-Appropriate documentation of features should be added to the Wiki when a feature is completed.
+Appropriate documentation of features should be added to the [Wiki](https://github.com/SE701Team2/Updog/wiki) when a feature is completed.
 
 ## Coding Style
 This section is a work in progress.
