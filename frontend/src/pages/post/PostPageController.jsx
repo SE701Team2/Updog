@@ -38,12 +38,24 @@ const sampleReply2 = {
     attachments: null
 }
 
+const sampleReply3 = {
+    id: 4,
+    content: "reply content 3",
+    author: sampleUserReplier,
+    parent: null,
+    children: [],
+    usersLiked: 4,
+    usersShared: 5,
+    timestamp: 1646627527764,
+    attachments: null
+}
+
 const samplePost = {
     id: 1,
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ",
     author: sampleUserPoster,
     parent: null,
-    children: [sampleReply1, sampleReply2],
+    children: [sampleReply1, sampleReply2, sampleReply3],
     usersLiked: 1,
     usersShared: 2,
     timestamp: 1646627469012,
