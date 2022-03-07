@@ -1,6 +1,6 @@
 import classes from './header.module.scss'
 
-export const Header = () => {
+export const HeaderView = () => {
     return (
         <div className={classes.container}>
             Header
