@@ -16,16 +16,5 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seanhogunkim/Updog.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/seanhogunkim/Updog/issues"
-  },
-  "homepage": "https://github.com/seanhogunkim/Updog#readme"
+  }
 }
