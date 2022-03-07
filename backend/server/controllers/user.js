@@ -6,10 +6,9 @@ export const addUser = async (req, res) => {
     console.log('🚀 ~ file: user.js ~ line 6 ~ addUser ~ body', body);
 
     const createUser = await models.users.create({
-      firstName: body.firstName,
-      lastName: body.lastName,
+      username: body.username,
       email: body.email,
-      age: body.age
+      password: body.password
     });
 
     res.status(201).send(createUser);
