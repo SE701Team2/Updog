@@ -6,6 +6,7 @@
   "devDependencies": {
     "eslint": "^8.10.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.3",
@@ -25,8 +26,5 @@
   "bugs": {
     "url": "https://github.com/seanhogunkim/Updog/issues"
   },
-  "homepage": "https://github.com/seanhogunkim/Updog#readme",
-  "dependencies": {
-    "eslint-config-prettier": "^8.5.0"
-  }
+  "homepage": "https://github.com/seanhogunkim/Updog#readme"
 }
