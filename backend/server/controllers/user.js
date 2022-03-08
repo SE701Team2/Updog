@@ -6,22 +6,12 @@ export const addUser = async (req, res) => {
     console.log('🚀 ~ file: user.js ~ line 6 ~ addUser ~ body', body);
 
     const createUser = await models.users.create({
-      firstName: body.firstName,
-      lastName: body.lastName,
+      username: body.username,
       email: body.email,
-      age: body.age
+      password: body.password
     });
 
     res.status(201).send(createUser);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
-
-export const getUsers = async (req, res) => {
-  try {
-    const users = await models.users.findAll();
-    res.status(200).send(users);
   } catch (error) {
     res.status(500).send(error);
   }
