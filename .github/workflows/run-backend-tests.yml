@@ -1,0 +1,36 @@
+name: run-backend-tests.yml
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+          working-directory: ./backend/
+
+    env:
+      CI: 'false' # Prevents the runner from treating warnings as errors
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+    - run: npm ci
+    - run: npm install -g sequelize-cli
+    - run: sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"
+    - run: sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"
+    - run: npm run build --if-present
+    - run: npm test
