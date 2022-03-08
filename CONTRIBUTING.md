@@ -19,8 +19,10 @@ Please set this up before making any contributions
 2. `npm install` from root (from \Updog)
 3. Navigate to `settings.json`
    This can be done by doing Ctrl+Shift+P and typing 'open settings'
-   <img width="253" alt="image" src="https://user-images.githubusercontent.com/61653096/157187749-e441e3fc-c4e2-47b2-995d-679c890abb4c.png">
-   Open settings.json and add these lines somewhere in the file
+
+     <img width="253" alt="image" src="https://user-images.githubusercontent.com/61653096/157187749-e441e3fc-c4e2-47b2-995d-679c890abb4c.png">
+
+    Open settings.json and add these lines somewhere in the file
 
 ```
 "editor.defaultFormatter": "esbenp.prettier-vscode",
