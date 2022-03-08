@@ -1,12 +1,30 @@
-import { Router } from 'express';
-const router = Router();
+import { Router } from 'express'
 
-import { user, test } from '../controllers';
+import { user, posts, test } from '../controllers'
 
-router.route('/users').post(user.addUser);
+const router = Router()
 
-router.route('/users/:id').get(user.getUsersById);
+/*
+USERS
+*/
+router.route('/users').post(user.addUser)
 
-router.route('/test').get(test.helloWorld);
+router.route('/users/:id').get(user.getUsersById)
 
-export default router;
+/*
+POSTS
+*/
+router.route('/posts').post(posts.createPost)
+
+router.route('/posts/:id').get(posts.getPostById)
+
+router.route('/posts/:id').put(posts.modifyPostById)
+
+router.route('/posts/:id').delete(posts.deletePostById)
+
+/*
+TESTING
+*/
+router.route('/test').get(test.helloWorld)
+
+export default router

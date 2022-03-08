@@ -22,7 +22,12 @@ module.exports = {
             usersShared: {
                 type: Sequelize.INTEGER,
             },
-            timestamp: {
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+            },
+            updatedAt: {
+                allowNull: false,
                 type: Sequelize.DATE,
             },
             attachments: {
