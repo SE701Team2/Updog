@@ -1,6 +1,6 @@
-import * as jwt from 'jsonwebtoken'
+const jwt = require('jsonwebtoken');
 
-export class Authentication {
+class Authentication {
 
     //TODO: in ../config/config.js, readFileSync(file with privateKey) ?
     static privateKey() {
@@ -9,9 +9,10 @@ export class Authentication {
 
     static generateAuthToken(user) {
         try {
-            const authToken = jwt.sign({
-                data: JSON.stringify(user)
-            }, this.privateKey(), { expiresIn: '1d' });
+            const authToken = jwt.sign({ data: JSON.stringify(user) }, this.privateKey(), { 
+                expiresIn: '1d',
+                algorithm: 'HS256'
+            });
             return authToken;
         } catch (error) {
             throw error
@@ -27,3 +28,4 @@ export class Authentication {
         }
     }
 }
+module.exports = Authentication;

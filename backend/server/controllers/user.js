@@ -1,4 +1,3 @@
-import req from 'express/lib/request';
 import models from '../../database/models';
 import { Authentication } from '../../middlewares/authentication';
 
