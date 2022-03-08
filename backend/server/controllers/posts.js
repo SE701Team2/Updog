@@ -1,31 +1,50 @@
 import models from '../../database/models'
+import { Authentication } from '../../middlewares/authentication'
 
 /*
+Requires authentication.
 Response codes:
 201 CREATED when the post has successfully been created.
 500 INTERNAL SERVER ERROR otherwise.
 */
 export const createPost = async (req, res) => {
     try {
-        const { body } = req
-        /*
-        NOTE: attachments is current a STRING type as the attachment functionality has not been setup yet.
-        */
-        const createNewPost = await models.posts.create({
-            text_content: body.text_content,
-            author: 'test author',
-            parent: body.parent,
-            usersLiked: 0,
-            usersShared: 0,
-            attachments: '',
-        })
-        res.status(201).send(createNewPost)
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+        } else {
+            const { body } = req
+            /*
+            NOTE: attachments is current a STRING type as the attachment functionality has not been setup yet.
+            */
+            const createNewPost = await models.posts.create({
+                text_content: body.text_content,
+                author: 'test author',
+                parent: body.parent,
+                usersLiked: 0,
+                usersShared: 0,
+                attachments: '',
+            })
+            res.status(201).send(createNewPost)
+        }
     } catch (error) {
         res.status(500).send(error)
     }
 }
 
 /*
+Does not require authentication.
 Path paramter: id - the id of the post that is being retrieved.
 Response Codes:
 200 OK when the post has been successfully found.
@@ -47,6 +66,7 @@ export const getPostById = async (req, res) => {
 }
 
 /*
+Requires authentication.
 Path paramter: id - the id of the post that is being modified.
 Response Codes:
 200 OK when the post has been successfully modified.
@@ -55,20 +75,36 @@ Response Codes:
 */
 export const modifyPostById = async (req, res) => {
     try {
-        const { params, body } = req
+        const authToken = req.get('Authorization')
 
-        const updated = await models.posts.update(
-            {
-                text_content: body.text_content,
-                usersLiked: body.usersLiked,
-                usersShared: body.usersShared,
-            },
-            { returning: true, where: { id: params.id } }
-        )
-        if (updated) {
-            res.status(200).send('The message has been updated.')
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
         } else {
-            res.status(404).send('Invalid ID.')
+            const { params, body } = req
+
+            const updated = await models.posts.update(
+                {
+                    text_content: body.text_content,
+                    usersLiked: body.usersLiked,
+                    usersShared: body.usersShared,
+                },
+                { returning: true, where: { id: params.id } }
+            )
+            if (updated) {
+                res.status(200).send('The message has been updated.')
+            } else {
+                res.status(404).send('Invalid ID.')
+            }
         }
     } catch (error) {
         res.status(500).send(error)
@@ -76,6 +112,7 @@ export const modifyPostById = async (req, res) => {
 }
 
 /*
+Requires authentication.
 Path parameter: id - the id of the post that is being deleted.
 Response Codes:
 200 OK when the post has been successfully deleted.
@@ -84,12 +121,30 @@ Response Codes:
 */
 export const deletePostById = async (req, res) => {
     try {
-        const { params } = req
-        const count = await models.posts.destroy({ where: { id: params.id } })
-        if (count !== 0) {
-            res.status(200).send('The message has been deleted.')
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
         } else {
-            res.status(404).send('Invalid ID.')
+            const { params } = req
+            const count = await models.posts.destroy({
+                where: { id: params.id },
+            })
+            if (count !== 0) {
+                res.status(200).send('The message has been deleted.')
+            } else {
+                res.status(404).send('Invalid ID.')
+            }
         }
     } catch (error) {
         res.status(500).send(error)
