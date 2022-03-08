@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node -- index.js",
+    "test": "jest",
     "dev": "nodemon -L --exec babel-node index.js",
     "doc": "apidoc -i server/controllers/ -o server/public/",
     "eslint": "eslint ."

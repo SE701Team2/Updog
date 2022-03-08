@@ -4,7 +4,7 @@ const assert = require('assert');
 
 describe('Users', () => {
   describe('Encrypting password', () => {
-    it('Should encrypt password before saving', async () => {
+    it('Should encrypt password before saving', async done => {
       // GIVEN a user has been created
       let password = 'PASSWORD';
       let randomUsername = (Math.random() + 1).toString(36).substring(7);
@@ -24,11 +24,12 @@ describe('Users', () => {
 
       // THEN password stored in the db should be encrypted and not the same as the actual password
       assert.notEqual(dbUser.password, password);
+      done();
     });
   });
 
   describe('Validating password', () => {
-    it('Should count the password as valid', async () => {
+    it('Should count the password as valid', async done => {
       // GIVEN a user is created and retrieved from the db
       let password = 'PASSWORD';
       let randomUsername = (Math.random() + 1).toString(36).substring(7);
@@ -50,9 +51,10 @@ describe('Users', () => {
 
       // THEN password should count as a valid password
       assert.equal(isValid, true);
+      done();
     });
 
-    it('Should NOT count the password as valid', async () => {
+    it('Should NOT count the password as valid', async done => {
       // GIVEN a user is created and retrieved from the db
       let password = 'PASSWORD';
       let randomUsername = (Math.random() + 1).toString(36).substring(7);
@@ -74,6 +76,12 @@ describe('Users', () => {
 
       // THEN password should count as an invalid password
       assert.equal(isValid, false);
+      done();
     });
+  });
+
+  afterAll(done => {
+    models.sequelize.close();
+    done();
   });
 });
