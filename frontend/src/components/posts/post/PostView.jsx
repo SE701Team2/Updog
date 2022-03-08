@@ -3,7 +3,7 @@ import { InteractionsController } from '../interactions/InteractionsController';
 import { PostController } from './PostController';
 import classes from './post.module.scss'
 
-export const PostView = ({ post, condensed }) => {
+export const PostView = ({ post, condensed, showReplies }) => {
     if (condensed) {
         return (
             <div className={classes.condensed}>
@@ -26,7 +26,7 @@ export const PostView = ({ post, condensed }) => {
             <div className={classes.interactions}>
                 <InteractionsController post={post} />
             </div>
-            {post.children.map(reply => (
+            {showReplies && post.children.map(reply => (
                 <div key={reply.id} className={classes.reply}>
                     <PostController post={reply} condensed />
                 </div> 

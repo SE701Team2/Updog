@@ -8,7 +8,7 @@ export const PostPageView = ({ post }) => {
         <div className={classes.container}>
             <HeaderController />
             <div className={classes.pageContent} >
-                <PostController post={post} />  
+                <PostController post={post} showReplies />  
             </div>
             <FooterController />
         </div>
