@@ -3,14 +3,14 @@ import { InteractionsController } from '../interactions/InteractionsController';
 import { PostController } from './PostController';
 import classes from './post.module.scss'
 
-export const PostView = ({ post, condensed, showReplies }) => {
+export const PostView = ({ postData, condensed, showReplies }) => {
     if (condensed) {
         return (
             <div className={classes.condensed}>
-                <SimpleUserDetailsController condensed user={post.author} time={post.timestamp} />
-                {post.content}
+                <SimpleUserDetailsController condensed user={postData.author} time={postData.timestamp} />
+                {postData.content}
                 <div className={classes.condensedInteractions}>
-                    <InteractionsController post={post} />
+                    <InteractionsController postData={postData} />
                 </div>
             </div>
         )
@@ -18,17 +18,17 @@ export const PostView = ({ post, condensed, showReplies }) => {
 
     return (
         <div className={classes.container}>
-            <SimpleUserDetailsController user={post.author} />
+            <SimpleUserDetailsController user={postData.author} />
             <div className={classes.content}>
-                <span>{new Date(post.timestamp).toLocaleTimeString()}:</span>
-                <span>{post.content}</span>
+                <span>{new Date(postData.timestamp).toLocaleTimeString()}:</span>
+                <span>{postData.content}</span>
             </div>
             <div className={classes.interactions}>
-                <InteractionsController post={post} />
+                <InteractionsController postData={postData} />
             </div>
-            {showReplies && post.children.map(reply => (
+            {showReplies && postData.children.map(reply => (
                 <div key={reply.id} className={classes.reply}>
-                    <PostController post={reply} condensed />
+                    <PostController id={reply.id} isReply />
                 </div> 
             ))}
         </div>

@@ -1,6 +1,6 @@
 import { InteractionsView } from "./InteractionsView"
 
-export const InteractionsController = ({ post }) => {
+export const InteractionsController = ({ postData }) => {
     const onLike = () => {
         // todo, implement like business logic 
     }
@@ -15,7 +15,7 @@ export const InteractionsController = ({ post }) => {
 
     return (
         <InteractionsView 
-            post={post}
+            postData={postData}
             onLike={onLike} 
             onShare={onShare} 
             onComment={onComment} 

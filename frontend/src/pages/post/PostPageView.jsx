@@ -3,12 +3,12 @@ import { FooterController } from '../../components/layout/footer/FooterControlle
 import { HeaderController } from '../../components/layout/header/HeaderController'
 import { PostController } from '../../components/posts/post/PostController'
 
-export const PostPageView = ({ post }) => {
+export const PostPageView = ({ id }) => {
     return (
         <div className={classes.container}>
             <HeaderController />
             <div className={classes.pageContent} >
-                <PostController post={post} showReplies />  
+                <PostController id={id} showReplies />  
             </div>
             <FooterController />
         </div>

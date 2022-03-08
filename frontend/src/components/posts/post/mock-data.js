@@ -12,7 +12,7 @@ const sampleUserPoster = {
   profilePic: "https://i.imgur.com/qZImY9j.jpg",
 };
 
-const sampleReply1 = {
+export const sampleReply = {
   id: 2,
   content: "reply content",
   author: sampleUserReplier,
@@ -24,37 +24,13 @@ const sampleReply1 = {
   attachments: null,
 };
 
-const sampleReply2 = {
-  id: 3,
-  content: "reply content 2",
-  author: sampleUserReplier,
-  parent: null,
-  children: [],
-  usersLiked: 4,
-  usersShared: 5,
-  timestamp: 1646627527764,
-  attachments: null,
-};
-
-const sampleReply3 = {
-  id: 4,
-  content: "reply content 3",
-  author: sampleUserReplier,
-  parent: null,
-  children: [],
-  usersLiked: 4,
-  usersShared: 5,
-  timestamp: 1646627527764,
-  attachments: null,
-};
-
-export const post = {
+export const samplePost = {
   id: 1,
   content:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ",
   author: sampleUserPoster,
   parent: null,
-  children: [sampleReply1, sampleReply2, sampleReply3],
+  children: [2],
   usersLiked: 1,
   usersShared: 2,
   timestamp: 1646627469012,

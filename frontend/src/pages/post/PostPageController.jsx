@@ -1,8 +1,7 @@
+import { useParams } from "react-router-dom"
 import { PostPageView } from "./PostPageView"
-import { post } from './mock-data.js'
 
 export const PostPageController = () => {
-    // when db / store is implemented, use const { id } = useParams() to get the id from url,
-    // then use the id to fetch the post data.
-    return <PostPageView post={post} />
+    const { id } = useParams()
+    return <PostPageView id={id} />
 }
