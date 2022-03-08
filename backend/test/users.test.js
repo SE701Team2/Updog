@@ -78,6 +78,32 @@ describe('Users', () => {
       assert.equal(isValid, false);
       done();
     });
+
+    describe('Validating Email', () => {
+      it('Should not save user if email is invalid', async done => {
+        // GIVEN a set of credentials
+        let password = 'PASSWORD';
+        let randomUsername = (Math.random() + 1).toString(36).substring(7);
+        let email = 'qweqwewq';
+
+        // Attempt to create user
+        try {
+          await models.users.create({
+            username: randomUsername,
+            email,
+            password
+          });
+
+          // Email is invalid so should have thrown an error
+          assert(false);
+        } catch (e) {
+          // Check the error is thrown by the email validation
+          let errMessage = 'The email address you entered is invalid';
+          assert.equal(e.errors[0].message, errMessage);
+        }
+        done();
+      });
+    });
   });
 
   afterAll(done => {

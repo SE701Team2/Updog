@@ -9,7 +9,7 @@ describe('Authentication', () => {
             const user = {
                 username: "test-username",
                 password: "Password",
-                email: "test@email"
+                email: "test@email.com"
             }
     
             const authToken = Authentication.generateAuthToken(user);
@@ -26,7 +26,7 @@ describe('Authentication', () => {
             await models.users.create({
                 username: "test-username",
                 password: "Password",
-                email: "test@email"
+                email: "test@email.com"
             });
 
             const user = await models.users.findOne({
@@ -39,7 +39,7 @@ describe('Authentication', () => {
 
             const decodedUser = Authentication.extractUser("Bearer " + authToken);
             assert.strictEqual(decodedUser.username, "test-username");
-            assert.strictEqual(decodedUser.email, "test@email");
+            assert.strictEqual(decodedUser.email, "test@email.com");
         });
     });
 });
