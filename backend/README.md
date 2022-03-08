@@ -62,7 +62,9 @@ NOTE: You do not need to create any tables, we just need a working db server
 # 3. Migrate models to DB so tables would be created
 To migrate the tables to the database, run the following commands:
 
-`npm install -g sequelize-cli`
+`npm install -g sequelize-cli` (only needs to be executed the first time)
+
+`sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"`
 
 `sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
 
