@@ -1,3 +1,4 @@
+import { doesNotMatch } from 'assert';
 import models from '../database/models';
 import { Authentication } from '../middlewares/authentication';
 
@@ -7,8 +8,8 @@ describe('Authentication', () => {
     describe('Generating token', () => {
         it('Test that the string returned is the correct format', () => {
             const user = {
-                firstName: "first",
-                lastName: "last",
+                username: "test-username",
+                password: "Password",
                 email: "test@email"
             }
     
@@ -24,22 +25,21 @@ describe('Authentication', () => {
     describe('Extracting user', () => {
         it('Test extracting user from jwt', async() => {
             await models.users.create({
-                firstName: "First",
-                lastName: "last",
+                username: "test-username",
+                password: "Password",
                 email: "test@email"
             });
 
             const user = await models.users.findOne({
                 where: {
-                    firstName: "First"
+                    username: "test-username"
                 }
             })
 
             const authToken = Authentication.generateAuthToken(user);
 
             const decodedUser = Authentication.extractUser("Bearer " + authToken);
-            assert.strictEqual(decodedUser.firstName, "First");
-            assert.strictEqual(decodedUser.lastName, "last");
+            assert.strictEqual(decodedUser.username, "test-username");
             assert.strictEqual(decodedUser.email, "test@email");
         });
     });
