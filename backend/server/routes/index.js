@@ -11,6 +11,8 @@ router.route('/users').post(user.addUser)
 
 router.route('/users/:id').get(user.getUsersById)
 
+router.route('/users/authenticate').post(user.authenticateUser)
+
 /*
 POSTS
 */
