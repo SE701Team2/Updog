@@ -1,5 +1,5 @@
 import { PostPageView } from "./PostPageView"
-import { post } from './post.mock.js'
+import { post } from './mock-data.js'
 
 export const PostPageController = () => {
     // when db / store is implemented, use const { id } = useParams() to get the id from url,
