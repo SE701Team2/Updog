@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-class Authentication {
+export class Authentication {
 
     //TODO: in ../config/config.js, readFileSync(file with privateKey) ?
     static privateKey() {
@@ -9,7 +9,7 @@ class Authentication {
 
     static generateAuthToken(user) {
         try {
-            const authToken = jwt.sign({ data: JSON.stringify(user) }, this.privateKey(), { 
+            const authToken = jwt.sign({"data": JSON.stringify(user)}, this.privateKey(), { 
                 expiresIn: '1d',
                 algorithm: 'HS256'
             });
@@ -21,11 +21,17 @@ class Authentication {
 
     static extractUser(authToken) {
         try {
-            const decoded = jwt.verify(authToken, this.privateKey());
-            return JSON.parse(decoded.data);
+            // sent by frontend as 'Bearer <token>'
+            if (authToken.startsWith("Bearer ")) {
+                const splitToken = authToken.split(" ");
+                const decoded = jwt.verify(splitToken[1], this.privateKey());
+                return JSON.parse(decoded.data);
+            } else {
+                throw new Error("Authorization header was not Bearer")
+            }
+            
         } catch (error) {
             throw error
         }
     }
 }
-module.exports = Authentication;

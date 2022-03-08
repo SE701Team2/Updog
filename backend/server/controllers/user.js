@@ -22,7 +22,7 @@ export const getUsersById = async (req, res) => {
   try {
     const { params } = req;
     const user = await models.users.findByPk(params.id);
-    const authToken = req.get('authToken');
+    const authToken = req.get('Authorization');
 
     if (!authToken) {
       res.status(400).send({
@@ -32,7 +32,7 @@ export const getUsersById = async (req, res) => {
 
     const decodedUser = Authentication.extractUser(authToken);
 
-    if (decodedUser.id != params.id) {
+    if (!decodedUser.id) {
       res.status(401).send({
         "Error message": "Auth token invalid"
       })
