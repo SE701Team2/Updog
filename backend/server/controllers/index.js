@@ -1,4 +1,5 @@
-import * as user from './user';
-import * as test from './testapi';
+import * as user from './user'
+import * as posts from './posts'
+import * as test from './testapi'
 
-export { user, test };
+export { user, posts, test }
