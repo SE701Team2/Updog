@@ -74,6 +74,7 @@ Response Codes:
 */
 export const modifyPostById = async (req, res) => {
     try {
+        // Authentication
         const authToken = req.get('Authorization')
 
         if (!authToken) {
@@ -91,18 +92,25 @@ export const modifyPostById = async (req, res) => {
         } else {
             const { params, body } = req
 
-            const updated = await models.posts.update(
-                {
-                    text_content: body.text_content,
-                    usersLiked: body.usersLiked,
-                    usersShared: body.usersShared,
-                },
-                { returning: true, where: { id: params.id } }
-            )
-            if (updated) {
-                res.status(200).send('The message has been updated.')
+            // Check whether the post being updated belongs to that user.
+            const post = await models.posts.findByPk(params.id)
+
+            if (post.author === decodedUser.id) {
+                const updated = await models.posts.update(
+                    {
+                        text_content: body.text_content,
+                        usersLiked: body.usersLiked,
+                        usersShared: body.usersShared,
+                    },
+                    { returning: true, where: { id: params.id } }
+                )
+                if (updated) {
+                    res.status(200).send('The message has been updated.')
+                } else {
+                    res.status(404).send('Invalid message ID.')
+                }
             } else {
-                res.status(404).send('Invalid ID.')
+                res.status(403).send('Invalid author ID.')
             }
         }
     } catch (error) {
@@ -136,13 +144,21 @@ export const deletePostById = async (req, res) => {
             })
         } else {
             const { params } = req
-            const count = await models.posts.destroy({
-                where: { id: params.id },
-            })
-            if (count !== 0) {
-                res.status(200).send('The message has been deleted.')
+
+            // Check whether the post being deleted belongs to that user.
+            const post = await models.posts.findByPk(params.id)
+
+            if (post.author === decodedUser.id) {
+                const count = await models.posts.destroy({
+                    where: { id: params.id },
+                })
+                if (count !== 0) {
+                    res.status(200).send('The message has been deleted.')
+                } else {
+                    res.status(404).send('Invalid message ID.')
+                }
             } else {
-                res.status(404).send('Invalid ID.')
+                res.status(403).send('Invalid author ID.')
             }
         }
     } catch (error) {
