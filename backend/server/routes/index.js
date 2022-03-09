@@ -18,11 +18,11 @@ POSTS
 */
 router.route('/posts').post(posts.createPost)
 
-router.route('/posts/:id').get(posts.getPostById)
-
-router.route('/posts/:id').put(posts.modifyPostById)
-
-router.route('/posts/:id').delete(posts.deletePostById)
+router
+    .route('/posts/:id')
+    .get(posts.getPostById)
+    .put(posts.modifyPostById)
+    .delete(posts.deletePostById)
 
 /*
 TESTING
