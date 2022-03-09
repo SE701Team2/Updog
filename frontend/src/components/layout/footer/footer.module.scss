@@ -3,6 +3,21 @@
     flex-direction: row;
     border-top: 1px solid black;
     min-height: 3rem;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 4%;
+    padding-top: 2%;
+    position: fixed; // Todo tabs still come on top of the keyboard
+    bottom: 0%;
+    width: 100%;
+}
+
+.section{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
+
