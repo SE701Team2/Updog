@@ -10,27 +10,25 @@ Response codes:
 export const createPost = async (req, res) => {
     try {
         const authToken = req.get('Authorization')
+        const { body } = req
 
         if (!authToken) {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
-        }
-
-        const decodedUser = Authentication.extractUser(authToken)
-
-        if (!decodedUser.id) {
-            res.status(401).send({
-                'Error message': 'Auth token invalid',
-            })
         } else {
-            const { body } = req
+            const decodedUser = Authentication.extractUser(authToken)
+
+            if (!decodedUser.id) {
+                res.status(401).send({ 'Error message': 'Auth token invalid' })
+            }
+
             /*
-            NOTE: attachments is current a STRING type as the attachment functionality has not been setup yet.
+            NOTE: attachments is currently a STRING type as the attachment functionality has not been setup yet.
             */
             const createNewPost = await models.posts.create({
                 text_content: body.text_content,
-                author: 'test author',
+                author: decodedUser.username,
                 parent: body.parent,
                 usersLiked: 0,
                 usersShared: 0,
