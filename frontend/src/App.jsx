@@ -1,12 +1,11 @@
 import classes from './app.module.scss';
-import { AppRouter } from './Router'
-import { Header } from './components/layout/header/Header'
+import Router from './Router'
 
-export const App = () => {
-  return (
+const App = () => (
     <div className={classes.container}>
-      <Header />
-      <AppRouter />
+      <Router />
     </div>
-  );
-}
+  )
+
+export default App;
+
