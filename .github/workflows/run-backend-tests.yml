@@ -21,13 +21,18 @@ jobs:
         node-version: [16.x]
 
     steps:
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql database: 'updog'
+        mysql user: ${{ secrets.db_username }}
+        mysql password: ${{ secrets.db_password }}
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: ./frontend/package-lock.json
+        cache-dependency-path: ./backend/package-lock.json
     - run: npm ci
     - run: npm install -g sequelize-cli
     - run: sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"
