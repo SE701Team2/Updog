@@ -5,16 +5,16 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 const FooterView = () => (
     <div className={classes.container}>
         <div className={classes.section}>
-            <div><HomeIcon /></div>
+            <div className={classes.icon}><HomeIcon sx={{ fontSize: 40 }}/></div>
             <span>Home</span>
         </div>
         <div div className={classes.section}>
-            <div><SearchIcon /></div>
+            <div className={classes.icon}><SearchIcon sx={{ fontSize: 40 }}/></div>
             
             <span>Search</span>
         </div>
         <div div className={classes.section}>
-            <div><NotificationsIcon /></div>
+            <div className={classes.icon}><NotificationsIcon sx={{ fontSize: 40 }}/></div>
             <span>Notifications</span>
         </div>
     </div>
