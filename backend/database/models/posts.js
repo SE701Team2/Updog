@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         'posts',
         {
             text_content: DataTypes.STRING,
-            author: DataTypes.STRING,
+            author: DataTypes.INTEGER,
             parent: DataTypes.INTEGER,
             usersLiked: DataTypes.INTEGER,
             usersShared: DataTypes.INTEGER,

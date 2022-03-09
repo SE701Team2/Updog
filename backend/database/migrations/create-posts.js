@@ -11,15 +11,18 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             author: {
-                type: Sequelize.STRING,
+                allowNull: false,
+                type: Sequelize.INTEGER,
             },
             parent: {
                 type: Sequelize.INTEGER,
             },
             usersLiked: {
+                allowNull: false,
                 type: Sequelize.INTEGER,
             },
             usersShared: {
+                allowNull: false,
                 type: Sequelize.INTEGER,
             },
             createdAt: {

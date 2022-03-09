@@ -28,7 +28,7 @@ export const createPost = async (req, res) => {
             */
             const createNewPost = await models.posts.create({
                 text_content: body.text_content,
-                author: decodedUser.username,
+                author: decodedUser.id,
                 parent: body.parent,
                 usersLiked: 0,
                 usersShared: 0,
