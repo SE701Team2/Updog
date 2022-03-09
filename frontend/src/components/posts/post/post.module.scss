@@ -1,11 +1,13 @@
+@use '~/src/styles/theme';
+
 .container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
     .interactions {
-        border-top: 1px solid lightgray;
-        border-bottom: 1px solid lightgray;
+        border-top: 1px solid theme.$divider;
+        border-bottom: 1px solid theme.$divider;
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
     }
@@ -17,7 +19,7 @@
         
     .reply {
         padding-bottom: 1rem;
-        border-bottom: 1px solid lightgray;
+        border-bottom: 1px solid theme.$divider;
     }
 }
 
