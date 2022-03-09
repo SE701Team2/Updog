@@ -83,6 +83,8 @@ describe('PUT /posts', () => {
 
     describe('when the post id can not be found', () => {})
 
+    describe('when the author is invalid', () => {})
+
     describe('when modifying a post in a valid way', () => {})
 
     /* 
@@ -98,6 +100,8 @@ describe('DELETE /posts', () => {
     describe('when auth token is invalid', () => {})
 
     describe('when the post id can not be found', () => {})
+
+    describe('when the author is invalid', () => {})
 
     describe('when deleting a leaf post', () => {})
 

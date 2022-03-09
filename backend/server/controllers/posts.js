@@ -23,18 +23,27 @@ export const createPost = async (req, res) => {
                 res.status(401).send({ 'Error message': 'Auth token invalid' })
             }
 
-            /*
-            NOTE: attachments is currently a STRING type as the attachment functionality has not been setup yet.
-            */
-            const createNewPost = await models.posts.create({
-                text_content: body.text_content,
-                author: decodedUser.id,
-                parent: body.parent,
-                usersLiked: 0,
-                usersShared: 0,
-                attachments: '',
-            })
-            res.status(201).send(createNewPost)
+            // Check whether the parent post exists.
+            const parent = await models.posts.findByPk(body.parent)
+
+            if (parent || body.parent == null) {
+                /*
+                NOTE: attachments is currently a STRING type as the attachment functionality has not been setup yet.
+                */
+                const createNewPost = await models.posts.create({
+                    text_content: body.text_content,
+                    author: decodedUser.id,
+                    parent: body.parent,
+                    usersLiked: 0,
+                    usersShared: 0,
+                    attachments: '',
+                })
+                res.status(201).send(createNewPost)
+            } else {
+                res.status(404).send({
+                    'Error message': 'Parent with that id does not exist.',
+                })
+            }
         }
     } catch (error) {
         console.log(error)
