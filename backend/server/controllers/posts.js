@@ -37,6 +37,7 @@ export const createPost = async (req, res) => {
             res.status(201).send(createNewPost)
         }
     } catch (error) {
+        console.log(error)
         res.status(500).send(error)
     }
 }
