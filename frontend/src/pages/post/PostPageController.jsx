@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom"
 import PostPageView from "./PostPageView"
+import postData from './mock-data'
 
 /**
  * This page renders a single post and its replies. It also contains
@@ -9,7 +10,11 @@ const PostPageController = () => {
     // gets the id from the current url 
     const { id } = useParams()
 
-    return <PostPageView id={id} />
+    // for mock purposes only, will need to fetch post from id 
+    // need to add logic for checking if id is a valid number
+    postData.id = parseInt(id, 10)
+
+    return <PostPageView postData={postData} />
 }
 
 export default PostPageController

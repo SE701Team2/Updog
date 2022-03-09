@@ -27,9 +27,9 @@ const PostView = ({ postData, condensed, showReplies }) => {
             <div className={classes.interactions}>
                 <Interactions postData={postData} />
             </div>
-            {showReplies && postData.children.map(reply => (
-                <div key={reply.id} className={classes.reply}>
-                    <Post id={reply.id} isReply />
+            {showReplies && postData.children.map(id => (
+                <div key={id} className={classes.reply}>
+                    <Post id={id} condensed />
                 </div> 
             ))}
         </div>
