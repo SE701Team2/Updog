@@ -1,5 +1,7 @@
-import { HeaderView } from "./HeaderView"
+import HeaderView from "./HeaderView"
 
-export const HeaderController = () => {
-    return <HeaderView />
-}
+const HeaderController = () => (
+    <HeaderView />
+)
+
+export default HeaderController

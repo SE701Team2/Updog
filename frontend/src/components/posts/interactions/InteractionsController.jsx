@@ -1,10 +1,10 @@
-import { InteractionsView } from "./InteractionsView"
+import InteractionsView from "./InteractionsView"
 
 /**
  * Creates a posts interactions (likes, comments, shares)
  * @prop postData - any post object 
  */
-export const InteractionsController = ({ postData }) => {
+const InteractionsController = ({ postData }) => {
     const onLike = () => {
         // todo, implement like business logic 
     }
@@ -26,3 +26,5 @@ export const InteractionsController = ({ postData }) => {
         />
     )
 }
+
+export default InteractionsController 

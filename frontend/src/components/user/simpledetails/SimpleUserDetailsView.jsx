@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
-import classes from './simpleuserdetails.module.scss'
 import ReactTimeAgo from 'react-time-ago'
+import classes from './simpleuserdetails.module.scss'
 
-export const SimpleUserDetailsView = ({ user, condensed, time }) => {
+const SimpleUserDetailsView = ({ user, condensed, time }) => {
     const size = condensed ? 56 : 82
 
     return (
@@ -26,3 +26,5 @@ export const SimpleUserDetailsView = ({ user, condensed, time }) => {
         </Link>
     )
 }
+
+export default SimpleUserDetailsView

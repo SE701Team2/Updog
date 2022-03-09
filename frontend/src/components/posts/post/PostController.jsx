@@ -1,4 +1,5 @@
-import { PostView } from "./PostView"
+// eslint-disable-next-line import/no-cycle
+import PostView from "./PostView"
 import { sampleReply, samplePost } from './mock-data'
 
 /**
@@ -8,9 +9,10 @@ import { sampleReply, samplePost } from './mock-data'
  * @prop {boolean} showReplies - optional, also renders each 1st level reply to the post
  * @prop {boolean} isReply - optional, used internally to mock data, can be removed later
  */
-export const PostController = ({ id, condensed = false, showReplies = false, isReply = false }) => {
+const PostController = ({ id, condensed = false, showReplies = false, isReply = false }) => {
     // add logic to fetch post from the id.
     let data = samplePost
+    data.id = id
 
     // for mock purposes only
     if (isReply) {
@@ -25,3 +27,5 @@ export const PostController = ({ id, condensed = false, showReplies = false, isR
         />
     )
 }
+
+export default PostController

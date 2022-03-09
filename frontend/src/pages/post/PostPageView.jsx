@@ -1,16 +1,16 @@
 import classes from './postpage.module.scss'
-import { FooterController } from '../../components/layout/footer/FooterController'
-import { HeaderController } from '../../components/layout/header/HeaderController'
-import { PostController } from '../../components/posts/post/PostController'
+import Footer from '../../components/layout/footer/FooterController'
+import Header from '../../components/layout/header/HeaderController'
+import Post  from '../../components/posts/post/PostController'
 
-export const PostPageView = ({ id }) => {
-    return (
-        <div className={classes.container}>
-            <HeaderController />
-            <div className={classes.pageContent} >
-                <PostController id={id} showReplies />  
-            </div>
-            <FooterController />
+const PostPageView = ({ id }) => (
+    <div className={classes.container}>
+        <Header />
+        <div className={classes.pageContent} >
+            <Post id={id} showReplies />  
         </div>
-    )
-}
+        <Footer />
+    </div>
+)
+
+export default PostPageView

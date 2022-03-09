@@ -1,5 +1,7 @@
-import { FooterView } from "./FooterView"
+import FooterView from "./FooterView"
 
-export const FooterController = () => {
-    return <FooterView />
-}
+const FooterController = () => (
+    <FooterView />
+)
+
+export default FooterController
