@@ -1,7 +1,5 @@
 import request from 'supertest'
 import server from '../server/index'
-import models from '../database/models'
-import { Authentication } from '../middlewares/authentication'
 
 describe('POST /posts', () => {
     describe('when not authenticated', () => {
@@ -58,12 +56,22 @@ describe('POST /posts', () => {
                     id: createUserResponse.body.id,
                 })
 
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const invalidId = createPostResponse.body.id + 999
+
             const response = await request(server)
                 .post('/api/posts')
                 .set('Authorization', `Bearer ${authResponse.body.authToken}`)
                 .send({
                     text_content: 'some random text 2',
-                    parent: 99999,
+                    parent: invalidId,
                 })
             expect(response.statusCode).toBe(404)
         })
@@ -71,21 +79,198 @@ describe('POST /posts', () => {
 })
 
 describe('GET /posts', () => {
-    describe('when the post id can not be found', () => {})
+    describe('when the post id can not be found', () => {
+        it('should return 404 not found response code', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
 
-    describe('when the post id can be found', () => {})
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const invalidId = createPostResponse.body.id + 999
+
+            const response = await request(server).get(
+                `/api/posts/${invalidId}`
+            )
+            expect(response.statusCode).toBe(404)
+        })
+    })
+
+    describe('when the post id can be found', () => {
+        it('should return 200 ok response code', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
+
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const response = await request(server).get(
+                `/api/posts/${createPostResponse.body.id}`
+            )
+            expect(response.statusCode).toBe(200)
+        })
+    })
 })
 
 describe('PUT /posts', () => {
-    describe('when not authenticated', () => {})
+    describe('when not authenticated', () => {
+        it('should return response code of 400', async () => {
+            const response = await request(server).put(`/api/posts/1`).send({
+                text_content: 'new text',
+                parent: null,
+            })
+            expect(response.statusCode).toBe(400)
+        })
+    })
 
-    describe('when auth token is invalid', () => {})
+    describe('when the post id can not be found', () => {
+        it('should return response code of 404', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
 
-    describe('when the post id can not be found', () => {})
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
 
-    describe('when the author is invalid', () => {})
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
 
-    describe('when modifying a post in a valid way', () => {})
+            const invalidId = createPostResponse.body.id + 999
+
+            const response = await request(server)
+                .put(`/api/posts/${invalidId}`)
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'new text',
+                    parent: null,
+                })
+            expect(response.statusCode).toBe(404)
+        })
+    })
+
+    describe('when the author is invalid', () => {
+        it('should return response code of 403', async () => {
+            const user1 = await request(server).post('/api/users').send({
+                username: 'testUser',
+                email: 'testUser@testmail.com',
+                password: 'password',
+            })
+
+            const user2 = await request(server).post('/api/users').send({
+                username: 'testUser',
+                email: 'testUser@testmail.com',
+                password: 'password',
+            })
+
+            const auth1 = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: user1.body.id,
+                })
+
+            const auth2 = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: user2.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${auth1.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const response = await request(server)
+                .put(`/api/posts/${createPostResponse.body.id}`)
+                .send({
+                    text_content: 'new text',
+                    parent: null,
+                })
+                .set('Authorization', `Bearer ${auth2.body.authToken}`)
+            expect(response.statusCode).toBe(403)
+        })
+    })
+
+    describe('when modifying a post in a valid way', () => {
+        it('should return response code of 200', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
+
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const response = await request(server)
+                .put(`/api/posts/${createPostResponse.body.id}`)
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'new text',
+                    parent: null,
+                })
+            expect(response.statusCode).toBe(200)
+        })
+    })
 
     /* 
     the parent must exist for it to be a valid post.
@@ -95,15 +280,117 @@ describe('PUT /posts', () => {
 })
 
 describe('DELETE /posts', () => {
-    describe('when not authenticated', () => {})
+    describe('when not authenticated', () => {
+        it('should return response code of 400', async () => {
+            const response = await request(server).delete(`/api/posts/1`)
+            expect(response.statusCode).toBe(400)
+        })
+    })
 
-    describe('when auth token is invalid', () => {})
+    describe('when the post id can not be found', () => {
+        it('should return response code of 404', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
 
-    describe('when the post id can not be found', () => {})
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
 
-    describe('when the author is invalid', () => {})
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
 
-    describe('when deleting a leaf post', () => {})
+            const invalidId = createPostResponse.body.id + 999
+
+            const response = await request(server)
+                .delete(`/api/posts/${invalidId}`)
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+            expect(response.statusCode).toBe(404)
+        })
+    })
+
+    describe('when the author is invalid', () => {
+        it('should return response code of 403', async () => {
+            const user1 = await request(server).post('/api/users').send({
+                username: 'testUser',
+                email: 'testUser@testmail.com',
+                password: 'password',
+            })
+
+            const user2 = await request(server).post('/api/users').send({
+                username: 'testUser',
+                email: 'testUser@testmail.com',
+                password: 'password',
+            })
+
+            const auth1 = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: user1.body.id,
+                })
+
+            const auth2 = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: user2.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${auth1.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const response = await request(server)
+                .delete(`/api/posts/${createPostResponse.body.id}`)
+                .set('Authorization', `Bearer ${auth2.body.authToken}`)
+            expect(response.statusCode).toBe(403)
+        })
+    })
+
+    describe('when deleting a leaf post', () => {
+        it('should return response code of 200', async () => {
+            const createUserResponse = await request(server)
+                .post('/api/users')
+                .send({
+                    username: 'testUser',
+                    email: 'testUser@testmail.com',
+                    password: 'password',
+                })
+
+            const authResponse = await request(server)
+                .post('/api/users/authenticate')
+                .send({
+                    id: createUserResponse.body.id,
+                })
+
+            const createPostResponse = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+                .send({
+                    text_content: 'some random text 2',
+                    parent: null,
+                })
+
+            const response = await request(server)
+                .delete(`/api/posts/${createPostResponse.body.id}`)
+                .set('Authorization', `Bearer ${authResponse.body.authToken}`)
+            expect(response.statusCode).toBe(200)
+        })
+    })
 
     /*
     Child posts need to get deleted along with the parent post.

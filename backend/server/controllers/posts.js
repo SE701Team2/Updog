@@ -90,39 +90,41 @@ export const modifyPostById = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
-        }
-
-        const decodedUser = Authentication.extractUser(authToken)
-
-        if (!decodedUser.id) {
-            res.status(401).send({
-                'Error message': 'Auth token invalid',
-            })
         } else {
-            const { params, body } = req
+            const decodedUser = Authentication.extractUser(authToken)
 
-            // Check whether the post being updated belongs to that user.
-            const post = await models.posts.findByPk(params.id)
-
-            if (post.author === decodedUser.id) {
-                const updated = await models.posts.update(
-                    {
-                        text_content: body.text_content,
-                        usersLiked: body.usersLiked,
-                        usersShared: body.usersShared,
-                    },
-                    { returning: true, where: { id: params.id } }
-                )
-                if (updated) {
-                    res.status(200).send('The message has been updated.')
-                } else {
-                    res.status(404).send('Invalid message ID.')
-                }
+            if (!decodedUser.id) {
+                res.status(401).send({
+                    'Error message': 'Auth token invalid',
+                })
             } else {
-                res.status(403).send('Invalid author ID.')
+                const { params, body } = req
+
+                // Check whether the post being updated belongs to that user.
+                const post = await models.posts.findByPk(params.id)
+                if (!post) {
+                    res.status(404).send('Invalid message ID.')
+                } else if (post.author === decodedUser.id) {
+                    const updated = await models.posts.update(
+                        {
+                            text_content: body.text_content,
+                            usersLiked: body.usersLiked,
+                            usersShared: body.usersShared,
+                        },
+                        { returning: true, where: { id: params.id } }
+                    )
+                    if (updated) {
+                        res.status(200).send('The message has been updated.')
+                    } else {
+                        res.status(400).send('Update failed.')
+                    }
+                } else {
+                    res.status(403).send('Invalid author ID.')
+                }
             }
         }
     } catch (error) {
+        console.log(error)
         res.status(500).send(error)
     }
 }
@@ -143,31 +145,32 @@ export const deletePostById = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
-        }
-
-        const decodedUser = Authentication.extractUser(authToken)
-
-        if (!decodedUser.id) {
-            res.status(401).send({
-                'Error message': 'Auth token invalid',
-            })
         } else {
-            const { params } = req
+            const decodedUser = Authentication.extractUser(authToken)
 
-            // Check whether the post being deleted belongs to that user.
-            const post = await models.posts.findByPk(params.id)
-
-            if (post.author === decodedUser.id) {
-                const count = await models.posts.destroy({
-                    where: { id: params.id },
+            if (!decodedUser.id) {
+                res.status(401).send({
+                    'Error message': 'Auth token invalid',
                 })
-                if (count !== 0) {
-                    res.status(200).send('The message has been deleted.')
-                } else {
-                    res.status(404).send('Invalid message ID.')
-                }
             } else {
-                res.status(403).send('Invalid author ID.')
+                const { params } = req
+
+                // Check whether the post being deleted belongs to that user.
+                const post = await models.posts.findByPk(params.id)
+                if (!post) {
+                    res.status(404).send('Invalid message ID.')
+                } else if (post.author === decodedUser.id) {
+                    const count = await models.posts.destroy({
+                        where: { id: params.id },
+                    })
+                    if (count !== 0) {
+                        res.status(200).send('The message has been deleted.')
+                    } else {
+                        res.status(400).send('Failed to update.')
+                    }
+                } else {
+                    res.status(403).send('Invalid author ID.')
+                }
             }
         }
     } catch (error) {
