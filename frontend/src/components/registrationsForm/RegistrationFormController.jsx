@@ -10,7 +10,8 @@ const RegistrationFormController = () => {
         setFormIsSubmitted(true);
     };
     async function handleClose() {
-        navigate("/post/:id")
+        // probably navigate to dashbord later on
+        navigate("/")
     }
     
 

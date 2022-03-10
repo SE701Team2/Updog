@@ -40,6 +40,9 @@ const RegistrationFormView = ({submitForm}) => {
         event.preventDefault();
         setErrors(validation(values));
         setData(true);
+        // post data to backend not finished
+        // try{.....} 
+        console.log(values.userName,values.email,values.password);
     };
    useEffect(() => {
        if(Object.keys(errors).length === 0 && data){
