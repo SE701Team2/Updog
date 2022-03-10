@@ -1,5 +1,52 @@
+import { initializeApp } from 'firebase/app'
+import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
+
+// Temporary method for testing/developing
+export const uploadImage = async (req, res) => {
+    console.log('UPLOADIMAGE : received a query')
+    try {
+        if (req.files) {
+            console.log(req.files)
+            const file = req.files.attachments
+            const filename = file.name
+            console.log(file)
+            console.log(filename)
+
+            const uploadPath =
+                require('path').resolve(__dirname, '../..') +
+                '/Images/' +
+                filename
+            console.log(uploadPath)
+            // Use the mv() method to place the file somewhere on your server
+            file.mv(uploadPath, null)
+            // const firebaseConfig = {
+            //     apiKey: 'AIzaSyAgBJyEccW1I6X-Ae_hCGhh3SsFj7j-ieI',
+            //     authDomain: 'updog-58ba9.firebaseapp.com',
+            //     projectId: 'updog-58ba9',
+            //     storageBucket: 'updog-58ba9.appspot.com',
+            //     messagingSenderId: '783564761817',
+            //     appId: '1:783564761817:web:cc92efd94759a49f012cc8',
+            // }
+            // const firebaseApp = initializeApp(firebaseConfig)
+            // const storage = getStorage(firebaseApp)
+            // // Create a storage reference from our storage service
+            // const storageRef = ref(storage, 'public/aphextwin.jpeg')
+
+            // uploadBytes(storageRef, file).then((snapshot) => {
+            //     console.log('Uploaded a blob or file!')
+            // })
+            res.status(200).send('file was received')
+        } else {
+            console.log('NO file received')
+            res.status(500).send('NO file received')
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
 
 /*
 Requires authentication.
@@ -8,9 +55,12 @@ Response codes:
 500 INTERNAL SERVER ERROR otherwise.
 */
 export const createPost = async (req, res) => {
+    console.log('post receieved')
+
     try {
         const authToken = req.get('Authorization')
         const { body } = req
+        console(typeof body.attachments)
 
         if (!authToken) {
             res.status(400).send({

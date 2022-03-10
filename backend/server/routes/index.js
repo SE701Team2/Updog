@@ -2,6 +2,8 @@ import { Router } from 'express'
 
 import { user, posts, test } from '../controllers'
 
+const upload = require('../../middlewares/image_multer')
+
 const router = Router()
 
 /*
@@ -16,6 +18,10 @@ router.route('/users/authenticate').post(user.authenticateUser)
 /*
 POSTS
 */
+
+// router.post('/uploadImage', upload.single('attachments'), posts.uploadImage)
+router.route('/uploadImage').post(posts.uploadImage)
+
 router.route('/posts').post(posts.createPost)
 
 router
