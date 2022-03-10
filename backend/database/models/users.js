@@ -31,11 +31,56 @@ module.exports = (sequelize, DataTypes) => {
                     isUrl: 'This image needs to be a link',
                 },
             },
-            followers: DataTypes.STRING,
-            following: DataTypes.STRING,
-            posts: DataTypes.STRING,
-            likes: DataTypes.STRING,
-            shares: DataTypes.STRING,
+            followers: {
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('followers'))
+                },
+                set(val) {
+                    return this.setDataValue('followers', JSON.stringify(val))
+                },
+            },
+            following: {
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('following'))
+                },
+                set(val) {
+                    return this.setDataValue('following', JSON.stringify(val))
+                },
+            },
+            posts: {
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('posts'))
+                },
+                set(val) {
+                    return this.setDataValue('posts', JSON.stringify(val))
+                },
+            },
+            likes: {
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('likes'))
+                },
+                set(val) {
+                    return this.setDataValue('likes', JSON.stringify(val))
+                },
+            },
+            shares: {
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('shares'))
+                },
+                set(val) {
+                    return this.setDataValue('shares', JSON.stringify(val))
+                },
+            },
             joinedDate: DataTypes.INTEGER,
         },
         {

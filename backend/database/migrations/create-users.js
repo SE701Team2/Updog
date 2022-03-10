@@ -1,7 +1,6 @@
-'use strict'
 module.exports = {
-    up: (queryInterface, Sequelize) => {
-        return queryInterface.createTable('users', {
+    up: (queryInterface, Sequelize) =>
+        queryInterface.createTable('users', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -36,37 +35,30 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            nickname: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
             followers: {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
             following: {
-                allowNull: true,
+                allowNull: false,
                 type: Sequelize.STRING,
             },
             posts: {
-                allowNull: true,
+                allowNull: false,
                 type: Sequelize.STRING,
             },
             likes: {
-                allowNull: true,
+                allowNull: false,
                 type: Sequelize.STRING,
             },
             shares: {
-                allowNull: true,
+                allowNull: false,
                 type: Sequelize.STRING,
             },
             joinedDate: {
                 allowNull: false,
                 type: Sequelize.INTEGER,
             },
-        })
-    },
-    down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('users')
-    },
+        }),
+    down: (queryInterface) => queryInterface.dropTable('users'),
 }

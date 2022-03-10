@@ -1,12 +1,21 @@
+/* eslint-disable import/prefer-default-export */
 export class UserDTO {
     id
+
     username
+
     nickname
+
     profilePic
+
     profileBanner
+
     bio
+
     followers
+
     following
+
     joinedDate
 
     constructor(
@@ -29,6 +38,20 @@ export class UserDTO {
         this.followers = followers
         this.following = following
         this.joinedDate = joinedDate
+    }
+
+    getUserObject() {
+        return {
+            id: this.id,
+            username: this.username,
+            nickname: this.nickname,
+            profilePic: this.profilePic,
+            profileBanner: this.profileBanner,
+            bio: this.bio,
+            followers: this.followers.length,
+            following: this.following.length,
+            joinedDate: this.joinedDate,
+        }
     }
 
     getId() {
