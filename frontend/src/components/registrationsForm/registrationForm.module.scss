@@ -1,28 +1,32 @@
+@use '~/src/styles/theme';
 * {
     margin: 0;
     padding: 0;
 }
-.container{
-    background: linear-gradient(135deg, #4A97E7,#0147af);
-    //background: white;
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+// .container{
+//     background: linear-gradient(135deg, theme.$primary,theme.$primaryVariant);
+//     //background: white;
+//     width: 100%;
+//     min-height: 100vh;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
 .appwrapper{
-    background-color: #fff;
-    min-width: 350px;
+    background-color: theme.$background;
+    
+   // min-width: 300px;
     min-height: 650px;
-    padding: 30px;
+    @media only screen and (min-width: 600px) {
+        padding: 30px;
+    }
     box-sizing: border-box;
     border-radius: 5px;
 
 
 }
 .title{
-    color: black;
+    color: theme.$onBackground;
     text-align: center;
     margin: 80px 0px 40px 0px;
 }
@@ -46,7 +50,7 @@
     border-top-style: none;
     border-left-style: none;
     border-right-style: none;
-    border-bottom-style: 2px solid black;
+    border-bottom-style: 2px solid theme.$onBackground;
     margin-bottom: 10px;
 
 }
@@ -60,7 +64,7 @@
      border-radius: 10px;
      color: white;
      padding: 10px 60px;
-     background: #4A97E7;
+     background: theme.$primary;
      box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
          rgba(0, 0, 0, 0.22) 0px 15px 12px;
      margin: auto;
@@ -71,29 +75,39 @@
     // margin-left: auto;
     
 }
-// .cancel{
-//      display: flex;
-//      font-size: 16px;
-//      border-radius: 10px;
-//      color: #4A97E7;
-//      padding: 10px 60px;
-//      background: white;
-//      box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
-//          rgba(0, 0, 0, 0.22) 0px 15px 12px;
-//      margin-right: auto;
-//      outline: none;
-//      border: none;
-//      cursor: pointer;
-//      transition: all 0.1s;
-// }
+.close{
+     display: flex;
+     font-size: 16px;
+     border-radius: 10px;
+     color: white;
+     padding: 10px 60px;
+     background: theme.$primary;
+     box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
+         rgba(0, 0, 0, 0.22) 0px 15px 12px;
+     //margin-right: auto;
+     outline: none;
+     border: none;
+     cursor: pointer;
+     transition: all 0.1s;
+     margin: auto;
+     margin-top: 300px;
+}
 
 button:active{
     transform: translateY(2px);
 }
-.form-success{
+.formsuccess{
     display: flex;
+    //flex-direction:column;
+    //text-align: center;
     justify-content: center;
+    // width: 100%;
+    //margin: 80px 0px 40px 0px;
     margin-top: 250px;
     min-width: 370px;
-    color: red;
+    color: theme.$onBackground;
+    // @media only screen and (min-width: 600px) {
+    //     //margin: 80px 0px 40px 0px;
+        
+    // }
 }

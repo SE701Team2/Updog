@@ -1,0 +1,11 @@
+@use '~/src/styles/theme';
+
+.container{
+    background: linear-gradient(135deg, theme.$primary,theme.$primaryVariant);
+    //background: white;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
