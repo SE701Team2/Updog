@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app'
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { initializeApp, cert } from 'firebase-admin/app'
+import { getStorage } from 'firebase-admin/storage'
+import path from 'path'
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 
@@ -13,30 +14,38 @@ export const uploadImage = async (req, res) => {
             const filename = file.name
             console.log(file)
             console.log(filename)
+            console.log(typeof file)
 
             const uploadPath =
-                require('path').resolve(__dirname, '../..') +
-                '/Images/' +
-                filename
+                path.resolve(__dirname, '../..') + '/Images/' + filename
             console.log(uploadPath)
             // Use the mv() method to place the file somewhere on your server
             file.mv(uploadPath, null)
-            // const firebaseConfig = {
-            //     apiKey: 'AIzaSyAgBJyEccW1I6X-Ae_hCGhh3SsFj7j-ieI',
-            //     authDomain: 'updog-58ba9.firebaseapp.com',
-            //     projectId: 'updog-58ba9',
-            //     storageBucket: 'updog-58ba9.appspot.com',
-            //     messagingSenderId: '783564761817',
-            //     appId: '1:783564761817:web:cc92efd94759a49f012cc8',
-            // }
-            // const firebaseApp = initializeApp(firebaseConfig)
-            // const storage = getStorage(firebaseApp)
-            // // Create a storage reference from our storage service
-            // const storageRef = ref(storage, 'public/aphextwin.jpeg')
 
-            // uploadBytes(storageRef, file).then((snapshot) => {
-            //     console.log('Uploaded a blob or file!')
-            // })
+            const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
+
+            initializeApp({
+                credential: cert(serviceAccount),
+                storageBucket: 'gs://updog-58ba9.appspot.com',
+            })
+
+            const bucket = getStorage().bucket()
+            // async function uploadFromMemory() {
+            //     await bucket.file('Post_images/' + filename).save(file)
+
+            //     console.log(
+            //         `${filename} with contents ${file} uploaded to ${'bucketName'}.`
+            //     )
+            // }
+            async function uploadFile() {
+                await bucket.upload(uploadPath, {
+                    destination: 'Post_images/' + filename,
+                })
+
+                console.log(`${uploadPath} uploaded to ${'bucketName'}`)
+            }
+            uploadFile().catch(console.error)
+
             res.status(200).send('file was received')
         } else {
             console.log('NO file received')

@@ -2,8 +2,6 @@ import { Router } from 'express'
 
 import { user, posts, test } from '../controllers'
 
-const upload = require('../../middlewares/image_multer')
-
 const router = Router()
 
 /*
