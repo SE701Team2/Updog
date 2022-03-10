@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import Landing from './pages/landing/LandingController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
-
 import Registration from './pages/registration/RegistrationPagesController'
 
 const Router = () => {
@@ -16,9 +15,6 @@ const Router = () => {
         // Auth routes
         routes = (
             <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/signUp" element={<Registration />} />
-                <Route path="/user/:username/follows" element={<Follows />} />
                 <Route path="/post/:id" element={<Post />} />
             </Routes>
         )
@@ -27,6 +23,7 @@ const Router = () => {
         routes = (
             <Routes>
                 <Route path="/" element={<Landing />} />
+                <Route path="/signUp" element={<Registration />} />
             </Routes>
         )
     }
