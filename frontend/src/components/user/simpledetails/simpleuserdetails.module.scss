@@ -1,9 +1,11 @@
+@use '~/src/styles/theme';
+
 .container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: black;
+    color: theme.$onBackground;
     text-decoration: none;
     width: 100%;
     height: 100%;
@@ -21,7 +23,7 @@
     justify-content: left;
     gap: 1rem;
     align-items: center;
-    color: black;
+    color: theme.$onBackground;
     text-decoration: none;
     width: 100%;
     height: 100%;

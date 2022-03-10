@@ -1,3 +1,5 @@
+@use '~/src/styles/theme';
+
 .container {
     display: flex;
     flex-direction: column;
@@ -8,5 +10,5 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    font-family: 'Roboto';
+    background-color: theme.$background;
 }
