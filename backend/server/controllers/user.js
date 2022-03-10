@@ -49,21 +49,23 @@ export const getUsersById = async (req, res) => {
 export const authenticateUser = async (req, res) => {
   try {
     const { body } = req;
-    const user = await models.users.findByPk(body.id);
+    const user = await models.users.findOne({
+      where: {
+        email: body.email
+      }
+    });
 
-    if (user.id) {
+    if(!user || !user.validatePassword(body.password)){
+      res.status(401).send({
+        "error": "Incorrect email or password"
+      })
+    } else {
       const authToken = Authentication.generateAuthToken(user);
       res.status(200).send({
         "message": "Authentication successful",
         "authToken": authToken
       });
-
-    } else {
-      res.status(404).send({
-        "Error message": "Authentication failed, couldn't find user"
-      })
     }
-    
   } catch (error) {
     res.status(500).send({"Error message": error.toString()})
   }
