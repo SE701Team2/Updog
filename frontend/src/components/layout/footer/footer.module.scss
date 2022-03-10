@@ -1,6 +1,10 @@
+@use '~/src/styles/theme';
+
 .container {
     display: flex;
     flex-direction: row;
+    background-color: theme.$primary;
+    color: theme.$onPrimary;
     border-top: 1px solid black;
     min-height: 3rem;
     justify-content: center;
