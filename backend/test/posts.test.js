@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { fs } from 'fs'
 import server from '../server/index'
 import models from '../database/models'
 import { Authentication } from '../middlewares/authentication'
@@ -30,6 +31,28 @@ describe('POST /posts', () => {
                 .send({
                     text_content: 'some random text 2',
                     parent: null,
+                })
+            expect(response.statusCode).toBe(201)
+        })
+    })
+
+    describe('when creating a valid post with attachment', () => {
+        it('should return response code of 200', async () => {
+            const user1 = await models.users.create({
+                username: 'testUser',
+                email: 'testUser@testmail.com',
+                password: 'password',
+            })
+
+            const authToken = Authentication.generateAuthToken(user1)
+
+            const response = await request(server)
+                .post('/api/posts')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    text_content: 'some random text 3',
+                    parent: null,
+                    attachments: fs.readFile('files/test_image.png.png', null),
                 })
             expect(response.statusCode).toBe(201)
         })
