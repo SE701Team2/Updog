@@ -1,7 +1,8 @@
 import FooterView from "./FooterView"
 
-const FooterController = () => (
-    <FooterView />
-)
+const FooterController = () => {
+    return <FooterView />
+}
+    
 
 export default FooterController
