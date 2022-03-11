@@ -5,6 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { StyledEngineProvider } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const FooterView = () => (
     <div className={classes.container}>
@@ -17,9 +18,9 @@ const FooterView = () => (
                 // }}
                 className={classes.nav}
             >
-                <BottomNavigationAction className={classes.navIcon} label="Home" icon={<HomeIcon />} />
-                <BottomNavigationAction className={classes.navIcon} label="Search" icon={<SearchIcon />} />
-                <BottomNavigationAction className={classes.navIcon} label="Notifications" icon={<NotificationsIcon />} />
+                <BottomNavigationAction className={classes.navIcon} label="Home" icon={<HomeIcon />} component={Link} to="/" />
+                <BottomNavigationAction className={classes.navIcon} label="Search" icon={<SearchIcon />} component={Link} to="/search"/>
+                <BottomNavigationAction className={classes.navIcon} label="Notifications" icon={<NotificationsIcon />} component={Link} to="/notifications"/>
             </BottomNavigation>
         </StyledEngineProvider>
 
