@@ -39,7 +39,7 @@
     "babel-jest": "^24.9.0",
     "bcrypt": "^5.0.1",
     "crypto-js": "3.1.9-1",
-    "jest": "^24.9.0",
+    "jest": "^27.5.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.4",
     "pre-commit": "^1.2.2",
