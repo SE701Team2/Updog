@@ -1,45 +1,86 @@
 import React,{useState} from "react"
-import { useNavigate } from 'react-router-dom'
+import { Button} from "@mui/material";
+import styled from "@emotion/styled";
+import { Link } from "react-router-dom";
 import RegistrationFormView from "./RegistrationFormView";
 import classes from "./registrationForm.module.scss"
 
-const RegistrationFormController = () => {
-    const navigate = useNavigate();
+const CloseButton = styled(Button)({
+
+        display: 'flex',
+        fontSize: '16px',
+
+        backgroundColor: 'purple',
+        padding: '10px 60px',
+        boxShadow: 'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
+        cursor: 'pointer',
+        transition:'all 0.1s',
+        margin: 'auto',
+        marginTop: '300px',
+    
+    }
+)
+ 
+
+const RegistrationFormController = () => { 
+   
+   const [values,setValues]=useState({
+        userName:"",
+        email:"",
+        password:""
+
+    });
+   
     const [formIsSubmitted, setFormIsSubmitted] = useState(false);
     const submitForm = () => {
         setFormIsSubmitted(true);
     };
-    async function handleClose() {
-        // probably navigate to dashbord later on
-        navigate("/")
+ 
+    const handleChange = async (e) => {
+        
+        setValues({
+            ...values,
+            [e.target.name]: e.target.value,
+        })
+      
+        
+    };
+     
+    function validation() {
+        const error = {};
+        if (!values.userName ) {
+             
+            error.userName = "Name is required.";
+        }
+        if (!values.email) {
+            error.email = "Email is required.";
+        } else if (!/\S+@\S+\.\S+/.test(values.email)) {
+            error.email = "Email is invalid.";
+        }
+        if (!values.password) {
+            error.password = "Password is required.";
+        } else if (values.password.length < 5) {
+            error.password = "Password too short! ";
+        }
+        return error;
     }
-    
-
    
     return(
-        !formIsSubmitted ?(<RegistrationFormView submitForm={submitForm}/>) : (
+        !formIsSubmitted ?(<RegistrationFormView submitForm={submitForm} 
+            onInputChange={handleChange} value={values} errors={validation()}/>) : (
             <div className={classes.appwrapper}>
 
                 <div>
                     <h1 className={classes.formsuccess}>Account Created!</h1>
-                    <button className={classes.close} onClick={handleClose}>Close</button>
+                    <Link to="/">
+                        <CloseButton variant="contained" disableRipple>Close</CloseButton>
+                    </Link>
+                    
                 </div>
             </div>
         )
       
     );
-    // if(!formIsSubmitted){
-    //     return(<RegistrationFormView submitForm={submitForm}/>);
-    // }if(formIsSubmitted){
-    //      return(
-            // <div className={classes.appwrapper}>
-
-            //     <div>
-            //         <h1 className={classes.formsuccess}>Account Created!</h1>
-            //     </div>
-            // </div>
-    //     )
-    // }
-
+  
 }
 export default RegistrationFormController;

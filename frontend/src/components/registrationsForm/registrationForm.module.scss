@@ -3,19 +3,9 @@
     margin: 0;
     padding: 0;
 }
-// .container{
-//     background: linear-gradient(135deg, theme.$primary,theme.$primaryVariant);
-//     //background: white;
-//     width: 100%;
-//     min-height: 100vh;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-// }
+
 .appwrapper{
     background-color: theme.$background;
-    
-   // min-width: 300px;
     min-height: 650px;
     @media only screen and (min-width: 600px) {
         padding: 30px;
@@ -55,6 +45,7 @@
 
 }
 .error{
+    margin-left: 20px;
     color:red;
 }
 .confirm{
@@ -72,8 +63,6 @@
      border: none;
      cursor: pointer;
      transition: all 0.1s;
-    // margin-left: auto;
-    
 }
 .close{
      display: flex;
@@ -84,7 +73,6 @@
      background: theme.$primary;
      box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
          rgba(0, 0, 0, 0.22) 0px 15px 12px;
-     //margin-right: auto;
      outline: none;
      border: none;
      cursor: pointer;
@@ -98,16 +86,8 @@ button:active{
 }
 .formsuccess{
     display: flex;
-    //flex-direction:column;
-    //text-align: center;
     justify-content: center;
-    // width: 100%;
-    //margin: 80px 0px 40px 0px;
     margin-top: 250px;
     min-width: 370px;
     color: theme.$onBackground;
-    // @media only screen and (min-width: 600px) {
-    //     //margin: 80px 0px 40px 0px;
-        
-    // }
 }

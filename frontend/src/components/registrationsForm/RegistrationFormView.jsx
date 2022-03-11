@@ -1,108 +1,109 @@
 
-import React,{useEffect, useState} from "react"
+import { Button, styled, TextField } from "@mui/material";
+import React,{ useState} from "react"
 import classes from "./registrationForm.module.scss"
 
-const RegistrationFormView = ({submitForm}) => {
 
-    function validation(values) {
-        const errors = {};
-        if (!values.userName) {
-            errors.userName = "Name is required.";
-        }
-        if (!values.email) {
-            errors.email = "Email is required.";
-        } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-            errors.email = "Email is invalid.";
-        }
-        if (!values.password) {
-            errors.password = "Password is required.";
-        } else if (values.password.length < 5) {
-            errors.password = "Password too short! ";
-        }
-        return errors;
-    }
+const ConfirmButton = styled(Button)({
 
-    const [values,setValues]=useState({
-        userName:"",
-        email:"",
-        password:""
+    display: 'flex',
+    fontSize: '16px',
+    backgroundColor: 'purple',
+    padding: '10px 60px',
+    boxShadow: 'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
+    cursor: 'pointer',
+    transition:'all 0.1s',
+    margin: 'auto',
 
-    });
-    const [errors, setErrors] = useState({});
-    const [data, setData] = useState(false);
-    const handleChange = (event) => {
-        setValues({
-            ...values,
-            [event.target.name]: event.target.value,
-        })
-    };
+}
+)
+const InputField = styled(TextField)({
+
+    marginLeft: '20px',
+    marginRight: '20px',
+    minWidth: '360px'
+
+}
+)
+
+const RegistrationFormView = ({submitForm,onInputChange,value,errors}) => {
+
+   
+
+    
+    const [error, setErrors] = useState({});
+    const [dataIsCollected, setDataIsCollected] = useState(false);
+    
     const formConfirm = async (event) => {
         event.preventDefault();
-        setErrors(validation(values));
-        setData(true);
-        // post data to backend not finished
-        // try{.....} 
-        console.log(values.userName,values.email,values.password);
-    };
-   useEffect(() => {
-       if(Object.keys(errors).length === 0 && data){
+        setErrors(errors);
+        setDataIsCollected(true);
+        // if user data is collected and no errors
+        // set the subnitForm to true 
+       if(Object.keys(errors).length === 0 && dataIsCollected){
+           // passing this value to RegistrationFormController later
+           // to show the Account Creat form
             submitForm(true)
+            console.log(value)
        }
-   })
+    };
+    
+  
+
     return (
-        // <div className={classes.container}>
             <div className={classes.appwrapper}>
-                 {/* <div>
-                     <button className={classes.cancel}>Cancel</button>
-                 </div> */}
+                 
                 <div>
                     <h2 className={classes.title}>Create an account</h2>
                 </div>
                 <form className="form-wrapper">
-                    
                     <div className={classes.name}>
-                         <label className="label">Name</label>
-                         <input 
-                            className={classes.input}
-                            type="text" 
-                            name="userName"
-                            value={values.userName}
-                            onChange={handleChange}
-                         />
-                         {errors.userName && <p className={classes.error}>{errors.userName}</p>}
-                     </div>
+                           
+                            <InputField
+                                label="Username"
+                                type="text" 
+                                name="userName"
+                                value={value.userName}
+                                onChange={onInputChange}
+                            /> 
+                    
+                            {error.userName && <p className={classes.error}>{error.userName}</p>}
+                        
+                    </div>
+                            
                     <div className={classes.email}>
-                         <label className="label">Email</label>
-                         <input 
-                            className={classes.input}
-                            type="email" 
-                            name="email"
-                            value={values.email}
-                            onChange={handleChange}
-                         />
-                        {errors.email && <p className={classes.error}>{errors.email}</p>}
+                         
+                         <InputField
+                                label="Email"
+                                type="email" 
+                                name="email"
+                                value={value.email}
+                                onChange={onInputChange}
+                            /> 
+                        
+                        {error.email && <p className={classes.error}>{error.email}</p>}
 
                     </div>
                     <div className={classes.password}>
-                         <label className="label">Password</label>
-                         <input 
-                            className={classes.input} 
-                            type="password"
-                            name="password"
-                            value={values.password}
-                            onChange={handleChange}                         
-                         />
-                         {errors.password && <p className={classes.error}>{errors.password}</p>}
+                        <InputField
+                                label="password"
+                                type="password" 
+                                name="password"
+                                value={value.password}
+                                onChange={onInputChange}
+                            /> 
+                         {error.password && <p className={classes.error}>{error.password}</p>}
 
                      </div>
                     
                      <div>
-                         <button className={classes.confirm} onClick={formConfirm}>Confirm</button>
+                         
+                         <ConfirmButton variant="contained" onClick={formConfirm}>Confirm</ConfirmButton>
                      </div>
                  </form>
              </div>
              
-         // </div>
+        
     )
  
 }

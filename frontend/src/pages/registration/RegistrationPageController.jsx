@@ -1,8 +1,11 @@
+import classes from './registrationpage.module.scss'
+import Registration  from '../../components/registrationsForm/RegistrationFormController'
 
-import RegistrationPageView from './RegistrationPageView'
+const RegistrationPageController = () => (
+    <div className={classes.container}>
+        <Registration />
 
-const RegistrationPageController = () => {
-    return(<RegistrationPageView />)
-}
+    </div>
+)
 
 export default RegistrationPageController

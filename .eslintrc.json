@@ -17,9 +17,9 @@
     },
     "rules": {
         "react/prop-types": "off",
-        "react/button-has-type": "off",
+        //"react/button-has-type": "off",
         "react/function-component-definition": "off",
-        "arrow-body-style":"off",
+        //"arrow-body-style":"off",
         "jsx-a11y/label-has-associated-control": "off",
         "react/react-in-jsx-scope": "off",
         "jsx-a11y/no-static-element-interactions": "off",
