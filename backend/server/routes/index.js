@@ -17,8 +17,7 @@ router.route('/users/authenticate').post(user.authenticateUser)
 POSTS
 */
 
-// router.post('/uploadImage', upload.single('attachments'), posts.uploadImage)
-router.route('/uploadImage').post(posts.uploadImage)
+router.route('/fetchImage').post(posts.getImage)
 
 router.route('/posts').post(posts.createPost)
 

@@ -5,56 +5,51 @@ import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 
 // Temporary method for testing/developing
-export const uploadImage = async (req, res) => {
-    console.log('UPLOADIMAGE : received a query')
+export const getImage = async (req, res) => {
+    console.log('Fetching Image : received a query')
     try {
-        if (req.files) {
-            console.log(req.files)
-            const file = req.files.attachments
-            const filename = file.name
-            console.log(file)
-            console.log(filename)
-            console.log(typeof file)
+        const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
+        initializeApp({
+            credential: cert(serviceAccount),
+            storageBucket: 'gs://updog-58ba9.appspot.com',
+        })
+        const bucket = getStorage().bucket()
 
-            const uploadPath =
-                path.resolve(__dirname, '../..') + '/Images/' + filename
-            console.log(uploadPath)
-            // Use the mv() method to place the file somewhere on your server
-            file.mv(uploadPath, null)
-
-            const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
-
-            initializeApp({
-                credential: cert(serviceAccount),
-                storageBucket: 'gs://updog-58ba9.appspot.com',
-            })
-
-            const bucket = getStorage().bucket()
-            // async function uploadFromMemory() {
-            //     await bucket.file('Post_images/' + filename).save(file)
-
-            //     console.log(
-            //         `${filename} with contents ${file} uploaded to ${'bucketName'}.`
-            //     )
-            // }
-            async function uploadFile() {
-                await bucket.upload(uploadPath, {
-                    destination: 'Post_images/' + filename,
-                })
-
-                console.log(`${uploadPath} uploaded to ${'bucketName'}`)
+        async function downloadFile(fileName, downloadDestination) {
+            const options = {
+                destination: downloadDestination,
             }
-            uploadFile().catch(console.error)
+            // Downloads the file
+            await bucket.file(fileName).download(options)
 
-            res.status(200).send('file was received')
-        } else {
-            console.log('NO file received')
-            res.status(500).send('NO file received')
+            console.log(
+                `gs://${bucketName}/${fileName} downloaded to ${destFileName}.`
+            )
         }
+
+        downloadFile(
+            'Post_images/1646976072501-7bjws-small_image.png',
+            'Downloaded_images/1646976072501-7bjws-small_image.png'
+        ).catch(console.error)
+        res.status(201).send()
     } catch (error) {
         console.log(error)
         res.status(500).send(error)
     }
+}
+
+async function uploadFileToCloudStorage(filename) {
+    const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
+    initializeApp({
+        credential: cert(serviceAccount),
+        storageBucket: 'gs://updog-58ba9.appspot.com',
+    })
+    const bucket = getStorage().bucket()
+
+    await bucket.upload(`./Images/${filename}`, {
+        destination: 'Post_images/' + filename,
+    })
+    console.log(`uploaded file : ${filename}`)
 }
 
 /*
@@ -69,7 +64,7 @@ export const createPost = async (req, res) => {
     try {
         const authToken = req.get('Authorization')
         const { body } = req
-        console(typeof body.attachments)
+        let attachmentLink = ''
 
         if (!authToken) {
             res.status(400).send({
@@ -80,6 +75,21 @@ export const createPost = async (req, res) => {
 
             if (!decodedUser.id) {
                 res.status(401).send({ 'Error message': 'Auth token invalid' })
+            }
+
+            if (req.files) {
+                console.log(req.files.attachments)
+
+                const file = req.files.attachments
+                const newFilename = `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(-5)}-${file.name}`
+
+                attachmentLink = newFilename
+                // Use the mv() method to place the file somewhere on your server
+                file.mv(`./Images/${newFilename}`, null)
+
+                uploadFileToCloudStorage(newFilename).catch(console.error)
             }
 
             // Check whether the parent post exists.
@@ -95,7 +105,7 @@ export const createPost = async (req, res) => {
                     parent: body.parent,
                     usersLiked: 0,
                     usersShared: 0,
-                    attachments: '',
+                    attachments: attachmentLink,
                 })
                 res.status(201).send(createNewPost)
             } else {
