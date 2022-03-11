@@ -64,7 +64,8 @@ export const createPost = async (req, res) => {
                     .slice(-5)}-${file.name}`
 
                 attachmentLink = newFilename
-                // Use the mv() method to place the file somewhere on your server
+
+                // Save the image to disk, which will end up being uploaded to cloud storage
                 file.mv(`./images_upload/${newFilename}`, null)
 
                 // upload the file/image to the firebase storage
