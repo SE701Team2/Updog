@@ -39,18 +39,8 @@ export const getUsersById = async (req, res) => {
             })
         } else {
             // sending user response in specific format
-            const userDTO = new UserDTO(
-                user.id,
-                user.username,
-                user.nickname,
-                user.profilePic,
-                user.profileBanner,
-                user.bio,
-                user.followers,
-                user.following,
-                user.joinedDate
-            )
-            res.status(200).send(userDTO.getUserObject())
+            const userDTO = UserDTO.convertToDto(user)
+            res.status(200).send(userDTO)
         }
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })

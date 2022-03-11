@@ -82,6 +82,8 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             joinedDate: DataTypes.INTEGER,
+            createdAt: DataTypes.DATE,
+            updatedAt: DataTypes.DATE,
         },
         {
             hooks: {
