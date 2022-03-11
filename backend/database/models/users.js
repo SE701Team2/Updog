@@ -32,54 +32,19 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             followers: {
-                type: DataTypes.STRING,
-                defaultValue: '[]',
-                get() {
-                    return JSON.parse(this.getDataValue('followers'))
-                },
-                set(val) {
-                    return this.setDataValue('followers', JSON.stringify(val))
-                },
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             following: {
-                type: DataTypes.STRING,
-                defaultValue: '[]',
-                get() {
-                    return JSON.parse(this.getDataValue('following'))
-                },
-                set(val) {
-                    return this.setDataValue('following', JSON.stringify(val))
-                },
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             posts: {
-                type: DataTypes.STRING,
-                defaultValue: '[]',
-                get() {
-                    return JSON.parse(this.getDataValue('posts'))
-                },
-                set(val) {
-                    return this.setDataValue('posts', JSON.stringify(val))
-                },
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             likes: {
-                type: DataTypes.STRING,
-                defaultValue: '[]',
-                get() {
-                    return JSON.parse(this.getDataValue('likes'))
-                },
-                set(val) {
-                    return this.setDataValue('likes', JSON.stringify(val))
-                },
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             shares: {
-                type: DataTypes.STRING,
-                defaultValue: '[]',
-                get() {
-                    return JSON.parse(this.getDataValue('shares'))
-                },
-                set(val) {
-                    return this.setDataValue('shares', JSON.stringify(val))
-                },
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             joinedDate: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,
