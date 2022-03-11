@@ -10,9 +10,8 @@ const FollowsPageController = () => {
     // gets the id from the current url 
     const { id } = useParams()
 
-    // for mock purposes only, will need to fetch post from id 
-    // need to add logic for checking if id is a valid number
-    // postData.id = parseInt(id, 10)
+    // we are going to fetch followers from the user
+    parseInt(id, 10)
 
     return <FollowsPageView followsData={followsData} />
 }
