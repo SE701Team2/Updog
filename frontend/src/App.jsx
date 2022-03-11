@@ -20,12 +20,12 @@ const theme = createTheme({
 });
 
 const App = () => (
+  <ThemeProvider theme={theme}>
     <div className={classes.container}>
-      <ThemeProvider theme={theme}>
-        <Router />
-      </ThemeProvider>
+      <Router />
     </div>
-  )
+  </ThemeProvider>
+)
 
 export default App;
 
