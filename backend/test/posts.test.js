@@ -1,5 +1,4 @@
 import request from 'supertest'
-import { fs } from 'fs'
 import server from '../server/index'
 import models from '../database/models'
 import { Authentication } from '../middlewares/authentication'
@@ -46,13 +45,15 @@ describe('POST /posts', () => {
 
             const authToken = Authentication.generateAuthToken(user1)
 
+            const fs = require('fs')
+            const testFile = fs.readFile('files/test_image.png.png', null)
             const response = await request(server)
                 .post('/api/posts')
                 .set('Authorization', `Bearer ${authToken}`)
                 .send({
                     text_content: 'some random text 3',
                     parent: null,
-                    attachments: fs.readFile('files/test_image.png.png', null),
+                    attachments: testFile,
                 })
             expect(response.statusCode).toBe(201)
         })
