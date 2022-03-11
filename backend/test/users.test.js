@@ -20,13 +20,13 @@ describe('Users', () => {
     describe('Encrypting password', () => {
         it('Should encrypt password before saving', async (done) => {
             // GIVEN a user has been created
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
 
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             // WHEN we attempt to retrieve the user record directly from the DB
@@ -45,13 +45,13 @@ describe('Users', () => {
     describe('Validating password', () => {
         it('Should count the password as valid', async (done) => {
             // GIVEN a user is created and retrieved from the db
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
 
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             const dbUser = await models.users.findOne({
@@ -61,7 +61,7 @@ describe('Users', () => {
             })
 
             // WHEN we input a valid password into the validatePassword method
-            let isValid = dbUser.validatePassword(password)
+            const isValid = dbUser.validatePassword(password)
 
             // THEN password should count as a valid password
             expect(isValid).toBe(true)
@@ -70,13 +70,13 @@ describe('Users', () => {
 
         it('Should NOT count the password as valid', async (done) => {
             // GIVEN a user is created and retrieved from the db
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
 
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             const dbUser = await models.users.findOne({
@@ -86,7 +86,7 @@ describe('Users', () => {
             })
 
             // WHEN we input an invalid password into the validatePassword method
-            let isValid = dbUser.validatePassword('invalid')
+            const isValid = dbUser.validatePassword('invalid')
 
             // THEN password should count as an invalid password
             expect(isValid).toBe(false)
@@ -97,23 +97,23 @@ describe('Users', () => {
     describe('Validating Email', () => {
         it('Should not save user if email is invalid', async (done) => {
             // GIVEN a set of credentials
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
-            let email = 'qweqwewq'
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = 'qweqwewq'
 
             // Attempt to create user
             try {
                 await models.users.create({
                     username: randomUsername,
-                    email: email,
-                    password: password,
+                    email,
+                    password,
                 })
 
                 // Email is invalid so should have thrown an error
                 assert(false)
             } catch (e) {
                 // Check the error is thrown by the email validation
-                let errMessage = 'The email address you entered is invalid'
+                const errMessage = 'The email address you entered is invalid'
                 assert.equal(e.errors[0].message, errMessage)
             }
             done()
@@ -123,32 +123,32 @@ describe('Users', () => {
     describe('Logging in with correct credentials', () => {
         it('Should return auth token and response status code 200', async (done) => {
             // GIVEN a created user
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
-            let email = 'test@' + randomUsername + '.com'
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
 
             const user = await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN that user logs in with the correct credentials
             const loginInfo = {
-                email: email,
-                password: password,
+                email,
+                password,
             }
 
             // THEN response status code should be 200
-            let response = await request('http://localhost:8000/api')
+            const response = await request('http://localhost:8000/api')
                 .post('/users/authenticate')
                 .send(loginInfo)
 
             assert.equal(response.statusCode, 200)
 
             // AND the correct auth token should be returned
-            let authUser = Authentication.extractUser(
-                'Bearer ' + response.body.authToken
+            const authUser = Authentication.extractUser(
+                `Bearer ${response.body.authToken}`
             )
             assert.equal(authUser.id, user.id)
             done()
@@ -158,22 +158,22 @@ describe('Users', () => {
     describe('Logging in with wrong password', () => {
         it('Should return a response status code of 401 and error message', async (done) => {
             // GIVEN a created user
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
-            let email = 'test@' + randomUsername + '.com'
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
 
             await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN the user attempts to log in with the wrong password
             const loginInfo = {
-                email: email,
+                email,
                 password: 'WrongPassword',
             }
-            let response = await request('http://localhost:8000/api')
+            const response = await request('http://localhost:8000/api')
                 .post('/users/authenticate')
                 .send(loginInfo)
 
@@ -187,22 +187,22 @@ describe('Users', () => {
     describe('Logging in with wrong email', () => {
         it('Should return a response status code of 401 and error message', async (done) => {
             // GIVEN a created user
-            let password = 'PASSWORD'
-            let randomUsername = (Math.random() + 1).toString(36).substring(7)
-            let email = 'test@' + randomUsername + '.com'
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
 
             await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN the user attempts to log in with the wrong email
             const loginInfo = {
                 email: 'wrong@email.com',
-                password: password,
+                password,
             }
-            let response = await request('http://localhost:8000/api')
+            const response = await request('http://localhost:8000/api')
                 .post('/users/authenticate')
                 .send(loginInfo)
 
