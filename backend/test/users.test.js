@@ -64,7 +64,7 @@ describe('Users', () => {
             let isValid = dbUser.validatePassword(password)
 
             // THEN password should count as a valid password
-            assert.equal(isValid, true)
+            expect(isValid).toBe(true)
             done()
         })
 
@@ -89,7 +89,7 @@ describe('Users', () => {
             let isValid = dbUser.validatePassword('invalid')
 
             // THEN password should count as an invalid password
-            assert.equal(isValid, false)
+            expect(isValid).toBe(false)
             done()
         })
     })
