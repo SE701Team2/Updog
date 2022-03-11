@@ -31,3 +31,11 @@ $text-9xl: 8rem;
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+:export {
+    primary: $primary;
+    primaryVariant: $primaryVariant;
+    secondary: $secondary;
+    secondaryVariant: $secondaryVariant;
+    error: $error;
+}
