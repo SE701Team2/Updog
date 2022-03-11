@@ -20,70 +20,11 @@
     text-align: center;
     margin: 80px 0px 40px 0px;
 }
-.name,
-.email,
-.password
- {
-    margin: 20px;
-    color: #969292;
-    font-size: 16px;
-}
-.password{
-    margin-bottom: 40px;
-}
-
-.input{
-    height: 32px;
-    font-size: 20px;
-    outline: none;
-    width: 100%;
-    border-top-style: none;
-    border-left-style: none;
-    border-right-style: none;
-    border-bottom-style: 2px solid theme.$onBackground;
-    margin-bottom: 10px;
-
-}
 .error{
     margin-left: 20px;
-    color:red;
-}
-.confirm{
-    
-    display: flex;
-     font-size: 16px;
-     border-radius: 10px;
-     color: white;
-     padding: 10px 60px;
-     background: theme.$primary;
-     box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
-         rgba(0, 0, 0, 0.22) 0px 15px 12px;
-     margin: auto;
-     outline: none;
-     border: none;
-     cursor: pointer;
-     transition: all 0.1s;
-}
-.close{
-     display: flex;
-     font-size: 16px;
-     border-radius: 10px;
-     color: white;
-     padding: 10px 60px;
-     background: theme.$primary;
-     box-shadow: rgba(0, 0, 0, 0) 0px 10px 38px,
-         rgba(0, 0, 0, 0.22) 0px 15px 12px;
-     outline: none;
-     border: none;
-     cursor: pointer;
-     transition: all 0.1s;
-     margin: auto;
-     margin-top: 300px;
+    color:theme.$error;
 }
 
-button:active{
-    transform: translateY(2px);
-}
 .formsuccess{
     display: flex;
     justify-content: center;

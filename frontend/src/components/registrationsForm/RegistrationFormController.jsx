@@ -9,14 +9,12 @@ const CloseButton = styled(Button)({
 
         display: 'flex',
         fontSize: '16px',
-
-        backgroundColor: 'purple',
         padding: '10px 60px',
         boxShadow: 'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
         cursor: 'pointer',
         transition:'all 0.1s',
         margin: 'auto',
-        marginTop: '300px',
+        marginTop: '200px',
     
     }
 )

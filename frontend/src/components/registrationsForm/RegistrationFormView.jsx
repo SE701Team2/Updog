@@ -8,7 +8,6 @@ const ConfirmButton = styled(Button)({
 
     display: 'flex',
     fontSize: '16px',
-    backgroundColor: 'purple',
     padding: '10px 60px',
     boxShadow: 'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
     cursor: 'pointer',
@@ -19,9 +18,8 @@ const ConfirmButton = styled(Button)({
 )
 const InputField = styled(TextField)({
 
-    marginLeft: '20px',
-    marginRight: '20px',
-    minWidth: '360px'
+    minWidth: '360px',
+    margin: '20px'
 
 }
 )
@@ -40,9 +38,10 @@ const RegistrationFormView = ({submitForm,onInputChange,value,errors}) => {
         setDataIsCollected(true);
         // if user data is collected and no errors
         // set the subnitForm to true 
+        // passing this value to RegistrationFormController later
+        // to show the Account Creat form
        if(Object.keys(errors).length === 0 && dataIsCollected){
-           // passing this value to RegistrationFormController later
-           // to show the Account Creat form
+          
             submitForm(true)
             console.log(value)
        }
