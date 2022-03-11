@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node -- index.js",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "dev": "nodemon -L --exec babel-node index.js",
     "doc": "apidoc -i server/controllers/ -o server/public/"
   },
