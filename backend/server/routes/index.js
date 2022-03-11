@@ -16,9 +16,6 @@ router.route('/users/authenticate').post(user.authenticateUser)
 /*
 POSTS
 */
-
-router.route('/fetchImage').post(posts.getImage)
-
 router.route('/posts').post(posts.createPost)
 
 router

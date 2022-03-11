@@ -1,55 +1,37 @@
-import { initializeApp, cert } from 'firebase-admin/app'
-import { getStorage } from 'firebase-admin/storage'
-import path from 'path'
+import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 
-// Temporary method for testing/developing
+// Upload a file to the storage
+async function uploadFileToCloudStorage(filename) {
+    await bucket.upload(`./images_upload/${filename}`, {
+        destination: `Post_images/${filename}`,
+    })
+    console.log(`uploaded file : ${filename}`)
+}
+
+// Download a file from the storage
+async function downloadFileFromCloudStorage(filename) {
+    const options = {
+        destination: `images_download/${filename}`,
+    }
+    // Downloads the file
+    await bucket.file(`Post_images/${filename}`).download(options)
+    console.log(
+        `Post_images/${filename} downloaded to ${`Downloaded_images/${filename}`}.`
+    )
+}
+
+// Example method for downloading File from Cloud Storage
 export const getImage = async (req, res) => {
     console.log('Fetching Image : received a query')
     try {
-        const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
-        initializeApp({
-            credential: cert(serviceAccount),
-            storageBucket: 'gs://updog-58ba9.appspot.com',
-        })
-        const bucket = getStorage().bucket()
-
-        async function downloadFile(fileName, downloadDestination) {
-            const options = {
-                destination: downloadDestination,
-            }
-            // Downloads the file
-            await bucket.file(fileName).download(options)
-
-            console.log(
-                `gs://${bucketName}/${fileName} downloaded to ${destFileName}.`
-            )
-        }
-
-        downloadFile(
-            'Post_images/1646976072501-7bjws-small_image.png',
-            'Downloaded_images/1646976072501-7bjws-small_image.png'
-        ).catch(console.error)
+        downloadFileFromCloudStorage(req.body.attachments).catch(console.error)
         res.status(201).send()
     } catch (error) {
         console.log(error)
         res.status(500).send(error)
     }
-}
-
-async function uploadFileToCloudStorage(filename) {
-    const serviceAccount = require('/Users/Goyard/Desktop/2022_Sem1_UoA/SoftEng701/Updog/backend/updog-58ba9-firebase-adminsdk-37xms-fe6982697e.json')
-    initializeApp({
-        credential: cert(serviceAccount),
-        storageBucket: 'gs://updog-58ba9.appspot.com',
-    })
-    const bucket = getStorage().bucket()
-
-    await bucket.upload(`./Images/${filename}`, {
-        destination: 'Post_images/' + filename,
-    })
-    console.log(`uploaded file : ${filename}`)
 }
 
 /*
@@ -59,12 +41,9 @@ Response codes:
 500 INTERNAL SERVER ERROR otherwise.
 */
 export const createPost = async (req, res) => {
-    console.log('post receieved')
-
     try {
         const authToken = req.get('Authorization')
         const { body } = req
-        let attachmentLink = ''
 
         if (!authToken) {
             res.status(400).send({
@@ -77,9 +56,8 @@ export const createPost = async (req, res) => {
                 res.status(401).send({ 'Error message': 'Auth token invalid' })
             }
 
+            let attachmentLink = ''
             if (req.files) {
-                console.log(req.files.attachments)
-
                 const file = req.files.attachments
                 const newFilename = `${Date.now()}-${Math.random()
                     .toString(36)
@@ -87,8 +65,9 @@ export const createPost = async (req, res) => {
 
                 attachmentLink = newFilename
                 // Use the mv() method to place the file somewhere on your server
-                file.mv(`./Images/${newFilename}`, null)
+                file.mv(`./images_upload/${newFilename}`, null)
 
+                // upload the file/image to the firebase storage
                 uploadFileToCloudStorage(newFilename).catch(console.error)
             }
 
