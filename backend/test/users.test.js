@@ -18,7 +18,7 @@ describe('Users', () => {
     })
 
     describe('Encrypting password', () => {
-        it('Should encrypt password before saving', async (done) => {
+        it('Should encrypt password before saving', async () => {
             // GIVEN a user has been created
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -38,12 +38,11 @@ describe('Users', () => {
 
             // THEN password stored in the db should be encrypted and not the same as the actual password
             assert.notEqual(dbUser.password, password)
-            done()
         })
     })
 
     describe('Validating password', () => {
-        it('Should count the password as valid', async (done) => {
+        it('Should count the password as valid', async () => {
             // GIVEN a user is created and retrieved from the db
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -65,10 +64,9 @@ describe('Users', () => {
 
             // THEN password should count as a valid password
             expect(isValid).toBe(true)
-            done()
         })
 
-        it('Should NOT count the password as valid', async (done) => {
+        it('Should NOT count the password as valid', async () => {
             // GIVEN a user is created and retrieved from the db
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -90,12 +88,11 @@ describe('Users', () => {
 
             // THEN password should count as an invalid password
             expect(isValid).toBe(false)
-            done()
         })
     })
 
     describe('Validating Email', () => {
-        it('Should not save user if email is invalid', async (done) => {
+        it('Should not save user if email is invalid', async () => {
             // GIVEN a set of credentials
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -116,12 +113,11 @@ describe('Users', () => {
                 const errMessage = 'The email address you entered is invalid'
                 assert.equal(e.errors[0].message, errMessage)
             }
-            done()
         })
     })
 
     describe('Logging in with correct credentials', () => {
-        it('Should return auth token and response status code 200', async (done) => {
+        it('Should return auth token and response status code 200', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -151,12 +147,11 @@ describe('Users', () => {
                 `Bearer ${response.body.authToken}`
             )
             assert.equal(authUser.id, user.id)
-            done()
         })
     })
 
     describe('Logging in with wrong password', () => {
-        it('Should return a response status code of 401 and error message', async (done) => {
+        it('Should return a response status code of 401 and error message', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -180,12 +175,11 @@ describe('Users', () => {
             // THEN a response with status code 401 should be returned along with an error message
             assert.equal(response.statusCode, 401)
             assert.equal(response.body.error, 'Incorrect email or password')
-            done()
         })
     })
 
     describe('Logging in with wrong email', () => {
-        it('Should return a response status code of 401 and error message', async (done) => {
+        it('Should return a response status code of 401 and error message', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -209,13 +203,11 @@ describe('Users', () => {
             // THEN a response with status code 401 should be returned along with an error message
             assert.equal(response.statusCode, 401)
             assert.equal(response.body.error, 'Incorrect email or password')
-            done()
         })
     })
 
-    afterAll((done) => {
+    afterAll(() => {
         models.sequelize.close()
         serverInstance.close()
-        done()
     })
 })
