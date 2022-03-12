@@ -8,9 +8,9 @@
 }
 
 .nav {
-    background-color: theme.$primary;
+    background-color: theme.$secondary;
 }
 
 .navIcon{
-    color: white;
+    color: theme.$primaryVariant;
 }

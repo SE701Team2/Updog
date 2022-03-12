@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import classes from './app.module.scss';
 import palette from './styles/theme.scss'
+import FooterController from './components/layout/footer/FooterController';
 import Router from './Router'
 
 const theme = createTheme({
