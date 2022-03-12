@@ -10,8 +10,8 @@ const Router = () => (
         <Route path="/post/:id" element={<Post />} />
 
 
-        {/* <Route path="/signUp" element={<Registration />} />
-        <Route path="/user/:username/follows" element={<Follows />} /> */}
+        <Route path="/signUp" element={<Registration />} />
+        {/* <Route path="/user/:username/follows" element={<Follows />} /> */}
     </Routes>
 )
 

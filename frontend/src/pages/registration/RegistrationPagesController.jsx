@@ -68,11 +68,13 @@ const RegistrationFormController = () => {
             <div className={classes.appwrapper}>
                 <div>
                     <h1 className={classes.formsuccess}>Account Created!</h1>
+                    <div>
                     <Link to="/">
                         <CloseButton variant="contained" disableRipple>
                             Close
                         </CloseButton>
                     </Link>
+                    </div>
                 </div>
             </div>
         </div>

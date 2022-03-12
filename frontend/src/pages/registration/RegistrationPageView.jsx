@@ -11,6 +11,7 @@ const ConfirmButton = styled(Button)({
     cursor: 'pointer',
     transition: 'all 0.1s',
     margin: 'auto',
+    marginTop:'20px'
 })
 const InputField = styled(TextField)({
     minWidth: '300px',
