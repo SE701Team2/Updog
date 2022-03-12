@@ -206,6 +206,99 @@ describe('Users', () => {
         })
     })
 
+    describe('Testing getUsersById endpoint', () => {
+        it('Should return a 200 status response', async () => {
+            // GIVEN a created user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+            const profilePic = 'https://imgur.com/gallery/zIMAzsV'
+            const profileBanner = 'https://imgur.com/gallery/RstwImS'
+            const bio = 'Bio'
+
+            const result = await models.users.create({
+                username: randomUsername,
+                email,
+                password,
+                profilePic,
+                profileBanner,
+                bio,
+            })
+
+            const loginInfo = {
+                email,
+                password,
+            }
+
+            const auth = await request('http://localhost:8000/api')
+                .post('/users/authenticate')
+                .send(loginInfo)
+
+            // add to followers table, userDTO just needs to count Ids
+            const followers = [
+                { followedId: result.id, followerId: 1000 },
+                { followedId: result.id, followerId: 2000 },
+            ]
+            await models.followers.bulkCreate(followers)
+
+            // user viewing itself
+            const response = await request('http://localhost:8000/api')
+                .get(`/users/${result.id}`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            const expectedResponse = {
+                id: response.body.id,
+                username: randomUsername,
+                nickname: '',
+                profilePic,
+                profileBanner,
+                bio,
+                followers: 2,
+                following: 0,
+                joinedDate: response.body.joinedDate,
+            }
+
+            assert.equal(response.statusCode, 200)
+            assert.equal(
+                JSON.stringify(response.body),
+                JSON.stringify(expectedResponse)
+            )
+        })
+    })
+
+    describe('Testing addUser endpoint', () => {
+        it('Should return a 201 status response', async () => {
+            // GIVEN a created user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const requestBody = {
+                username: randomUsername,
+                email,
+                password,
+            }
+
+            const response = await request('http://localhost:8000/api')
+                .post('/users')
+                .send(requestBody)
+
+            const expectedResponse = {
+                id: response.body.id,
+                username: randomUsername,
+                followers: 0,
+                following: 0,
+                joinedDate: response.body.joinedDate,
+            }
+
+            assert.equal(response.statusCode, 201)
+            assert.equal(
+                JSON.stringify(response.body),
+                JSON.stringify(expectedResponse)
+            )
+        })
+    })
+
     afterAll(() => {
         models.sequelize.close()
         serverInstance.close()
