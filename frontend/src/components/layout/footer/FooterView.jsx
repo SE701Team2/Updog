@@ -8,7 +8,7 @@ import { StyledEngineProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Badge } from '@mui/material';
 
-const FooterView = ({currentPage, onPageChange}) => (
+const FooterView = ({currentPage, onPageChange, notificationsNumber}) => (
     <div className={classes.container}>
         <StyledEngineProvider injectFirst>
             <BottomNavigation
@@ -18,7 +18,7 @@ const FooterView = ({currentPage, onPageChange}) => (
                 className={classes.nav} >
                 <BottomNavigationAction className={classes.navIcon} value="/" label="Home" icon={<HomeIcon />} component={Link} to="/" />
                 <BottomNavigationAction className={classes.navIcon} value="/search" label="Search" icon={<SearchIcon />} component={Link} to="/search" />
-                <BottomNavigationAction className={classes.navIcon} value="/notifications" label="Notifications" icon={<Badge badgeContent={1} color="error" max={10} overlap="circular"><NotificationsIcon /></Badge>} component={Link} to="/notifications" />
+                <BottomNavigationAction className={classes.navIcon} value="/notifications" label="Notifications" icon={<Badge badgeContent={notificationsNumber} color="error" max={10} overlap="circular"><NotificationsIcon /></Badge>} component={Link} to="/notifications" />
             </BottomNavigation>
         </StyledEngineProvider>
 
