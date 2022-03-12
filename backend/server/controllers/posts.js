@@ -114,7 +114,7 @@ export const modifyPostById = async (req, res) => {
                     if (updated) {
                         res.status(200).send('The message has been updated.')
                     } else {
-                        res.status(400).send('Update failed.')
+                        res.status(500).send('Failed to update the post.')
                     }
                 } else {
                     res.status(403).send('Invalid author ID.')
@@ -156,15 +156,15 @@ export const deletePostById = async (req, res) => {
                 // Check whether the post being deleted belongs to that user.
                 const post = await models.posts.findByPk(params.id)
                 if (!post) {
-                    res.status(404).send('Invalid message ID.')
+                    res.status(404).send('Invalid post ID.')
                 } else if (post.author === decodedUser.id) {
                     const count = await models.posts.destroy({
                         where: { id: params.id },
                     })
                     if (count !== 0) {
-                        res.status(200).send('The message has been deleted.')
+                        res.status(200).send('The post has been deleted.')
                     } else {
-                        res.status(400).send('Failed to delete.')
+                        res.status(500).send('Failed to destroy the post.')
                     }
                 } else {
                     res.status(403).send('Invalid author ID.')
