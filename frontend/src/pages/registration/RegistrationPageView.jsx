@@ -1,6 +1,6 @@
 import { Button, styled, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import classes from './registrationForm.module.scss'
+import classes from './registrationpage.module.scss'
 
 const ConfirmButton = styled(Button)({
     display: 'flex',
@@ -13,7 +13,7 @@ const ConfirmButton = styled(Button)({
     margin: 'auto',
 })
 const InputField = styled(TextField)({
-    minWidth: '360px',
+    minWidth: '300px',
     margin: '20px',
 })
 
@@ -70,7 +70,7 @@ const RegistrationFormView = ({ submitForm, onInputChange, value, errors }) => {
                 </div>
                 <div className={classes.password}>
                     <InputField
-                        label="password"
+                        label="Password"
                         type="password"
                         name="password"
                         value={value.password}

@@ -1,5 +1,9 @@
 @use '~/src/styles/theme';
 
+* {
+    margin: 0;
+    padding: 0;
+}
 .container{
     background: linear-gradient(135deg, theme.$primary,theme.$primaryVariant);
     //background: white;
@@ -8,4 +12,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.appwrapper{
+    background-color: theme.$background;
+    min-height: 650px;
+    @media only screen and (min-width: 600px) {
+        padding: 30px;
+    }
+    box-sizing: border-box;
+    border-radius: 5px;
+
+
+}
+.title{
+    color: theme.$onBackground;
+    text-align: center;
+    margin: 80px 0px 40px 0px;
+}
+.error{
+    margin-left: 20px;
+    color:theme.$error;
+}
+
+.formsuccess{
+    display: flex;
+    justify-content: center;
+    margin-top: 250px;
+    min-width: 370px;
+    color: theme.$onBackground;
 }

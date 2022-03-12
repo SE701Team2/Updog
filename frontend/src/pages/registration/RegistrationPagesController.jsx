@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
-import RegistrationFormView from './RegistrationFormView'
-import classes from './registrationForm.module.scss'
+import RegistrationFormView from './RegistrationPageView'
+import classes from './registrationpage.module.scss'
 
 const CloseButton = styled(Button)({
     display: 'flex',
@@ -55,21 +55,25 @@ const RegistrationFormController = () => {
     }
 
     return !formIsSubmitted ? (
-        <RegistrationFormView
-            submitForm={submitForm}
-            onInputChange={handleChange}
-            value={values}
-            errors={validation()}
-        />
+        <div className={classes.container}>
+            <RegistrationFormView
+                submitForm={submitForm}
+                onInputChange={handleChange}
+                value={values}
+                errors={validation()}
+            />
+        </div>
     ) : (
-        <div className={classes.appwrapper}>
-            <div>
-                <h1 className={classes.formsuccess}>Account Created!</h1>
-                <Link to="/">
-                    <CloseButton variant="contained" disableRipple>
-                        Close
-                    </CloseButton>
-                </Link>
+        <div className={classes.container}>
+            <div className={classes.appwrapper}>
+                <div>
+                    <h1 className={classes.formsuccess}>Account Created!</h1>
+                    <Link to="/">
+                        <CloseButton variant="contained" disableRipple>
+                            Close
+                        </CloseButton>
+                    </Link>
+                </div>
             </div>
         </div>
     )
