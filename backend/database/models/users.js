@@ -1,4 +1,3 @@
-'use strict'
 const bcrypt = require('bcryptjs')
 
 module.exports = (sequelize, DataTypes) => {
@@ -45,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
                     User.password_confirmation = User.password
 
                     User.joinedDate = Math.floor(Date.now() / 1000)
+
                 },
             },
         }
@@ -60,6 +60,16 @@ module.exports = (sequelize, DataTypes) => {
             through: 'followers',
             as: 'followed',
             foreignKey: 'followerId',
+        })
+        users.belongsToMany(models.posts, {
+            through: 'likedPost',
+            as: 'likedPosts',
+            foreignKey: 'userId',
+        })
+        users.belongsToMany(models.posts, {
+            through: 'sharedPost',
+            as: 'sharedPosts',
+            foreignKey: 'userId',
         })
     }
     users.prototype.validatePassword = function (plainText) {

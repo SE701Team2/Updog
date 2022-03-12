@@ -1,11 +1,11 @@
 // colour theme
-$primary: #6200EE;
-$primaryVariant: #3700B3;
-$secondary: #03DAC6;
-$secondaryVariant: #018786;
+$primary: #1d3557;
+$primaryVariant: #457b9d;
+$secondary: #a8dadc;
+$secondaryVariant: #f1faee;
 $surface: #FFFFFF;
 $background: #FFFFFF;
-$error: #B00020;
+$error: #e63946;
 $onPrimary: #FFFFFF;
 $onSecondary: #FFFFFF;
 $onSurface: #000000;
@@ -30,4 +30,14 @@ $text-9xl: 8rem;
 
 body {
     font-family: 'Roboto', sans-serif;
+}
+
+:export {
+    primary: $primary;
+    primaryVariant: $primaryVariant;
+    secondary: $secondary;
+    secondaryVariant: $secondaryVariant;
+    error: $error;
+    onPrimary: $onPrimary;
+    onSecondary: $onSecondary;
 }

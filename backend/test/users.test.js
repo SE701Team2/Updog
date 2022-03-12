@@ -18,7 +18,7 @@ describe('Users', () => {
     })
 
     describe('Encrypting password', () => {
-        it('Should encrypt password before saving', async (done) => {
+        it('Should encrypt password before saving', async () => {
             // GIVEN a user has been created
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -26,7 +26,7 @@ describe('Users', () => {
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             // WHEN we attempt to retrieve the user record directly from the DB
@@ -38,12 +38,11 @@ describe('Users', () => {
 
             // THEN password stored in the db should be encrypted and not the same as the actual password
             assert.notEqual(dbUser.password, password)
-            done()
         })
     })
 
     describe('Validating password', () => {
-        it('Should count the password as valid', async (done) => {
+        it('Should count the password as valid', async () => {
             // GIVEN a user is created and retrieved from the db
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -51,7 +50,7 @@ describe('Users', () => {
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             const dbUser = await models.users.findOne({
@@ -64,11 +63,10 @@ describe('Users', () => {
             const isValid = dbUser.validatePassword(password)
 
             // THEN password should count as a valid password
-            assert.equal(isValid, true)
-            done()
+            expect(isValid).toBe(true)
         })
 
-        it('Should NOT count the password as valid', async (done) => {
+        it('Should NOT count the password as valid', async () => {
             // GIVEN a user is created and retrieved from the db
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -76,7 +74,7 @@ describe('Users', () => {
             await models.users.create({
                 username: randomUsername,
                 email: 'TEST@GMAIL.COM',
-                password: password,
+                password,
             })
 
             const dbUser = await models.users.findOne({
@@ -89,13 +87,12 @@ describe('Users', () => {
             const isValid = dbUser.validatePassword('invalid')
 
             // THEN password should count as an invalid password
-            assert.equal(isValid, false)
-            done()
+            expect(isValid).toBe(false)
         })
     })
 
     describe('Validating Email', () => {
-        it('Should not save user if email is invalid', async (done) => {
+        it('Should not save user if email is invalid', async () => {
             // GIVEN a set of credentials
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -105,8 +102,8 @@ describe('Users', () => {
             try {
                 await models.users.create({
                     username: randomUsername,
-                    email: email,
-                    password: password,
+                    email,
+                    password,
                 })
 
                 // Email is invalid so should have thrown an error
@@ -116,12 +113,11 @@ describe('Users', () => {
                 const errMessage = 'The email address you entered is invalid'
                 assert.equal(e.errors[0].message, errMessage)
             }
-            done()
         })
     })
 
     describe('Logging in with correct credentials', () => {
-        it('Should return auth token and response status code 200', async (done) => {
+        it('Should return auth token and response status code 200', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -129,14 +125,14 @@ describe('Users', () => {
 
             const user = await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN that user logs in with the correct credentials
             const loginInfo = {
-                email: email,
-                password: password,
+                email,
+                password,
             }
 
             // THEN response status code should be 200
@@ -151,12 +147,11 @@ describe('Users', () => {
                 `Bearer ${response.body.authToken}`
             )
             assert.equal(authUser.id, user.id)
-            done()
         })
     })
 
     describe('Logging in with wrong password', () => {
-        it('Should return a response status code of 401 and error message', async (done) => {
+        it('Should return a response status code of 401 and error message', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -164,13 +159,13 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN the user attempts to log in with the wrong password
             const loginInfo = {
-                email: email,
+                email,
                 password: 'WrongPassword',
             }
             const response = await request('http://localhost:8000/api')
@@ -180,12 +175,11 @@ describe('Users', () => {
             // THEN a response with status code 401 should be returned along with an error message
             assert.equal(response.statusCode, 401)
             assert.equal(response.body.error, 'Incorrect email or password')
-            done()
         })
     })
 
     describe('Logging in with wrong email', () => {
-        it('Should return a response status code of 401 and error message', async (done) => {
+        it('Should return a response status code of 401 and error message', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -193,14 +187,14 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             })
 
             // WHEN the user attempts to log in with the wrong email
             const loginInfo = {
                 email: 'wrong@email.com',
-                password: password,
+                password,
             }
             const response = await request('http://localhost:8000/api')
                 .post('/users/authenticate')
@@ -209,12 +203,11 @@ describe('Users', () => {
             // THEN a response with status code 401 should be returned along with an error message
             assert.equal(response.statusCode, 401)
             assert.equal(response.body.error, 'Incorrect email or password')
-            done()
         })
     })
 
     describe('Testing getUsersById endpoint', () => {
-        it('Should return a 200 status response', async (done) => {
+        it('Should return a 200 status response', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -225,16 +218,16 @@ describe('Users', () => {
 
             const result = await models.users.create({
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
                 profilePic,
                 profileBanner,
                 bio,
             })
 
             const loginInfo = {
-                email: email,
-                password: password,
+                email,
+                password,
             }
 
             const auth = await request('http://localhost:8000/api')
@@ -257,9 +250,9 @@ describe('Users', () => {
                 id: response.body.id,
                 username: randomUsername,
                 nickname: '',
-                profilePic: profilePic,
-                profileBanner: profileBanner,
-                bio: bio,
+                profilePic,
+                profileBanner,
+                bio,
                 followers: 2,
                 following: 0,
                 joinedDate: response.body.joinedDate,
@@ -270,12 +263,11 @@ describe('Users', () => {
                 JSON.stringify(response.body),
                 JSON.stringify(expectedResponse)
             )
-            done()
         })
     })
 
     describe('Testing addUser endpoint', () => {
-        it('Should return a 201 status response', async (done) => {
+        it('Should return a 201 status response', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
             const randomUsername = (Math.random() + 1).toString(36).substring(7)
@@ -283,8 +275,8 @@ describe('Users', () => {
 
             const requestBody = {
                 username: randomUsername,
-                email: email,
-                password: password,
+                email,
+                password,
             }
 
             const response = await request('http://localhost:8000/api')
@@ -304,13 +296,11 @@ describe('Users', () => {
                 JSON.stringify(response.body),
                 JSON.stringify(expectedResponse)
             )
-            done()
         })
     })
 
-    afterAll((done) => {
+    afterAll(() => {
         models.sequelize.close()
         serverInstance.close()
-        done()
     })
 })
