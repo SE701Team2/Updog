@@ -3,11 +3,11 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import fileupload from 'express-fileupload';
-const server = express();
-
+import { initializeApp } from "firebase/app";
 import db from '../config/database';
 import routes from './routes';
-import { initializeApp } from "firebase/app";
+
+const server = express();
 
 db.authenticate()
   .then(() => console.log('Database connected...'))
