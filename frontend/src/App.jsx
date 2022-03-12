@@ -17,14 +17,33 @@ const theme = createTheme({
             main: palette.error,
         },
     },
+    components: {
+        MuiBottomNavigationAction: {
+            styleOverrides: {
+                root: {
+                    color: palette.onPrimary,
+                    '&.Mui-selected': {
+                        color: palette.secondary,
+                    },
+                },
+            },
+        },
+        MuiBottomNavigation: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: palette.primary,
+                },
+            },
+        },
+    },
 })
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <div className={classes.container}>
-      <Router />
-    </div>
-  </ThemeProvider>
+    <ThemeProvider theme={theme}>
+        <div className={classes.container}>
+            <Router />
+        </div>
+    </ThemeProvider>
 )
 
 export default App

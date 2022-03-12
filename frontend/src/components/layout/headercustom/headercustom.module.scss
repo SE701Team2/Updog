@@ -9,7 +9,7 @@
 }
 
 .headerCustom {
-    background-color: theme.$secondary;
+    background-color: theme.$primary;
     color: theme.$secondary;
     justify-content: space-between;
 }
@@ -21,9 +21,9 @@
 }
 
 .headerIcon {
-    color: theme.$primary;
+    color: theme.$onPrimary !important;
 }
 
 .headerText{
-    color: theme.$primary;
+    color: theme.$onPrimary;
 }
