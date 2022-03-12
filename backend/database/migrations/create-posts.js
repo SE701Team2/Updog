@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import {decode} from "jsonwebtoken";
@@ -152,7 +151,6 @@ export const deletePostById = async (req, res) => {
         res.status(500).send(error)
     }
 }
-=======
 module.exports = {
     up: (queryInterface, Sequelize) =>
         queryInterface.createTable('posts', {
@@ -194,4 +192,3 @@ module.exports = {
         }),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('posts'),
 }
->>>>>>> 1b6ce8506775c3d363578becf617381394da58b2
