@@ -7,6 +7,12 @@ export const convertToPostDto = async (post) => {
         attributes: ['id'],
         where: { parent: post.id },
     })
+    const usersLiked = await models.likedPost.count({
+        where: { postId: post.id },
+    })
+    const usersShared = await models.sharedPost.count({
+        where: { postId: post.id },
+    })
 
     return {
         id: post.id,
@@ -14,9 +20,9 @@ export const convertToPostDto = async (post) => {
         author,
         parent: post.parent,
         children: children.map((child) => child.id),
-        usersLiked: 0, // work in progress.
-        usersShared: 0, // work in progress.
-        timestamp: post.updatedAt,
+        usersLiked,
+        usersShared,
+        timestamp: Date.parse(post.updatedAt),
         attachment: null, // work in progress.
     }
 }

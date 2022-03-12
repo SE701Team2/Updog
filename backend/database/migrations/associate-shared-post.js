@@ -2,7 +2,7 @@
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        queryInterface.createTable('sharedPost', {
+        queryInterface.createTable('sharedPosts', {
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

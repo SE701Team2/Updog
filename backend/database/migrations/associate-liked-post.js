@@ -2,7 +2,7 @@
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        queryInterface.createTable('likedPost', {
+        queryInterface.createTable('likedPosts', {
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
