@@ -1,112 +1,94 @@
-
-import { Button, styled, TextField } from "@mui/material";
-import React,{ useState} from "react"
-import classes from "./registrationForm.module.scss"
-
+import { Button, styled, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import classes from './registrationForm.module.scss'
 
 const ConfirmButton = styled(Button)({
-
     display: 'flex',
     fontSize: '16px',
     padding: '10px 60px',
-    boxShadow: 'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
+    boxShadow:
+        'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
     cursor: 'pointer',
-    transition:'all 0.1s',
+    transition: 'all 0.1s',
     margin: 'auto',
-
-}
-)
+})
 const InputField = styled(TextField)({
-
     minWidth: '360px',
-    margin: '20px'
+    margin: '20px',
+})
 
-}
-)
+const RegistrationFormView = ({ submitForm, onInputChange, value, errors }) => {
+    const [error, setErrors] = useState({})
+    const [dataIsCollected, setDataIsCollected] = useState(false)
 
-const RegistrationFormView = ({submitForm,onInputChange,value,errors}) => {
-
-   
-
-    
-    const [error, setErrors] = useState({});
-    const [dataIsCollected, setDataIsCollected] = useState(false);
-    
     const formConfirm = async (event) => {
-        event.preventDefault();
-        setErrors(errors);
-        setDataIsCollected(true);
+        event.preventDefault()
+        setErrors(errors)
+        setDataIsCollected(true)
         // if user data is collected and no errors
-        // set the subnitForm to true 
+        // set the subnitForm to true
         // passing this value to RegistrationFormController later
         // to show the Account Creat form
-       if(Object.keys(errors).length === 0 && dataIsCollected){
-          
+        if (Object.keys(errors).length === 0 && dataIsCollected) {
             submitForm(true)
             console.log(value)
-       }
-    };
-    
-  
+        }
+    }
 
     return (
-            <div className={classes.appwrapper}>
-                 
-                <div>
-                    <h2 className={classes.title}>Create an account</h2>
+        <div className={classes.appwrapper}>
+            <div>
+                <h2 className={classes.title}>Create an account</h2>
+            </div>
+            <form className="form-wrapper">
+                <div className={classes.name}>
+                    <InputField
+                        label="Username"
+                        type="text"
+                        name="userName"
+                        value={value.userName}
+                        onChange={onInputChange}
+                    />
+
+                    {error.userName && (
+                        <p className={classes.error}>{error.userName}</p>
+                    )}
                 </div>
-                <form className="form-wrapper">
-                    <div className={classes.name}>
-                           
-                            <InputField
-                                label="Username"
-                                type="text" 
-                                name="userName"
-                                value={value.userName}
-                                onChange={onInputChange}
-                            /> 
-                    
-                            {error.userName && <p className={classes.error}>{error.userName}</p>}
-                        
-                    </div>
-                            
-                    <div className={classes.email}>
-                         
-                         <InputField
-                                label="Email"
-                                type="email" 
-                                name="email"
-                                value={value.email}
-                                onChange={onInputChange}
-                            /> 
-                        
-                        {error.email && <p className={classes.error}>{error.email}</p>}
 
-                    </div>
-                    <div className={classes.password}>
-                        <InputField
-                                label="password"
-                                type="password" 
-                                name="password"
-                                value={value.password}
-                                onChange={onInputChange}
-                            /> 
-                         {error.password && <p className={classes.error}>{error.password}</p>}
+                <div className={classes.email}>
+                    <InputField
+                        label="Email"
+                        type="email"
+                        name="email"
+                        value={value.email}
+                        onChange={onInputChange}
+                    />
 
-                     </div>
-                    
-                     <div>
-                         
-                         <ConfirmButton variant="contained" onClick={formConfirm}>Confirm</ConfirmButton>
-                     </div>
-                 </form>
-             </div>
-             
-        
+                    {error.email && (
+                        <p className={classes.error}>{error.email}</p>
+                    )}
+                </div>
+                <div className={classes.password}>
+                    <InputField
+                        label="password"
+                        type="password"
+                        name="password"
+                        value={value.password}
+                        onChange={onInputChange}
+                    />
+                    {error.password && (
+                        <p className={classes.error}>{error.password}</p>
+                    )}
+                </div>
+
+                <div>
+                    <ConfirmButton variant="contained" onClick={formConfirm}>
+                        Confirm
+                    </ConfirmButton>
+                </div>
+            </form>
+        </div>
     )
- 
 }
-                
-
 
 export default RegistrationFormView
