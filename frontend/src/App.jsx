@@ -3,9 +3,7 @@ import classes from './app.module.scss'
 import palette from './styles/theme.scss'
 import Router from './Router'
 import FooterController from './components/layout/footer/FooterController'
-// Test
 
-let x = 3
 const theme = createTheme({
     palette: {
         primary: {
