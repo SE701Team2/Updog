@@ -1,0 +1,29 @@
+@use '~/src/styles/theme';
+
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 3rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerCustom {
+    background-color: theme.$secondary;
+    color: theme.$secondary;
+    justify-content: space-between;
+}
+
+.headerLeft{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.headerIcon {
+    color: theme.$primary;
+}
+
+.headerText{
+    color: theme.$primary;
+}
