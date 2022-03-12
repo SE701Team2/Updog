@@ -1,13 +1,13 @@
-import React from 'react'
 import FooterView from './FooterView'
+import { useState } from 'react'
 /**
  * This is a reusable footer component intended for users to navigate to main pages.
  */
 const FooterController = () => {
     const path = window.location.pathname
-    const [currentPage, setCurrentPage] = React.useState(path)
+    const [currentPage, setCurrentPage] = useState(path)
     // Mock variable for global notification number state
-    const [notificationsNumber] = React.useState(2)
+    const [notificationsNumber] = useState(2)
     const onPageChange = (event, newPage) => {
         setCurrentPage(newPage)
     }
