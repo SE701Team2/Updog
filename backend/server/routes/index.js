@@ -24,6 +24,11 @@ router
     .put(posts.modifyPostById)
     .delete(posts.deletePostById)
 
+router
+    .route('/posts/:id/share')
+    .post(posts.sharePostById)
+    .delete(posts.unsharePostById)
+
 /*
 TESTING
 */
