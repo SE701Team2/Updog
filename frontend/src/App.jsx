@@ -1,23 +1,23 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import classes from './app.module.scss';
+import classes from './app.module.scss'
 import palette from './styles/theme.scss'
 import Router from './Router'
 
 const theme = createTheme({
-  palette: {
-    primary: {
-      main: palette.primary,
-      light: palette.primaryVariant,
+    palette: {
+        primary: {
+            main: palette.primary,
+            light: palette.primaryVariant,
+        },
+        secondary: {
+            main: palette.secondary,
+            light: palette.secondaryVariant,
+        },
+        error: {
+            main: palette.error,
+        },
     },
-    secondary: {
-      main: palette.secondary,
-      light: palette.secondaryVariant,
-    },
-    error: {
-      main: palette.error,
-    },
-  },
-});
+})
 
 const App = () => (
   <ThemeProvider theme={theme}>
@@ -27,5 +27,4 @@ const App = () => (
   </ThemeProvider>
 )
 
-export default App;
-
+export default App
