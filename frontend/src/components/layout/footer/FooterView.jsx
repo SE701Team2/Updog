@@ -1,12 +1,12 @@
-import classes from './footer.module.scss'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { StyledEngineProvider } from '@mui/material';
+import { StyledEngineProvider , Badge } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Badge } from '@mui/material';
+
+import classes from './footer.module.scss'
 
 const FooterView = ({currentPage, onPageChange, notificationsNumber}) => (
     <div className={classes.container}>
