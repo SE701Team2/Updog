@@ -3,6 +3,8 @@ name: run-backend-tests.yml
 on:
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    branches: [bugfix/backend-testing-workflow]
 
 jobs:
   build:
