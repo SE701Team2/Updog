@@ -6,16 +6,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { StyledEngineProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { Badge } from '@mui/material';
 const FooterView = () => (
     <div className={classes.container}>
         <StyledEngineProvider injectFirst>
             <BottomNavigation
                 showLabels
+                
                 className={classes.nav} >
                 <BottomNavigationAction className={classes.navIcon} label="Home" icon={<HomeIcon />} component={Link} to="/" />
                 <BottomNavigationAction className={classes.navIcon} label="Search" icon={<SearchIcon />} component={Link} to="/search" />
-                <BottomNavigationAction className={classes.navIcon} label="Notifications" icon={<NotificationsIcon />} component={Link} to="/notifications" />
+                <BottomNavigationAction className={classes.navIcon} label="Notifications" icon={<Badge badgeContent={1} color="error" max={10} overlap="circular"><NotificationsIcon /></Badge>} component={Link} to="/notifications" />
             </BottomNavigation>
         </StyledEngineProvider>
 

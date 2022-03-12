@@ -1,6 +1,7 @@
 import FooterView from "./FooterView"
 
 const FooterController = () => {
+    
     return <FooterView />
 }
     
