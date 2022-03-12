@@ -1,12 +1,16 @@
 @use '~/src/styles/theme';
 
 .container {
-    display: flex;
-    flex-direction: row;
-    background-color: theme.$primary;
-    color: theme.$onPrimary;
-    border-top: 1px solid black;
-    min-height: 3rem;
-    justify-content: center;
     align-items: center;
+    position: fixed; // Todo tabs still come on top of the keyboard
+    bottom: 0%;
+    width: 100%;
+}
+
+.nav {
+    background-color: theme.$secondary;
+}
+
+.navIcon{
+    color: theme.$primaryVariant;
 }
