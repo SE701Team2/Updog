@@ -7,6 +7,7 @@ const server = express();
 
 import db from '../config/database';
 import routes from './routes';
+import { initializeApp } from "firebase/app";
 
 db.authenticate()
   .then(() => console.log('Database connected...'))
@@ -28,5 +29,16 @@ server.use(
 server.use(bodyParser.json());
 server.use('/api-doc', express.static(__dirname + '/public'));
 server.use('/api', routes);
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBIOtL6KjR5pBSRVVqzWHWpfOokOXD-Ffc",
+    authDomain: "updog-attachments.firebaseapp.com",
+    projectId: "updog-attachments",
+    storageBucket: "updog-attachments.appspot.com",
+    messagingSenderId: "30682006423",
+    appId: "1:30682006423:web:66a642212e83ad6cd3fad2",
+    measurementId: "G-W26WPC0WGZ"
+};
+initializeApp(firebaseConfig);
 
 export default server;
