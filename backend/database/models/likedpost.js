@@ -1,4 +1,3 @@
-'use strict'
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
     class likedPost extends Model {
@@ -13,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     }
     likedPost.init(
         {
-            postId: DataTypes.DECIMAL,
-            userId: DataTypes.DECIMAL,
+            postId: DataTypes.INTEGER,
+            userId: DataTypes.INTERGER,
         },
         {
             sequelize,
