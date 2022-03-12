@@ -35,26 +35,6 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            followers: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-            following: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-            posts: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-            likes: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
-            shares: {
-                allowNull: false,
-                type: Sequelize.STRING,
-            },
             joinedDate: {
                 allowNull: false,
                 type: Sequelize.INTEGER,

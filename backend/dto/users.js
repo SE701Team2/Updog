@@ -1,6 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 export class UserDTO {
-    static convertToDto(user) {
+    static convertToDto(user, followers, following) {
+        let numFollowers = 0
+        let numFollowing = 0
+        if (followers && followers instanceof Array) {
+            numFollowers = followers.length
+        }
+        if (following && following instanceof Array) {
+            numFollowing = following.length
+        }
         return {
             id: user.id,
             username: user.username,
@@ -8,8 +16,8 @@ export class UserDTO {
             profilePic: user.profilePic,
             profileBanner: user.profileBanner,
             bio: user.bio,
-            followers: user.followers.length,
-            following: user.following.length,
+            followers: numFollowers,
+            following: numFollowing,
             joinedDate: user.joinedDate,
         }
     }

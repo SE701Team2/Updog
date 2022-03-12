@@ -39,6 +39,8 @@ export const getUsersById = async (req, res) => {
             })
         } else {
             // sending user response in specific format
+            // const followers = await models.followers.findById(params.id)
+
             const userDTO = UserDTO.convertToDto(user)
             res.status(200).send(userDTO)
         }
