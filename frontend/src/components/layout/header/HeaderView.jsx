@@ -6,7 +6,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 
 const HeaderView = ({goToFeed, goToProfile}) => (
     <div className={classes.container}>
@@ -27,11 +26,9 @@ const HeaderView = ({goToFeed, goToProfile}) => (
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Updog
                     </Typography>
-                    <Tooltip title="Open Profile">
-                        <IconButton onClick={goToProfile}>
-                            <Avatar alt="Barrack Obama" src="https://i.imgur.com/PiJAoqO.jpeg" />
-                        </IconButton>
-                    </Tooltip>
+                    <IconButton onClick={goToProfile}>
+                        <Avatar alt="Barrack Obama" src="https://i.imgur.com/PiJAoqO.jpeg" />
+                    </IconButton>
                 </Toolbar>
             </ AppBar>
         </Box>
