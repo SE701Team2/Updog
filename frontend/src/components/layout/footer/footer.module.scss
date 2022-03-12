@@ -1,0 +1,16 @@
+@use '~/src/styles/theme';
+
+.container {
+    align-items: center;
+    position: fixed; // Todo tabs still come on top of the keyboard
+    bottom: 0%;
+    width: 100%;
+}
+
+.nav {
+    background-color: theme.$primary;
+}
+
+.navIcon{
+    color: theme.$onPrimary;
+}

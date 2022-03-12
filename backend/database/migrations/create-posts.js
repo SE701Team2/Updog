@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import {decode} from "jsonwebtoken";
@@ -151,3 +152,46 @@ export const deletePostById = async (req, res) => {
         res.status(500).send(error)
     }
 }
+=======
+module.exports = {
+    up: (queryInterface, Sequelize) =>
+        queryInterface.createTable('posts', {
+            id: {
+                allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
+                type: Sequelize.INTEGER,
+            },
+            text_content: {
+                type: Sequelize.STRING,
+            },
+            author: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            parent: {
+                type: Sequelize.INTEGER,
+            },
+            usersLiked: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            usersShared: {
+                allowNull: false,
+                type: Sequelize.INTEGER,
+            },
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+            },
+            attachments: {
+                type: Sequelize.STRING,
+            },
+        }),
+    down: (queryInterface, Sequelize) => queryInterface.dropTable('posts'),
+}
+>>>>>>> 1b6ce8506775c3d363578becf617381394da58b2
