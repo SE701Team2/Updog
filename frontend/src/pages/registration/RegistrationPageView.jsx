@@ -19,17 +19,16 @@ const InputField = styled(TextField)({
 
 const RegistrationFormView = ({ submitForm, onInputChange, value, errors }) => {
     const [error, setErrors] = useState({})
-    const [dataIsCollected, setDataIsCollected] = useState(false)
+
 
     const formConfirm = async (event) => {
         event.preventDefault()
         setErrors(errors)
-        setDataIsCollected(true)
         // if user data is collected and no errors
         // set the subnitForm to true
         // passing this value to RegistrationFormController later
         // to show the Account Creat form
-        if (Object.keys(errors).length === 0 && dataIsCollected) {
+        if (Object.keys(errors).length === 0 ) {
             submitForm(true)
             console.log(value)
         }
