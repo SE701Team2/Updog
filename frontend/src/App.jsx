@@ -1,33 +1,34 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import classes from './app.module.scss';
+import classes from './app.module.scss'
 import palette from './styles/theme.scss'
 import Router from './Router'
-import FooterController from './components/layout/footer/FooterController';
+import FooterController from './components/layout/footer/FooterController'
+// Test
 
+let x = 3
 const theme = createTheme({
-  palette: {
-    primary: {
-      main: palette.primary,
-      light: palette.primaryVariant,
+    palette: {
+        primary: {
+            main: palette.primary,
+            light: palette.primaryVariant,
+        },
+        secondary: {
+            main: palette.secondary,
+            light: palette.secondaryVariant,
+        },
+        error: {
+            main: palette.error,
+        },
     },
-    secondary: {
-      main: palette.secondary,
-      light: palette.secondaryVariant,
-    },
-    error: {
-      main: palette.error,
-    },
-  },
-});
+})
 
 const App = () => (
-  <ThemeProvider theme={theme}>
-    <div className={classes.container}>
-      <Router />
-      <FooterController />
-    </div>
-  </ThemeProvider>
+    <ThemeProvider theme={theme}>
+        <div className={classes.container}>
+            <Router />
+            <FooterController />
+        </div>
+    </ThemeProvider>
 )
 
-export default App;
-
+export default App
