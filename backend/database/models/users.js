@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             email: {
                 type: DataTypes.STRING,
+                unique: true,
                 validate: {
                     isEmail: {
                         msg: 'The email address you entered is invalid',
@@ -32,19 +33,54 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             followers: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('followers'))
+                },
+                set(val) {
+                    return this.setDataValue('followers', JSON.stringify(val))
+                },
             },
             following: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('following'))
+                },
+                set(val) {
+                    return this.setDataValue('following', JSON.stringify(val))
+                },
             },
             posts: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('posts'))
+                },
+                set(val) {
+                    return this.setDataValue('posts', JSON.stringify(val))
+                },
             },
             likes: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('likes'))
+                },
+                set(val) {
+                    return this.setDataValue('likes', JSON.stringify(val))
+                },
             },
             shares: {
-                type: DataTypes.ARRAY(DataTypes.INTEGER),
+                type: DataTypes.STRING,
+                defaultValue: '[]',
+                get() {
+                    return JSON.parse(this.getDataValue('shares'))
+                },
+                set(val) {
+                    return this.setDataValue('shares', JSON.stringify(val))
+                },
             },
             joinedDate: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,

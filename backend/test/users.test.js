@@ -222,8 +222,8 @@ describe('Users', () => {
             const profilePic = 'https://imgur.com/gallery/zIMAzsV'
             const profileBanner = 'https://imgur.com/gallery/RstwImS'
             const bio = 'Bio'
-            const followers = ['1', '2']
-            const following = ['3', '4']
+            const followers = [1, 2]
+            const following = [3, 4]
 
             const result = await models.users.create({
                 username: randomUsername,
@@ -252,6 +252,30 @@ describe('Users', () => {
 
             assert.equal(response.statusCode, 200)
             assert.equal(response.body.followers, 2)
+            done()
+        })
+    })
+
+    describe('Testing addUser endpoint', () => {
+        it('Should return a 201 status response', async (done) => {
+            // GIVEN a created user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const requestBody = {
+                username: randomUsername,
+                email: email,
+                password: password,
+            }
+
+            const response = await request('http://localhost:8000/api')
+                .post('/users')
+                .send(requestBody)
+
+            assert.equal(response.statusCode, 201)
+            assert.notEqual(response.body.id, undefined)
+            assert.equal(response.body.username, randomUsername)
             done()
         })
     })

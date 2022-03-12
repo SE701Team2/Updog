@@ -12,8 +12,8 @@ export const addUser = async (req, res) => {
             email: body.email,
             password: body.password,
         })
-
-        res.status(201).send(createUser)
+        const userDTO = UserDTO.convertToDto(createUser)
+        res.status(201).send(userDTO)
     } catch (error) {
         res.status(500).send(error)
     }

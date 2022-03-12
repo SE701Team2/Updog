@@ -37,23 +37,23 @@ module.exports = {
             },
             followers: {
                 allowNull: false,
-                type: Sequelize.ARRAY(Sequelize.INTEGER),
+                type: Sequelize.STRING,
             },
             following: {
                 allowNull: false,
-                type: Sequelize.ARRAY(Sequelize.INTEGER),
+                type: Sequelize.STRING,
             },
             posts: {
                 allowNull: false,
-                type: Sequelize.ARRAY(Sequelize.INTEGER),
+                type: Sequelize.STRING,
             },
             likes: {
                 allowNull: false,
-                type: Sequelize.ARRAY(Sequelize.INTEGER),
+                type: Sequelize.STRING,
             },
             shares: {
                 allowNull: false,
-                type: Sequelize.ARRAY(Sequelize.INTEGER),
+                type: Sequelize.STRING,
             },
             joinedDate: {
                 allowNull: false,
