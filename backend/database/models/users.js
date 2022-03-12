@@ -29,12 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
         users.belongsToMany(models.posts, {
             through: 'likedPost',
-            as: 'posts',
+            as: 'likedPosts',
             foreignKey: 'userId',
         })
         users.belongsToMany(models.posts, {
             through: 'sharedPost',
-            as: 'posts',
+            as: 'sharedPosts',
             foreignKey: 'userId',
         })
     }

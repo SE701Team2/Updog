@@ -1,4 +1,5 @@
 import models from '../../database/models'
+import { convertToPostDto } from '../../dto/posts'
 import { Authentication } from '../../middlewares/authentication'
 
 /*
@@ -30,15 +31,13 @@ export const createPost = async (req, res) => {
                 /*
                 NOTE: attachments is currently a STRING type as the attachment functionality has not been setup yet.
                 */
-                const createNewPost = await models.posts.create({
+                const post = await models.posts.create({
                     text_content: body.text_content,
                     author: decodedUser.id,
                     parent: body.parent,
-                    usersLiked: 0,
-                    usersShared: 0,
-                    attachments: '',
                 })
-                res.status(201).send(createNewPost)
+                const postDTO = await convertToPostDto(post)
+                res.status(201).send(postDTO)
             } else {
                 res.status(404).send({
                     'Error message': 'Parent with that id does not exist.',
@@ -64,7 +63,8 @@ export const getPostById = async (req, res) => {
         const { params } = req
         const post = await models.posts.findByPk(params.id)
         if (post != null) {
-            res.status(200).send(post)
+            const postDTO = await convertToPostDto(post)
+            res.status(200).send(postDTO)
         } else {
             res.status(404).send('ID not found.')
         }
@@ -108,8 +108,6 @@ export const modifyPostById = async (req, res) => {
                     const updated = await models.posts.update(
                         {
                             text_content: body.text_content,
-                            usersLiked: body.usersLiked,
-                            usersShared: body.usersShared,
                         },
                         { returning: true, where: { id: params.id } }
                     )
@@ -166,7 +164,7 @@ export const deletePostById = async (req, res) => {
                     if (count !== 0) {
                         res.status(200).send('The message has been deleted.')
                     } else {
-                        res.status(400).send('Failed to update.')
+                        res.status(400).send('Failed to delete.')
                     }
                 } else {
                     res.status(403).send('Invalid author ID.')

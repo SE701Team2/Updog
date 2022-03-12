@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             parent: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
-            attachments: DataTypes.STRING,
         },
         {}
     )
@@ -15,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
         posts.belongsToMany(models.users, {
             through: 'likedPost',
-            as: 'users',
+            as: 'likedUsers',
             foreignKey: 'postId',
         })
         posts.belongsToMany(models.users, {
             through: 'sharedPost',
-            as: 'users',
+            as: 'sharedUsers',
             foreignKey: 'postId',
         })
     }
