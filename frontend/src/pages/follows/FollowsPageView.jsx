@@ -2,12 +2,12 @@ import { List, ListItem, Tabs, Tab } from '@mui/material'
 
 import classes from './followspage.module.scss'
 import Footer from '../../components/layout/footer/FooterController'
-import Header from '../../components/layout/header/HeaderController'
 import SimpleUserDetails from '../../components/user/simpledetails/SimpleUserDetailsController'
+import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
 
 const FollowsPageView = ({ followsData, tab, handleChange }) => (
     <div className={classes.container}>
-        <Header />
+        <HeaderCustom title="Follows" />
 
         <Tabs value={tab} onChange={handleChange} variant="fullWidth">
             <Tab label="Followers" />

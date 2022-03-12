@@ -1,5 +1,5 @@
-import FooterView from './FooterView'
 import { useState } from 'react'
+import FooterView from './FooterView'
 /**
  * This is a reusable footer component intended for users to navigate to main pages.
  */
