@@ -31,6 +31,7 @@ describe('POST /posts', () => {
                     text_content: 'what is the meaning of life?',
                     parent: null,
                 })
+            expect(response.body.id).toBeTruthy()
             expect(response.body.content).toBe('what is the meaning of life?')
             expect(response.body.author.username).toBe('gandalf')
             expect(response.body.author.email).toBe('gandalf@gandalf.com')
@@ -38,6 +39,7 @@ describe('POST /posts', () => {
             expect(response.body.children).toStrictEqual([])
             expect(response.body.usersLiked).toBe(0)
             expect(response.body.usersShared).toBe(0)
+            expect(response.body.timestamp).toBeTruthy()
             expect(response.statusCode).toBe(201)
         })
     })
@@ -124,6 +126,7 @@ describe('GET /posts', () => {
             const response = await request(server).get(
                 `/api/posts/${createPostResponse.body.id}`
             )
+            expect(response.body.id).toBeTruthy()
             expect(response.body.content).toBe('some random text 2')
             expect(response.body.author.username).toBe('testUser')
             expect(response.body.author.email).toBe('testUser@testmail.com')
@@ -131,6 +134,7 @@ describe('GET /posts', () => {
             expect(response.body.children).toStrictEqual([])
             expect(response.body.usersLiked).toBe(0)
             expect(response.body.usersShared).toBe(0)
+            expect(response.body.timestamp).toBeTruthy()
             expect(response.statusCode).toBe(200)
         })
     })
