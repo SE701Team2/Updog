@@ -14,9 +14,6 @@ const HeaderView = ({goToFeed, goToProfile}) => (
                 <Toolbar>
                     <IconButton
                         size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
                         color="inherit"
                         sx={{ mr: 2 }}
                         onClick={goToFeed}
