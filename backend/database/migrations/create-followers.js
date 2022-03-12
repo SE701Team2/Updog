@@ -10,10 +10,12 @@ module.exports = {
                 type: Sequelize.DATE,
             },
             followedId: {
+                allowNull: false,
                 type: Sequelize.INTEGER,
                 primaryKey: true,
             },
             followerId: {
+                allowNull: false,
                 type: Sequelize.INTEGER,
                 primaryKey: true,
             },

@@ -12,7 +12,7 @@ export const addUser = async (req, res) => {
             email: body.email,
             password: body.password,
         })
-        const userDTO = UserDTO.convertToDto(createUser)
+        const userDTO = await UserDTO.convertToDto(createUser)
         res.status(201).send(userDTO)
     } catch (error) {
         res.status(500).send(error)
@@ -38,10 +38,7 @@ export const getUsersById = async (req, res) => {
                 'Error message': 'Auth token invalid',
             })
         } else {
-            // sending user response in specific format
-            // const followers = await models.followers.findById(params.id)
-
-            const userDTO = UserDTO.convertToDto(user)
+            const userDTO = await UserDTO.convertToDto(user)
             res.status(200).send(userDTO)
         }
     } catch (error) {

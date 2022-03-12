@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
                     isUrl: 'This image needs to be a link',
                 },
             },
+            bio: DataTypes.STRING,
             joinedDate: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
@@ -50,6 +51,16 @@ module.exports = (sequelize, DataTypes) => {
     )
     users.associate = function (models) {
         // associations can be defined here
+        users.belongsToMany(models.users, {
+            through: 'followers',
+            as: 'follower',
+            foreignKey: 'followedId',
+        })
+        users.belongsToMany(models.users, {
+            through: 'followers',
+            as: 'followed',
+            foreignKey: 'followerId',
+        })
     }
     users.prototype.validatePassword = function (plainText) {
         return bcrypt.compareSync(plainText, this.password)

@@ -1,16 +1,25 @@
+const { Model } = require('sequelize')
+
 module.exports = (sequelize, DataTypes) => {
-    const followers = sequelize.define(
-        'followers',
+    class followers extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+        }
+    }
+    followers.init(
         {
             followedId: DataTypes.INTEGER,
             followerId: DataTypes.INTEGER,
-            createdAt: DataTypes.DATE,
-            updatedAt: DataTypes.DATE,
         },
-        {}
+        {
+            sequelize,
+            modelName: 'followers',
+        }
     )
-    followers.associate = function (models) {
-        // associations can be defined here
-    }
     return followers
 }

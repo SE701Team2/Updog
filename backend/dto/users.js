@@ -1,14 +1,16 @@
+import models from '../database/models'
+
 /* eslint-disable import/prefer-default-export */
 export class UserDTO {
-    static convertToDto(user, followers, following) {
-        let numFollowers = 0
-        let numFollowing = 0
-        if (followers && followers instanceof Array) {
-            numFollowers = followers.length
-        }
-        if (following && following instanceof Array) {
-            numFollowing = following.length
-        }
+    static async convertToDto(user) {
+        const numFollowers = await models.followers.count({
+            where: { followedId: user.id },
+        })
+
+        const numFollowing = await models.followers.count({
+            where: { followerId: user.id },
+        })
+
         return {
             id: user.id,
             username: user.username,

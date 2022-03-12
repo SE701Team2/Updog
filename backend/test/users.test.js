@@ -222,8 +222,6 @@ describe('Users', () => {
             const profilePic = 'https://imgur.com/gallery/zIMAzsV'
             const profileBanner = 'https://imgur.com/gallery/RstwImS'
             const bio = 'Bio'
-            const followers = [1, 2]
-            const following = [3, 4]
 
             const result = await models.users.create({
                 username: randomUsername,
@@ -232,8 +230,6 @@ describe('Users', () => {
                 profilePic,
                 profileBanner,
                 bio,
-                followers,
-                following,
             })
 
             const loginInfo = {
@@ -245,13 +241,35 @@ describe('Users', () => {
                 .post('/users/authenticate')
                 .send(loginInfo)
 
+            // add to followers table, userDTO just needs to count Ids
+            const followers = [
+                { followedId: result.id, followerId: 1000 },
+                { followedId: result.id, followerId: 2000 },
+            ]
+            await models.followers.bulkCreate(followers)
+
             // user viewing itself
             const response = await request('http://localhost:8000/api')
                 .get(`/users/${result.id}`)
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
+            const expectedResponse = {
+                id: response.body.id,
+                username: randomUsername,
+                nickname: '',
+                profilePic: profilePic,
+                profileBanner: profileBanner,
+                bio: bio,
+                followers: 2,
+                following: 0,
+                joinedDate: response.body.joinedDate,
+            }
+
             assert.equal(response.statusCode, 200)
-            assert.equal(response.body.followers, 2)
+            assert.equal(
+                JSON.stringify(response.body),
+                JSON.stringify(expectedResponse)
+            )
             done()
         })
     })
@@ -273,9 +291,19 @@ describe('Users', () => {
                 .post('/users')
                 .send(requestBody)
 
+            const expectedResponse = {
+                id: response.body.id,
+                username: randomUsername,
+                followers: 0,
+                following: 0,
+                joinedDate: response.body.joinedDate,
+            }
+
             assert.equal(response.statusCode, 201)
-            assert.notEqual(response.body.id, undefined)
-            assert.equal(response.body.username, randomUsername)
+            assert.equal(
+                JSON.stringify(response.body),
+                JSON.stringify(expectedResponse)
+            )
             done()
         })
     })
