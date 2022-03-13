@@ -1,5 +1,6 @@
 import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
+import { convertToPostDto } from '../../dto/posts'
 import { Authentication } from '../../middlewares/authentication'
 
 // Upload a file to the storage, then create attachment object to be appended into the Database.
@@ -78,25 +79,24 @@ export const createPost = async (req, res) => {
                 /*
                 NOTE: attachments is currently a STRING type as the attachment functionality has not been setup yet.
                 */
-                const createNewPost = await models.posts.create({
+                const post = await models.posts.create({
                     text_content: body.text_content,
                     author: decodedUser.id,
                     parent: body.parent,
-                    usersLiked: 0,
-                    usersShared: 0,
                 })
+                const postDTO = await convertToPostDto(post)
 
                 if (req.files) {
                     const file = req.files.attachments
                     if (!!file && file.constructor === Array) {
                         file.forEach(async (x) => {
-                            uploadFileToCloud(x, createNewPost.id)
+                            uploadFileToCloud(x, post.id)
                         })
                     } else {
-                        uploadFileToCloud(file, createNewPost.id)
+                        uploadFileToCloud(file, post.id)
                     }
                 }
-                res.status(201).send(createNewPost)
+                res.status(201).send(postDTO)
             } else {
                 res.status(404).send({
                     'Error message': 'Parent with that id does not exist.',
@@ -122,7 +122,8 @@ export const getPostById = async (req, res) => {
         const { params } = req
         const post = await models.posts.findByPk(params.id)
         if (post != null) {
-            res.status(200).send(post)
+            const postDTO = await convertToPostDto(post)
+            res.status(200).send(postDTO)
         } else {
             res.status(404).send('ID not found.')
         }
@@ -166,15 +167,13 @@ export const modifyPostById = async (req, res) => {
                     const updated = await models.posts.update(
                         {
                             text_content: body.text_content,
-                            usersLiked: body.usersLiked,
-                            usersShared: body.usersShared,
                         },
                         { returning: true, where: { id: params.id } }
                     )
                     if (updated) {
                         res.status(200).send('The message has been updated.')
                     } else {
-                        res.status(400).send('Update failed.')
+                        res.status(500).send('Failed to update the post.')
                     }
                 } else {
                     res.status(403).send('Invalid author ID.')
@@ -216,15 +215,15 @@ export const deletePostById = async (req, res) => {
                 // Check whether the post being deleted belongs to that user.
                 const post = await models.posts.findByPk(params.id)
                 if (!post) {
-                    res.status(404).send('Invalid message ID.')
+                    res.status(404).send('Invalid post ID.')
                 } else if (post.author === decodedUser.id) {
                     const count = await models.posts.destroy({
                         where: { id: params.id },
                     })
                     if (count !== 0) {
-                        res.status(200).send('The message has been deleted.')
+                        res.status(200).send('The post has been deleted.')
                     } else {
-                        res.status(400).send('Failed to update.')
+                        res.status(500).send('Failed to destroy the post.')
                     }
                 } else {
                     res.status(403).send('Invalid author ID.')

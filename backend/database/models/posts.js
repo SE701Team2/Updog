@@ -5,8 +5,6 @@ module.exports = (sequelize, DataTypes) => {
             text_content: DataTypes.STRING,
             author: DataTypes.INTEGER,
             parent: DataTypes.INTEGER,
-            usersLiked: DataTypes.INTEGER,
-            usersShared: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
         },
@@ -14,6 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     )
     posts.associate = function (models) {
         // associations can be defined here
+        posts.belongsToMany(models.users, {
+            through: 'likedPosts',
+            as: 'likedUsers',
+            foreignKey: 'postId',
+        })
+        posts.belongsToMany(models.users, {
+            through: 'sharedPosts',
+            as: 'sharedUsers',
+            foreignKey: 'postId',
+        })
     }
     return posts
 }

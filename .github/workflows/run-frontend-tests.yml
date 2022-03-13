@@ -1,0 +1,33 @@
+name: run-frontend-tests.yml
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+          working-directory: ./frontend/
+
+    env:
+      CI: 'false' # don't treat warnings as errors
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./frontend/package-lock.json
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
