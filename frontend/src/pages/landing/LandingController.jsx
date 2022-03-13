@@ -1,8 +1,8 @@
-import LandingView from "./LandingView"
+import LandingView from './LandingView'
 
 /**
- * This page is where a user will land when they are not logged in. 
- * It contains a button to sign up and a button to sign in
+ * This page is where a user will land when they are not logged in.
+ * It contains a button to sign up
  */
 const LandingController = () => <LandingView />
 
