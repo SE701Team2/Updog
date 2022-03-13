@@ -5,9 +5,6 @@ import classes from './profileuserdetails.module.scss'
 
 const ProfileUserDetailsView = ({ user }) => (
     <div className={classes.container}>
-        <div className={classes.banner}>
-            <img alt="Profile Banner" src={user.profileBanner} />
-        </div>
         <Avatar
             alt="Profile Pic"
             src={user.profilePic}
