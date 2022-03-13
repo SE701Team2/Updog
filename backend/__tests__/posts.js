@@ -34,7 +34,9 @@ describe('Posts', () => {
                         parent: null,
                     })
                 expect(response.body.id).toBeTruthy()
-                expect(response.body.content).toBe('what is the meaning of life?')
+                expect(response.body.content).toBe(
+                    'what is the meaning of life?'
+                )
                 expect(response.body.author.username).toBe('gandalf')
                 expect(response.body.author.email).toBe('gandalf@gandalf.com')
                 expect(response.body.parent).toBe(null)
@@ -148,10 +150,12 @@ describe('Posts', () => {
     describe('PUT /posts', () => {
         describe('when not authenticated', () => {
             it('should return response code of 400', async () => {
-                const response = await request(server).put(`/api/posts/1`).send({
-                    text_content: 'new text',
-                    parent: null,
-                })
+                const response = await request(server)
+                    .put(`/api/posts/1`)
+                    .send({
+                        text_content: 'new text',
+                        parent: null,
+                    })
                 expect(response.statusCode).toBe(400)
             })
         })
