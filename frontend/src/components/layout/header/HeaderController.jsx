@@ -1,5 +1,5 @@
-import HeaderView from "./HeaderView"
 import { useNavigate } from "react-router"
+import HeaderView from "./HeaderView"
 
 const HeaderController = () => {
     const navigate = useNavigate();
