@@ -21,7 +21,7 @@ const UserPageView = ({ userData, userFeed, loggedIn }) => (
                 disableElevation
                 className={classes.followButton}
             >
-                Follow
+                Placeholder
             </Button>
             <ProfileUserDetails user={userData} />
             &nbsp;
