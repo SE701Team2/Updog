@@ -1,13 +1,9 @@
+@use '~/src/styles/theme';
+
 .container {
     display: flex;
     flex-direction: column;
     height: 100%;
-}
-
-.pageContent {
-    height: 100%;
-    padding: 1rem;
-    overflow: auto;
 }
 
 .banner {
@@ -15,3 +11,15 @@
     height: 140px;
     border-bottom: 1px solid black;
 }
+
+.pageContent {
+    height: 100%;
+    padding: 1rem;
+    overflow: auto;
+    padding-bottom: 50px;
+}
+
+.followButton {
+    float: right;
+}
+
