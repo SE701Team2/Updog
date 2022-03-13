@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
             usersShared: DataTypes.INTEGER,
             createdAt: DataTypes.DATE,
             updatedAt: DataTypes.DATE,
-            attachments: DataTypes.STRING,
         },
         {}
     )
