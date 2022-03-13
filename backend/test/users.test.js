@@ -17,6 +17,16 @@ describe('Users', () => {
         })
     })
 
+    beforeEach(async () => {
+        await models.users.destroy({
+            where: {}
+        })
+
+        await models.followers.destroy({
+            where: {}
+        })
+    });
+
     describe('Encrypting password', () => {
         it('Should encrypt password before saving', async () => {
             // GIVEN a user has been created
@@ -25,6 +35,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -49,6 +60,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -73,6 +85,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -102,12 +115,13 @@ describe('Users', () => {
             try {
                 await models.users.create({
                     username: randomUsername,
+                    nickname: randomUsername,
                     email,
                     password,
                 })
 
                 // Email is invalid so should have thrown an error
-                assert(false)
+                fail("Email should not have been saved as it is invalid")
             } catch (e) {
                 // Check the error is thrown by the email validation
                 const errMessage = 'The email address you entered is invalid'
@@ -125,6 +139,7 @@ describe('Users', () => {
 
             const user = await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -159,6 +174,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -187,6 +203,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -206,7 +223,7 @@ describe('Users', () => {
         })
     })
 
-    describe('Testing getUsersById endpoint', () => {
+    describe('Testing getUsersByUsername endpoint', () => {
         it('Should return a 200 status response', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
@@ -218,6 +235,7 @@ describe('Users', () => {
 
             const result = await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
                 profilePic,
@@ -243,13 +261,13 @@ describe('Users', () => {
 
             // user viewing itself
             const response = await request('http://localhost:8000/api')
-                .get(`/users/${result.id}`)
+                .get(`/users/${result.username}`)
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
             const expectedResponse = {
                 id: response.body.id,
                 username: randomUsername,
-                nickname: '',
+                nickname: randomUsername,
                 profilePic,
                 profileBanner,
                 bio,
@@ -275,6 +293,7 @@ describe('Users', () => {
 
             const requestBody = {
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             }
@@ -286,6 +305,7 @@ describe('Users', () => {
             const expectedResponse = {
                 id: response.body.id,
                 username: randomUsername,
+                nickname: randomUsername,
                 followers: 0,
                 following: 0,
                 joinedDate: response.body.joinedDate,

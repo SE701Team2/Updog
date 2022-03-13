@@ -7,8 +7,31 @@ export const addUser = async (req, res) => {
         const { body } = req
         console.log('🚀 ~ file: user.js ~ line 6 ~ addUser ~ body', body)
 
+        const duplicateUsername = await models.users.findOne({
+            where: {
+                username: body.username,
+            }
+        })
+
+        if(duplicateUsername){
+            res.status(409).send({"error": "Username already taken"})
+            return
+        }
+
+        const duplicateEmail = await models.users.findOne({
+            where: {
+                email: body.email,
+            }
+        })
+
+        if(duplicateEmail){
+            res.status(409).send({"error": "Email has already been taken"})
+            return
+        }
+
         const createUser = await models.users.create({
             username: body.username,
+            nickname: body.nickname,
             email: body.email,
             password: body.password,
         })
@@ -19,10 +42,14 @@ export const addUser = async (req, res) => {
     }
 }
 
-export const getUsersById = async (req, res) => {
+export const getUsersByUsername = async (req, res) => {
     try {
         const { params } = req
-        const user = await models.users.findByPk(params.id)
+        const user = await models.users.findOne({
+            where: {
+                username: params.username
+            }
+        })
         const authToken = req.get('Authorization')
 
         if (!authToken) {

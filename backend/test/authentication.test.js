@@ -8,6 +8,7 @@ describe('Authentication', () => {
         it('Test that the string returned is the correct format', () => {
             const user = {
                 username: "test-username",
+                nickname: 'gandalf',
                 password: "Password",
                 email: "test@email.com"
             }
@@ -25,6 +26,7 @@ describe('Authentication', () => {
         it('Test extracting user from jwt', async() => {
             await models.users.create({
                 username: "test-username",
+                nickname: 'gandalf',
                 password: "Password",
                 email: "test@email.com"
             });
