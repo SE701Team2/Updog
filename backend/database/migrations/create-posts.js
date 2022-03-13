@@ -17,14 +17,6 @@ module.exports = {
             parent: {
                 type: Sequelize.INTEGER,
             },
-            usersLiked: {
-                allowNull: false,
-                type: Sequelize.INTEGER,
-            },
-            usersShared: {
-                allowNull: false,
-                type: Sequelize.INTEGER,
-            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
@@ -34,5 +26,5 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         }),
-    down: (queryInterface, Sequelize) => queryInterface.dropTable('posts'),
+    down: (queryInterface) => queryInterface.dropTable('posts'),
 }
