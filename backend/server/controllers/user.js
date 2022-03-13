@@ -1,72 +1,99 @@
-import models from '../../database/models';
-import { Authentication } from '../../middlewares/authentication';
+import models from '../../database/models'
+import { Authentication } from '../../middlewares/authentication'
+import { UserDTO } from '../../dto/users'
 
 export const addUser = async (req, res) => {
-  try {
-    const { body } = req;
-    console.log('🚀 ~ file: user.js ~ line 6 ~ addUser ~ body', body);
+    try {
+        const { body } = req
+        console.log('🚀 ~ file: user.js ~ line 6 ~ addUser ~ body', body)
 
-    const createUser = await models.users.create({
-      username: body.username,
-      email: body.email,
-      password: body.password
-    });
+        const duplicateUsername = await models.users.findOne({
+            where: {
+                username: body.username,
+            }
+        })
 
-    res.status(201).send(createUser);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-};
+        if(duplicateUsername){
+            res.status(409).send({"error": "Username already taken"})
+            return
+        }
 
-export const getUsersById = async (req, res) => {
-  try {
-    const { params } = req;
-    const user = await models.users.findByPk(params.id);
-    const authToken = req.get('Authorization');
+        const duplicateEmail = await models.users.findOne({
+            where: {
+                email: body.email,
+            }
+        })
 
-    if (!authToken) {
-      res.status(400).send({
-        "Error message": "Auth token not provided"
-      })
-    } 
+        if(duplicateEmail){
+            res.status(409).send({"error": "Email has already been taken"})
+            return
+        }
 
-    const decodedUser = Authentication.extractUser(authToken);
-
-    if (!decodedUser.id) {
-      res.status(401).send({
-        "Error message": "Auth token invalid"
-      })
-
-    } else {
-      res.status(200).send(user);
+        const createUser = await models.users.create({
+            username: body.username,
+            nickname: body.nickname,
+            email: body.email,
+            password: body.password,
+        })
+        const userDTO = await UserDTO.convertToDto(createUser)
+        res.status(201).send(userDTO)
+    } catch (error) {
+        res.status(500).send(error)
     }
-    
-  } catch (error) {
-    res.status(500).send({"Error message": error.toString()});
-  }
-};
+}
+
+export const getUsersByUsername = async (req, res) => {
+    try {
+        const { params } = req
+        const user = await models.users.findOne({
+            where: {
+                username: params.username
+            }
+        })
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+        } else {
+            const userDTO = await UserDTO.convertToDto(user)
+            res.status(200).send(userDTO)
+        }
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
 
 export const authenticateUser = async (req, res) => {
-  try {
-    const { body } = req;
-    const user = await models.users.findOne({
-      where: {
-        email: body.email
-      }
-    });
+    try {
+        const { body } = req
+        const user = await models.users.findOne({
+            where: {
+                email: body.email,
+            },
+        })
 
-    if(!user || !user.validatePassword(body.password)){
-      res.status(401).send({
-        "error": "Incorrect email or password"
-      })
-    } else {
-      const authToken = Authentication.generateAuthToken(user);
-      res.status(200).send({
-        "message": "Authentication successful",
-        "authToken": authToken
-      });
+        if (!user || !user.validatePassword(body.password)) {
+            res.status(401).send({
+                error: 'Incorrect email or password',
+            })
+        } else {
+            const authToken = Authentication.generateAuthToken(user)
+            res.status(200).send({
+                message: 'Authentication successful',
+                authToken: authToken,
+            })
+        }
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
     }
-  } catch (error) {
-    res.status(500).send({"Error message": error.toString()})
-  }
 }

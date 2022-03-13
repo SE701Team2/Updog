@@ -4,9 +4,13 @@ module.exports = (sequelize, DataTypes) => {
     const users = sequelize.define(
         'users',
         {
-            username: DataTypes.STRING,
+            username: {
+                type: DataTypes.STRING,
+                unique: true,
+            },
             email: {
                 type: DataTypes.STRING,
+                unique: true,
                 validate: {
                     isEmail: {
                         msg: 'The email address you entered is invalid',
@@ -14,6 +18,23 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
             password: DataTypes.STRING,
+            nickname: DataTypes.STRING,
+            profilePic: {
+                type: DataTypes.STRING,
+                validate: {
+                    isUrl: 'This image needs to be a link',
+                },
+            },
+            profileBanner: {
+                type: DataTypes.STRING,
+                validate: {
+                    isUrl: 'This image needs to be a link',
+                },
+            },
+            bio: DataTypes.STRING,
+            joinedDate: DataTypes.INTEGER,
+            createdAt: DataTypes.DATE,
+            updatedAt: DataTypes.DATE,
         },
         {
             hooks: {
@@ -21,12 +42,25 @@ module.exports = (sequelize, DataTypes) => {
                     const salt = bcrypt.genSaltSync()
                     User.password = bcrypt.hashSync(User.password, salt)
                     User.password_confirmation = User.password
+
+                    User.joinedDate = Math.floor(Date.now() / 1000)
+
                 },
             },
         }
     )
     users.associate = function (models) {
         // associations can be defined here
+        users.belongsToMany(models.users, {
+            through: 'followers',
+            as: 'follower',
+            foreignKey: 'followedId',
+        })
+        users.belongsToMany(models.users, {
+            through: 'followers',
+            as: 'followed',
+            foreignKey: 'followerId',
+        })
         users.belongsToMany(models.posts, {
             through: 'likedPost',
             as: 'likedPosts',

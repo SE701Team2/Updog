@@ -20,6 +20,7 @@
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
+    "firebase-admin": "^10.0.2",
     "generate-password": "^1.5.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
