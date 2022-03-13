@@ -25,6 +25,7 @@ const UserPageView = ({ userData, userFeed, loggedIn }) => (
             </Button>
             <ProfileUserDetails user={userData} />
             &nbsp;
+            <hr />
             <h1>Posts</h1>
             <List>
                 {userFeed?.map((post) => (
