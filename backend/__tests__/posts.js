@@ -48,6 +48,38 @@ describe('Posts', () => {
             })
         })
 
+        describe('when creating a valid post with attachment', () => {
+            it('should return response code of 200', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const fs = require('fs')
+                const testFile = fs.readFile(
+                    '__tests__/files/test_image.png',
+                    (err) => {
+                        if (err) {
+                            throw err
+                        }
+                    }
+                )
+                const response = await request(server)
+                    .post('/api/posts')
+                    .set('Authorization', `Bearer ${authToken}`)
+                    .send({
+                        text_content: 'some random text 3',
+                        parent: null,
+                        attachments: testFile,
+                    })
+                expect(response.statusCode).toBe(201)
+            })
+        })
+
         // the parent must exist for it to be a valid post.
         describe('when creating an invalid post', () => {
             it('should return response code of 404 not found', async () => {
