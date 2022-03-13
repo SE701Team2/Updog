@@ -17,6 +17,7 @@ const Router = () => {
         routes = (
             <Routes>
                 <Route path="/post/:id" element={<Post />} />
+                <Route path="/user/:username/follows" element={<Follows />} />
             </Routes>
         )
     } else {
