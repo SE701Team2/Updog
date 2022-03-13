@@ -2,7 +2,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import classes from './app.module.scss'
 import palette from './styles/theme.scss'
 import Router from './Router'
-import HeaderController from './components/layout/header/HeaderController'
 
 const theme = createTheme({
     palette: {
@@ -42,7 +41,6 @@ const theme = createTheme({
 const App = () => (
     <ThemeProvider theme={theme}>
         <div className={classes.container}>
-            <HeaderController />
             <Router />
         </div>
     </ThemeProvider>

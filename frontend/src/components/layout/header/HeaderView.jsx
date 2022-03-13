@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import logo from '../../../images/logo.png'
 import classes from './header.module.scss'
 
-const HeaderView = ({goToFeed, goToProfile}) => (
+const HeaderView = ({user, goToFeed, goToProfile}) => (
     <div className={classes.container}>
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -19,7 +19,7 @@ const HeaderView = ({goToFeed, goToProfile}) => (
                         Updog
                     </Typography>
                     <IconButton onClick={goToProfile}>
-                        <Avatar alt="Barrack Obama" src="https://i.imgur.com/PiJAoqO.jpeg" />
+                        <Avatar alt={user.username} src={user.profilePic} />
                     </IconButton>
                 </Toolbar>
             </ AppBar>

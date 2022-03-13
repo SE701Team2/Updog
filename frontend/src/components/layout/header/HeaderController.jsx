@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router"
 import HeaderView from "./HeaderView"
+import user from "./mock-userData"
 
 const HeaderController = () => {
     const navigate = useNavigate();
@@ -9,11 +10,12 @@ const HeaderController = () => {
     }
 
     const goToProfile = ()=>{
-        navigate("/user/:username");
+        navigate(`/user/${user.username}`);
     }
 
     return(
         <HeaderView 
+            user={user}
             goToFeed={goToFeed} 
             goToProfile={goToProfile}
         />
