@@ -12,6 +12,7 @@ describe('Users', () => {
         // Testing on a different port to avoid conflict
         db.sync().then(() => {
             serverInstance = server.listen(8000, () =>
+                // eslint-disable-next-line no-console
                 console.log(`server is running at ${8000}`)
             )
         })
@@ -19,13 +20,13 @@ describe('Users', () => {
 
     beforeEach(async () => {
         await models.users.destroy({
-            where: {}
+            where: {},
         })
 
         await models.followers.destroy({
-            where: {}
+            where: {},
         })
-    });
+    })
 
     describe('Encrypting password', () => {
         it('Should encrypt password before saving', async () => {
@@ -121,7 +122,7 @@ describe('Users', () => {
                 })
 
                 // Email is invalid so should have thrown an error
-                fail("Email should not have been saved as it is invalid")
+                assert.fail('Email should not have been saved as it is invalid')
             } catch (e) {
                 // Check the error is thrown by the email validation
                 const errMessage = 'The email address you entered is invalid'
