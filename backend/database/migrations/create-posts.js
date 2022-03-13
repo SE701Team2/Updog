@@ -33,9 +33,6 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DATE,
             },
-            attachments: {
-                type: Sequelize.STRING,
-            },
         }),
     down: (queryInterface, Sequelize) => queryInterface.dropTable('posts'),
 }

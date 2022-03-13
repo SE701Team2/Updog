@@ -2,12 +2,27 @@ import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 
-// Upload a file to the storage
-async function uploadFileToCloudStorage(filename) {
-    await bucket.upload(`./images_upload/${filename}`, {
-        destination: `Post_images/${filename}`,
+// Upload a file to the storage, then create attachment object to be appended into the Database.
+async function uploadFileToCloud(file, postID) {
+    const newFilename = `${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(-5)}-${file.name}`
+
+    // Moving a file from memory to disk.
+    // TODO : Preferbly we want to upload straight from memory.
+    await file.mv(`./images_upload/${newFilename}`, null)
+
+    // Uploading to the cloud storage
+    await bucket.upload(`./images_upload/${newFilename}`, {
+        destination: `Post_images/${newFilename}`,
     })
-    console.log(`uploaded file : ${filename}`)
+
+    // Creating a object for database.
+    await models.attachments.create({
+        postID,
+        attachmentLink: `Post_images/${newFilename}`,
+    })
+    console.log(`uploaded file : ${newFilename}`)
 }
 
 // Download a file from the storage
@@ -56,22 +71,6 @@ export const createPost = async (req, res) => {
                 res.status(401).send({ 'Error message': 'Auth token invalid' })
             }
 
-            let attachmentLink = ''
-            if (req.files) {
-                const file = req.files.attachments
-                const newFilename = `${Date.now()}-${Math.random()
-                    .toString(36)
-                    .slice(-5)}-${file.name}`
-
-                attachmentLink = newFilename
-
-                // Save the image to disk, which will end up being uploaded to cloud storage
-                file.mv(`./images_upload/${newFilename}`, null)
-
-                // upload the file/image to the firebase storage
-                uploadFileToCloudStorage(newFilename).catch(console.error)
-            }
-
             // Check whether the parent post exists.
             const parent = await models.posts.findByPk(body.parent)
 
@@ -85,8 +84,18 @@ export const createPost = async (req, res) => {
                     parent: body.parent,
                     usersLiked: 0,
                     usersShared: 0,
-                    attachments: attachmentLink,
                 })
+
+                if (req.files) {
+                    const file = req.files.attachments
+                    if (!!file && file.constructor === Array) {
+                        file.forEach(async (x) => {
+                            uploadFileToCloud(x, createNewPost.id)
+                        })
+                    } else {
+                        uploadFileToCloud(file, createNewPost.id)
+                    }
+                }
                 res.status(201).send(createNewPost)
             } else {
                 res.status(404).send({
