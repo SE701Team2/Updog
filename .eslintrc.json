@@ -6,6 +6,10 @@
     },
     "extends": [
         "airbnb",
+        "prettier",
+        "plugin:md/prettier"
+    ],
+    "plugins": [
         "prettier"
     ],
     "parserOptions": {
