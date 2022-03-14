@@ -125,14 +125,15 @@ export const getUserActivity = async (req, res) => {
             return
         }
 
-        let activity = [];
+        // Retrieve user's posts, including the shared and liked posts
+
         const posts = await models.posts.findAll({
             where:{
                 author: userOfInterest.id
             }
         })
 
-        posts.forEach(p => activity.push(Activity.convertToActivity(Activity.POSTED, p.id, p.updatedAt)))
+       const postsActivity = posts.map(p => Activity.convertToActivity(Activity.POSTED, p.id, p.createdAt))
 
         const sharedPosts = await models.sharedPost.findAll({
             where:{
@@ -140,7 +141,7 @@ export const getUserActivity = async (req, res) => {
             }
         })
 
-        sharedPosts.forEach(p => activity.push(Activity.convertToActivity(Activity.SHARED, p.postId, p.updatedAt)))
+        const sharedPostsActivity = sharedPosts.map(p => Activity.convertToActivity(Activity.SHARED, p.postId, p.createdAt))
 
         const likedPosts = await models.likedPost.findAll({
             where:{
@@ -148,8 +149,10 @@ export const getUserActivity = async (req, res) => {
             }
         })
 
-        likedPosts.forEach(p => activity.push(Activity.convertToActivity(Activity.LIKED, p.postId, p.updatedAt)))
+        const likedPostsActivity = likedPosts.map(p => Activity.convertToActivity(Activity.LIKED, p.postId, p.createdAt))
 
+        // Merge the posts together into one array, sort them in descending order based on timestamp, and return them
+        let activity = [...postsActivity, ...likedPostsActivity, ...sharedPostsActivity];
         activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
         res.status(200).send(activity)
     } catch (error) {
