@@ -14,10 +14,14 @@ const UserPageController = () => {
     // once auth is implemented this will be removed
     const logginState = true
 
-    const [buttonText, setButtonText] = useState(false)
+    // once api calls are implemented will be changed
+    let isFollower = true
+
+    const [buttonText, setButtonText] = useState(isFollower)
 
     const changeText = () => {
         setButtonText(!buttonText)
+        isFollower = !isFollower
     }
 
     return (
