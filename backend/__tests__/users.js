@@ -39,7 +39,6 @@ describe('Users', () => {
         await models.sharedPost.destroy({
             where: {},
         })
-
     })
 
     describe('Encrypting password', () => {
@@ -298,6 +297,22 @@ describe('Users', () => {
                 JSON.stringify(expectedResponse)
             )
         })
+
+        it('Should return a 404 status response', async () => {
+            // random username that doesn't exist
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+
+            // trying to get this user, don't need authentication as 404 should return first
+            const response = await request('http://localhost:8000/api').get(
+                `/users/${randomUsername}`
+            )
+
+            assert.equal(response.statusCode, 404)
+            assert.equal(
+                response.body.error,
+                `User '${randomUsername}' not found`
+            )
+        })
     })
 
     describe('Testing addUser endpoint', () => {
@@ -343,25 +358,25 @@ describe('Users', () => {
             })
 
             const newPost = await models.posts.create({
-                text_content: "Updog is the next big thing",
+                text_content: 'Updog is the next big thing',
                 author: newUser.id,
-                createdAt: "2020-03-13 04:56:53"
+                createdAt: '2020-03-13 04:56:53',
             })
 
             const likedPost = await models.likedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-13 04:56:53"
+                createdAt: '2021-03-13 04:56:53',
             })
 
             const sharedPost = await models.sharedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-14 04:56:53"
+                createdAt: '2021-03-14 04:56:53',
             })
 
             // WHEN the logged in user tries to view the user activity
-            let authToken = Authentication.generateAuthToken(newUser)
+            const authToken = Authentication.generateAuthToken(newUser)
 
             const response = await request('http://localhost:8000/api')
                 .get(`/users/${randomUsername}/activity`)
@@ -372,17 +387,17 @@ describe('Users', () => {
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(sharedPost.createdAt),
-                    activity: "SHARED"
+                    activity: 'SHARED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(likedPost.createdAt),
-                    activity: "LIKED"
+                    activity: 'LIKED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(newPost.createdAt),
-                    activity: "POSTED"
+                    activity: 'POSTED',
                 },
             ]
 
@@ -480,4 +495,3 @@ describe('Users', () => {
         serverInstance.close()
     })
 })
-
