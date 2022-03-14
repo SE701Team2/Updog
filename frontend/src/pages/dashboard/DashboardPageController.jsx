@@ -6,6 +6,7 @@ import sampleFeed from './mock-dashboard-data'
  * displayed in a condensed view. Refer to PostView Component for more details
  */
 const DashboardPageController = () => (
+    // Currently using mock-data. Will need to fetch from /feed endpoint to get feed data
     <DashboardPageView feedData={sampleFeed} />
 )
 
