@@ -8,7 +8,7 @@ describe('Activity', () => {
 
           const expectedOutput = {
               postID: postId,
-              timestamp: 1615564613000,
+              timestamp: Date.parse(updatedAt),
               activity: "LIKED"
           }
 
