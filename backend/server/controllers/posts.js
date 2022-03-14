@@ -269,7 +269,7 @@ export const sharePostById = async (req, res) => {
                 }
             } else {
                 res.status(404).send({
-                    'Error message': 'Parent with that id does not exist.',
+                    'Error message': 'Post with that id does not exist.',
                 })
             }
         }
