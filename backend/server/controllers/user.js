@@ -1,6 +1,7 @@
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import { UserDTO } from '../../dto/users'
+import {Activity} from "../../enums/activity";
 
 export const addUser = async (req, res) => {
     try {
@@ -93,6 +94,64 @@ export const authenticateUser = async (req, res) => {
                 authToken: authToken,
             })
         }
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+
+export const getUserActivity = async (req, res) => {
+    try {
+        const { params } = req
+        const userOfInterest = await models.users.findOne({
+            where: {
+                username: params.username
+            }
+        })
+
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const loggedInUser = Authentication.extractUser(authToken)
+
+        if (!loggedInUser) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        }
+
+        let activity = [];
+        const posts = await models.posts.findAll({
+            where:{
+                author: userOfInterest.id
+            }
+        })
+
+        posts.forEach(p => activity.push(Activity.convertToActivity(Activity.POSTED, p.id, p.updatedAt)))
+
+        const sharedPosts = await models.sharedPost.findAll({
+            where:{
+                userID: userOfInterest.id
+            }
+        })
+
+        sharedPosts.forEach(p => activity.push(Activity.convertToActivity(Activity.SHARED, p.postId, p.updatedAt)))
+
+        const likedPosts = await models.likedPost.findAll({
+            where:{
+                userID: userOfInterest.id
+            }
+        })
+
+        likedPosts.forEach(p => activity.push(Activity.convertToActivity(Activity.LIKED, p.postId, p.updatedAt)))
+
+        activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+        res.status(200).send(activity)
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
