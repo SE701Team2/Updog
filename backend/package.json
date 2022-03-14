@@ -10,7 +10,7 @@
     },
     "scripts": {
         "start": "babel-node -- index.js",
-        "test": "jest --detectOpenHandles",
+        "test": "jest --detectOpenHandles --forceExit",
         "dev": "nodemon -L --exec babel-node index.js"
     },
     "keywords": [],
