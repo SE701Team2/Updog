@@ -77,7 +77,7 @@ describe('POST /posts', () => {
     })
 })
 
-describe('GET /posts', () => {
+describe('GET /posts/:id', () => {
     describe('when the post id can not be found', () => {
         it('should return 404 not found response code', async () => {
             const user1 = await models.users.create({
@@ -140,7 +140,7 @@ describe('GET /posts', () => {
     })
 })
 
-describe('PUT /posts', () => {
+describe('PUT /posts/:id', () => {
     describe('when not authenticated', () => {
         it('should return response code of 400', async () => {
             const response = await request(server).put(`/api/posts/1`).send({
@@ -255,7 +255,7 @@ describe('PUT /posts', () => {
     describe('when modifying a post in an invalid way', () => {})
 })
 
-describe('DELETE /posts', () => {
+describe('DELETE /posts/:id', () => {
     describe('when not authenticated', () => {
         it('should return response code of 400', async () => {
             const response = await request(server).delete(`/api/posts/1`)
@@ -352,4 +352,20 @@ describe('DELETE /posts', () => {
     Child posts need to get deleted along with the parent post.
     */
     describe('when deleting a parent post', () => {})
+})
+
+describe('POST /posts/:id/share', () => {
+    describe('when not authenticated', () => {})
+
+    describe('when the post does not exist', () => {})
+
+    describe('when a valid user is sharing a post that exists', () => {})
+})
+
+describe('DELETE /posts/:id/share', () => {
+    describe('when not authenticated', () => {})
+
+    describe('when the user is unsharing a post that they did not share', () => {})
+
+    describe('when a valid user is unsharing a post', () => {})
 })
