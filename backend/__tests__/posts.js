@@ -472,7 +472,7 @@ describe('Posts', () => {
                     })
 
                 const likePostresponse = await request(server)
-                    .delete(`/api/posts/${createPostResponse.body.id}/like`)
+                    .post(`/api/posts/${createPostResponse.body.id}/like`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 const response = await request(server)
