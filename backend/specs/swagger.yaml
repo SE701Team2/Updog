@@ -1,0 +1,383 @@
+openapi: 3.0.2
+servers:
+    - url: /api
+info:
+    description: |-
+        This is the Updog API documentation based on the OpenAPI 3.0 specification.  You can find out more about
+        Swagger at [http://swagger.io](http://swagger.io).
+        - [The Updog repository](https://github.com/SE701Team2/Updog)
+    version: 1.0.11
+    title: Updog API - OpenAPI 3.0
+    termsOfService: 'http://swagger.io/terms/'
+    contact:
+        email: 'se701updog@gmail.com'
+    license:
+        name: Apache 2.0
+        url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+    - name: Posts
+      description: Comments and replies from our user
+    - name: User
+      description: Operations about user
+paths:
+    /posts:
+        post:
+            tags:
+                - Posts
+            summary: Create Post
+            description: Adds a new post
+            operationId: createPost
+            requestBody:
+                description: Create a new post
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                text_content:
+                                    type: string
+                                parent:
+                                    type: integer
+            responses:
+                '201':
+                    description: successfully created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Posts'
+                '401':
+                    description: Auth token invalid
+                '500':
+                    description: Internal Server Error
+            security:
+                - bearerAuth: []
+    '/posts/{postId}':
+        get:
+            tags:
+                - Posts
+            summary: Find post by ID
+            description: Returns a single post
+            operationId: getPosttById
+            parameters:
+                - name: postId
+                  in: path
+                  description: ID of post to return
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                '200':
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Posts'
+                '404':
+                    description: Post not found
+                '500':
+                    description: Internal Server Error
+        put:
+            tags:
+                - Posts
+            summary: Update an existing post
+            description: Update an existing post by Id
+            operationId: modifyPostById
+            parameters:
+                - name: postId
+                  in: path
+                  description: ID of post to return
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            requestBody:
+                description: Update an existent post from user
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                text_content:
+                                    type: string
+                                usersLiked:
+                                    type: integer
+                                usersShared:
+                                    type: integer
+            responses:
+                '200':
+                    description: Successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Posts'
+                '400':
+                    description: Update failed
+                '403':
+                    description: Invalid author ID
+                '500':
+                    description: Internal Server Error
+            security:
+                - bearerAuth: []
+        delete:
+            tags:
+                - Posts
+            summary: Deletes a post
+            description: Delete an existent post by Id
+            operationId: deletePostById
+            parameters:
+                - name: postId
+                  in: path
+                  description: ID of post to return
+                  required: true
+                  schema:
+                      type: integer
+                      format: int64
+            responses:
+                '200':
+                    description: Message has been deleted
+                '400':
+                    description: Failed to update
+                '403':
+                    description: Invalid author ID
+                '404':
+                    description: Invalid message ID
+                '500':
+                    description: Internal Server Error
+            security:
+                - bearerAuth: []
+    /users:
+        post:
+            tags:
+                - User
+            summary: Create user
+            description: This can only be done by the logged in user.
+            operationId: createUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                nickname:
+                                    type: string
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+                description: Created user object
+            responses:
+                '201':
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '409':
+                    description: Email has already been taken
+                '500':
+                    description: Internal Server Error
+    /users/authenticate:
+        post:
+            tags:
+                - User
+            summary: Logs user into the system
+            description: ''
+            operationId: loginUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+            responses:
+                '200':
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                type: string
+                '401':
+                    description: Invalid username/password supplied
+                '500':
+                    description: Internal Server Error
+    '/users/{username}':
+        get:
+            tags:
+                - User
+            summary: Get user by their username
+            description: ''
+            operationId: getUserByUsername
+            parameters:
+                - name: username
+                  in: path
+                  description: 'The username of the user that needs to be fetched.'
+                  required: true
+                  schema:
+                      type: string
+            security:
+                - bearerAuth: []
+            responses:
+                '200':
+                    description: successful operation
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '400':
+                    description: Auth token not provided
+                '401':
+                    description: Access token invalid
+                '500':
+                    description: Internal Server Error
+components:
+    schemas:
+        Posts:
+            x-swagger-router-model: io.swagger.updog.model.Posts
+            properties:
+                text-content:
+                    type: string
+                    example: 'Hello World!'
+                author:
+                    type: integer
+                    format: int32
+                    example: 2
+                parent:
+                    type: integer
+                    format: int32
+                    example: 5
+                usersLiked:
+                    type: integer
+                    format: int32
+                    example: 71
+                usersShared:
+                    type: integer
+                    format: int32
+                    example: 52
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                likedUsers:
+                    type: array
+                    xml:
+                        name: likedPosts
+                        wrapped: true
+                    items:
+                        $ref: '#/components/schemas/LikedPost'
+                sharedUsers:
+                    type: array
+                    xml:
+                        name: sharedPosts
+                        wrapped: true
+                    items:
+                        $ref: '#/components/schemas/SharedPost'
+            xml:
+                name: posts
+            type: object
+        User:
+            x-swagger-router-model: io.swagger.updog.model.User
+            properties:
+                username:
+                    type: string
+                    example: theUser
+                email:
+                    type: string
+                    example: john@email.com
+                password:
+                    type: string
+                    example: 12345
+                nickname:
+                    type: string
+                profilePic:
+                    type: string
+                profileBanner:
+                    type: string
+                bio:
+                    type: string
+                joinedDate:
+                    type: integer
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                followed:
+                    type: array
+                    xml:
+                        name: followed
+                        wrapped: true
+                    items:
+                        $ref: '#/components/schemas/Followers'
+                follower:
+                    type: array
+                    xml:
+                        name: follower
+                        wrapped: true
+                    items:
+                        $ref: '#/components/schemas/Followers'
+                likedPosts:
+                    type: array
+                    xml:
+                        name: likedPosts
+                        wrapped: true
+                    items:
+                        $ref: '#/components/schemas/LikedPost'
+                sharedPosts:
+                    type: array
+                    xml:
+                        wrapped: true
+                        name: sharedPosts
+                    items:
+                        $ref: '#/components/schemas/SharedPost'
+            xml:
+                name: user
+            type: object
+        Attachments:
+            x-swagger-router-model: io.swagger.updog.model.attachments
+            properties:
+                postId:
+                    type: integer
+                attachmentLink:
+                    type: string
+            type: object
+        Followers:
+            x-swagger-router-model: io.swagger.updog.model.followers
+            properties:
+                followedId:
+                    type: integer
+                followerId:
+                    type: integer
+            type: object
+        LikedPost:
+            x-swagger-router-model: io.swagger.updog.model.likedpost
+            properties:
+                postId:
+                    type: integer
+                userId:
+                    type: integer
+            type: object
+        SharedPost:
+            x-swagger-router-model: io.swagger.updog.model.sharedpost
+            properties:
+                postId:
+                    type: integer
+                userId:
+                    type: integer
+            type: object
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
