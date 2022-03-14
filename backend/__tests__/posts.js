@@ -462,8 +462,46 @@ describe('Posts', () => {
             })
         })
 
-        describe('when the user is unsharing a post that they did not share', () => {})
+        describe('when the user is unsharing a post that they did not share', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
 
-        describe('when a valid user is unsharing a post', () => {})
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .delete(`/api/posts/99/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(404)
+            })
+        })
+
+        describe('when a valid user is unsharing a post', () => {
+            it('should return response code of 200', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                await request(server)
+                    .post(`/api/posts/2/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                const response = await request(server)
+                    .delete(`/api/posts/2/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(200)
+            })
+        })
     })
 })
