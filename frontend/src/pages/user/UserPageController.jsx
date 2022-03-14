@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 import UserPageView from './UserPageView'
 import { sampleUser, sampleFeed } from './mock-data'
 
@@ -13,11 +14,19 @@ const UserPageController = () => {
     // once auth is implemented this will be removed
     const logginState = true
 
+    const [buttonText, setButtonText] = useState(false)
+
+    const changeText = () => {
+        setButtonText(!buttonText)
+    }
+
     return (
         <UserPageView
             userData={sampleUser}
             userFeed={sampleFeed}
             loggedIn={logginState}
+            buttonText={buttonText}
+            handleChange={changeText}
         />
     )
 }

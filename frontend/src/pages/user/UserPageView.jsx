@@ -7,7 +7,13 @@ import ProfileUserDetails from '../../components/user/profiledetails/ProfileUser
 import Post from '../../components/posts/post/PostController'
 
 // eslint-disable-next-line no-unused-vars
-const UserPageView = ({ userData, userFeed, loggedIn }) => (
+const UserPageView = ({
+    userData,
+    userFeed,
+    loggedIn,
+    buttonText,
+    handleChange,
+}) => (
     <div className={classes.container}>
         <HeaderCustom title={userData.username} />
         <img
@@ -20,8 +26,9 @@ const UserPageView = ({ userData, userFeed, loggedIn }) => (
                 variant="contained"
                 disableElevation
                 className={classes.followButton}
+                onClick={handleChange}
             >
-                Placeholder
+                {buttonText ? 'UnFollow' : 'Follow'}
             </Button>
             <ProfileUserDetails user={userData} />
             &nbsp;
