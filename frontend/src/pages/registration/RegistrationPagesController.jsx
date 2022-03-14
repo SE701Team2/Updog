@@ -45,13 +45,15 @@ const RegistrationFormController = () => {
                     username,
                     nickname: username,
                 })
-                console.log(response)
-                if (response.data) {
+                const token = response.data.authToken
+
+                if (token) {
+                    localStorage.setItem('token', token)
                     setLoading(false)
-                    // save jwt here
                     navigate('/')
                 }
             } catch (e) {
+                setLoading(false)
                 setError(e.message)
             }
         }

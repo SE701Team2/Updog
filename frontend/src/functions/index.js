@@ -13,7 +13,6 @@ export const getHeaders = () => {
 const tokenExpired = (message) => {
     if (message === 'JWT has expired') {
         localStorage.removeItem('token')
-        localStorage.removeItem('meta')
         window.location.reload()
     }
 }
