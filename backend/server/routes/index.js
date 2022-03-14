@@ -24,6 +24,8 @@ router
     .put(posts.modifyPostById)
     .delete(posts.deletePostById)
 
+router.route('/posts/:id/like').post(posts.likePost).delete(posts.unlikePost)
+
 /*
 TESTING
 */

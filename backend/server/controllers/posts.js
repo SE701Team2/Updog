@@ -234,3 +234,101 @@ export const deletePostById = async (req, res) => {
         res.status(500).send(error)
     }
 }
+
+/*
+Requires authentication.
+Path paramter: id - the id of the post that user has liked.
+Response Codes:
+200 OK when the post has been successfully modified.
+404 NOT FOUND when the post with that id can not be found.
+500 INTERNAL SERVER ERROR for everything else.
+*/
+export const likePost = async (req, res) => {
+    try {
+        // Authentication
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        } else {
+            const decodedUser = Authentication.extractUser(authToken)
+
+            if (!decodedUser.id) {
+                res.status(401).send({
+                    'Error message': 'Auth token invalid',
+                })
+            } else {
+                const { params, body } = req
+
+                // Check whether the post being updated belongs to that user.
+                const post = await models.posts.findByPk(params.id)
+                if (!post) {
+                    res.status(404).send('Invalid message ID.')
+                } else {
+                    const likePost = await models.likedPost.create({
+                        postId: params.id,
+                        userId: decodedUser.id,
+                    })
+
+                    res.status(201).send(likePost)
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
+
+/*
+Requires authentication.
+Path paramter: id - the id of the post that user has liked.
+Response Codes:
+200 OK when the post has been successfully modified.
+404 NOT FOUND when the post with that id can not be found.
+500 INTERNAL SERVER ERROR for everything else.
+*/
+export const unlikePost = async (req, res) => {
+    try {
+        // Authentication
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        } else {
+            const decodedUser = Authentication.extractUser(authToken)
+
+            if (!decodedUser.id) {
+                res.status(401).send({
+                    'Error message': 'Auth token invalid',
+                })
+            } else {
+                const { params, body } = req
+
+                // Check whether the post being deleted belongs to that user.
+                const post = await models.posts.findByPk(params.id)
+                if (!post) {
+                    res.status(404).send('Invalid post ID.')
+                } else if (post.author === decodedUser.id) {
+                    const count = await models.likedPost.destroy({
+                        where: { postId: params.id, userId: decodedUser.id },
+                    })
+                    if (count !== 0) {
+                        res.status(200).send('The post has been deleted.')
+                    } else {
+                        res.status(500).send('Failed to destroy the post.')
+                    }
+                } else {
+                    res.status(403).send('Invalid author ID.')
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
