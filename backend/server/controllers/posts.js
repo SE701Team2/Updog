@@ -284,7 +284,7 @@ export const likePost = async (req, res) => {
 
 /*
 Requires authentication.
-Path paramter: id - the id of the post that user has liked.
+Path paramter: id - the id of the post that user has unliked.
 Response Codes:
 200 OK when the post has been successfully modified.
 404 NOT FOUND when the post with that id can not be found.
@@ -309,21 +309,14 @@ export const unlikePost = async (req, res) => {
             } else {
                 const { params, body } = req
 
-                // Check whether the post being deleted belongs to that user.
-                const post = await models.posts.findByPk(params.id)
-                if (!post) {
-                    res.status(404).send('Invalid post ID.')
-                } else if (post.author === decodedUser.id) {
-                    const count = await models.likedPost.destroy({
-                        where: { postId: params.id, userId: decodedUser.id },
-                    })
-                    if (count !== 0) {
-                        res.status(200).send('The post has been deleted.')
-                    } else {
-                        res.status(500).send('Failed to destroy the post.')
-                    }
+                const count = await models.likedPost.destroy({
+                    where: { postId: params.id, userId: decodedUser.id },
+                })
+                if (count !== 0) {
+                    res.status(200).send('The likedPost has been deleted.')
                 } else {
-                    res.status(403).send('Invalid author ID.')
+                    // User has not liked that post. (or the post itself does not exist)
+                    res.status(500).send('Failed to destroy the likedPost.')
                 }
             }
         }
