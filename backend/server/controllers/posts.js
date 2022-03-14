@@ -44,7 +44,6 @@ export const createPost = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error)
         res.status(500).send(error)
     }
 }
@@ -124,7 +123,6 @@ export const modifyPostById = async (req, res) => {
             }
         }
     } catch (error) {
-        console.log(error)
         res.status(500).send(error)
     }
 }
