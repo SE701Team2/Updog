@@ -23,6 +23,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        queryInterface.dropTable('likedPost')
+        queryInterface.dropTable('likedPosts')
     },
 }
