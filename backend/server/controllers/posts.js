@@ -1,6 +1,54 @@
+import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import { convertToPostDto } from '../../dto/posts'
 import { Authentication } from '../../middlewares/authentication'
+
+// Upload a file to the storage, then create attachment object to be appended into the Database.
+async function uploadFileToCloud(file, postID) {
+    const newFilename = `${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(-5)}-${file.name}`
+
+    // Moving a file from memory to disk.
+    // TODO : Preferbly we want to upload straight from memory.
+    await file.mv(`./images_upload/${newFilename}`, null)
+
+    // Uploading to the cloud storage
+    await bucket.upload(`./images_upload/${newFilename}`, {
+        destination: `Post_images/${newFilename}`,
+    })
+
+    // Creating a object for database.
+    await models.attachments.create({
+        postID,
+        attachmentLink: `Post_images/${newFilename}`,
+    })
+    console.log(`uploaded file : ${newFilename}`)
+}
+
+// Download a file from the storage
+async function downloadFileFromCloudStorage(filename) {
+    const options = {
+        destination: `images_download/${filename}`,
+    }
+    // Downloads the file
+    await bucket.file(`Post_images/${filename}`).download(options)
+    console.log(
+        `Post_images/${filename} downloaded to ${`Downloaded_images/${filename}`}.`
+    )
+}
+
+// Example method for downloading File from Cloud Storage
+export const getImage = async (req, res) => {
+    console.log('Fetching Image : received a query')
+    try {
+        downloadFileFromCloudStorage(req.body.attachments).catch(console.error)
+        res.status(201).send()
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
+}
 
 /*
 Requires authentication.
@@ -36,6 +84,17 @@ export const createPost = async (req, res) => {
                     parent: body.parent,
                 })
                 const postDTO = await convertToPostDto(post)
+
+                if (req.files) {
+                    const file = req.files.attachments
+                    if (!!file && file.constructor === Array) {
+                        file.forEach(async (x) => {
+                            uploadFileToCloud(x, post.id)
+                        })
+                    } else {
+                        uploadFileToCloud(file, post.id)
+                    }
+                }
                 res.status(201).send(postDTO)
             } else {
                 res.status(404).send({

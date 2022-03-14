@@ -9,7 +9,7 @@ USERS
 */
 router.route('/users').post(user.addUser)
 
-router.route('/users/:id').get(user.getUsersById)
+router.route('/users/:username').get(user.getUsersByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 

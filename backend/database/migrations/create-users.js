@@ -24,15 +24,15 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             profilePic: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             profileBanner: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             bio: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.STRING,
             },
             joinedDate: {
