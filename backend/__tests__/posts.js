@@ -424,8 +424,18 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
+                const postCreationResponse = await request(server)
+                    .post('/api/posts')
+                    .set('Authorization', `Bearer ${authToken}`)
+                    .send({
+                        text_content: 'what is the meaning of life?',
+                        parent: null,
+                    })
+
                 const response = await request(server)
-                    .post(`/api/posts/999999/share`)
+                    .post(
+                        `/api/posts/${postCreationResponse.body.id + 99}/share`
+                    )
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(404)
@@ -443,8 +453,16 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
+                const postCreationResponse = await request(server)
+                    .post('/api/posts')
+                    .set('Authorization', `Bearer ${authToken}`)
+                    .send({
+                        text_content: 'what is the meaning of life?',
+                        parent: null,
+                    })
+
                 const response = await request(server)
-                    .post(`/api/posts/1/share`)
+                    .post(`/api/posts/${postCreationResponse.body.id}/share`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(201)
