@@ -303,20 +303,13 @@ describe('Users', () => {
                 .post('/users')
                 .send(requestBody)
 
-            const expectedResponse = {
-                id: response.body.id,
-                username: randomUsername,
-                nickname: randomUsername,
-                followers: 0,
-                following: 0,
-                joinedDate: response.body.joinedDate,
-            }
+            const jwt = response.body.authToken // expect a token
+            const user = Authentication.extractUser(`Bearer ${jwt}`)
 
             assert.equal(response.statusCode, 201)
-            assert.equal(
-                JSON.stringify(response.body),
-                JSON.stringify(expectedResponse)
-            )
+            assert.equal(user.username, requestBody.username)
+            assert.equal(user.nickname, requestBody.nickname)
+            assert.equal(user.email, requestBody.email)
         })
     })
 
