@@ -401,6 +401,148 @@ describe('Posts', () => {
         describe('when deleting a parent post', () => {})
     })
 
+    describe('POST /posts/:id/like', () => {
+        describe('when user like thier own post in a valid way', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(201)
+            })
+        })
+
+        describe('when user like others post in a valid way', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const user2 = await models.users.create({
+                    username: 'gandalf2',
+                    nickname: 'gandalf2',
+                    email: 'gandalf2@gandalf.com',
+                    password: 'password2',
+                })
+
+                const authToken = Authentication.generateAuthToken(user2)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(201)
+            })
+        })
+
+        describe('when user try to like post that does not exist', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const invalidId = newPost.id + 999
+
+                const response = await request(server)
+                    .post(`/api/posts/${invalidId}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+                expect(response.statusCode).toBe(404)
+            })
+        })
+    })
+
+    describe('DELETE /posts/:id/like', () => {
+        describe('when user unlike post in a valid way', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const newLikePost = await models.likedPost.create({
+                    userId: user1.id,
+                    postId: newPost.id,
+                })
+
+                const response = await request(server)
+                    .delete(`/api/posts/${newPost.id}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(200)
+            })
+        })
+
+        describe('when user try to unlike post that has not been liked', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .delete(`/api/posts/${newPost.id}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(500)
+            })
+        })
+    })
+
     describe('POST /posts/:id/share', () => {
         describe('when not authenticated', () => {
             it('should return response code of 400', async () => {
