@@ -14,7 +14,7 @@ const FeedCard = styled(Card)({
     margin: 'auto',
     marginTop: '10px',
     marginBottom: '10px',
-    padding: '0 10px 0 10px',
+    padding: '10px',
 })
 
 const FloatingAddButton = styled(Fab)({
