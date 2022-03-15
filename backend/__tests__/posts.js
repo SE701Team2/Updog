@@ -447,16 +447,14 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const postCreationResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'what is the meaning of life?',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .post(`/api/posts/${postCreationResponse.body.id}/share`)
+                    .post(`/api/posts/${newPost.id}/share`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(201)
@@ -510,7 +508,7 @@ describe('Posts', () => {
                     parent: null,
                 })
 
-                const postShared = await models.sharedPost.create({
+                await models.sharedPost.create({
                     postId: newPost.id,
                     userId: user1.id,
                 })
