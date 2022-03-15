@@ -13,6 +13,8 @@ router.route('/users/:username').get(user.getUsersByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
+router.route('/users/:username/activity').get(user.getUserActivity)
+
 /*
 POSTS
 */
@@ -25,6 +27,11 @@ router
     .delete(posts.deletePostById)
 
 router.route('/posts/:id/like').post(posts.likePost).delete(posts.unlikePost)
+
+router
+    .route('/posts/:id/share')
+    .post(posts.sharePostById)
+    .delete(posts.unsharePostById)
 
 /*
 TESTING
