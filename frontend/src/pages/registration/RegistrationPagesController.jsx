@@ -1,83 +1,80 @@
 import React, { useState } from 'react'
-import { Button } from '@mui/material'
-import styled from '@emotion/styled'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import RegistrationFormView from './RegistrationPageView'
-import classes from './registrationpage.module.scss'
 
-const CloseButton = styled(Button)({
-    display: 'flex',
-    fontSize: '16px',
-    padding: '10px 60px',
-    boxShadow:
-        'rgba(0, 0, 0, 0) 0px 10px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
-    cursor: 'pointer',
-    transition: 'all 0.1s',
-    margin: 'auto',
-    marginTop: '200px',
-})
+import { postData } from '../../functions'
 
 const RegistrationFormController = () => {
-    const [values, setValues] = useState({
-        userName: '',
-        email: '',
-        password: '',
-    })
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('')
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
 
-    const [formIsSubmitted, setFormIsSubmitted] = useState(false)
-    const submitForm = () => {
-        setFormIsSubmitted(true)
+    const navigate = useNavigate()
+
+    const validation = () => {
+        if (!username) {
+            setError('Username is required.')
+            return false
+        }
+        if (!email) {
+            setError('Email is required.')
+            return false
+        }
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            setError('Email is invalid.')
+            return false
+        }
+        if (!password) {
+            setError('Password is required.')
+        } else if (password.length < 5) {
+            setError('Password must be at least 5 characters long.')
+            return false
+        }
+        return true
     }
 
-    const handleChange = async (e) => {
-        setValues({
-            ...values,
-            [e.target.name]: e.target.value,
-        })
+    const submitForm = async () => {
+        setLoading(true)
+        if (validation()) {
+            try {
+                const response = await postData('users', {
+                    email,
+                    password,
+                    username,
+                    nickname: username,
+                })
+                const token = response.data.authToken
+
+                if (token) {
+                    localStorage.setItem('token', token)
+                    setLoading(false)
+                    navigate('/')
+                }
+            } catch (e) {
+                setLoading(false)
+                setError(e.message)
+            }
+        }
     }
 
-    function validation() {
-        const error = {}
-        if (!values.userName) {
-            error.userName = 'Name is required.'
-        }
-        if (!values.email) {
-            error.email = 'Email is required.'
-        } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-            error.email = 'Email is invalid.'
-        }
-        if (!values.password) {
-            error.password = 'Password is required.'
-        } else if (values.password.length < 5) {
-            error.password = 'Password too short! '
-        }
-        return error
-    }
-
-    return !formIsSubmitted ? (
-        <div className={classes.container}>
-            <RegistrationFormView
-                submitForm={submitForm}
-                onInputChange={handleChange}
-                value={values}
-                errors={validation()}
-            />
-        </div>
-    ) : (
-        <div className={classes.container}>
-            <div className={classes.appwrapper}>
-                <div>
-                    <h1 className={classes.formsuccess}>Account Created!</h1>
-                    <div>
-                    <Link to="/">
-                        <CloseButton variant="contained" disableRipple>
-                            Close
-                        </CloseButton>
-                    </Link>
-                    </div>
-                </div>
-            </div>
-        </div>
+    return (
+        <RegistrationFormView
+            state={{
+                email,
+                password,
+                username,
+                error,
+                loading,
+            }}
+            action={{
+                setEmail,
+                setPassword,
+                setUsername,
+                submitForm,
+            }}
+        />
     )
 }
 export default RegistrationFormController
