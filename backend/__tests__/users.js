@@ -12,9 +12,33 @@ describe('Users', () => {
         // Testing on a different port to avoid conflict
         db.sync().then(() => {
             serverInstance = server.listen(8000, () =>
+                // eslint-disable-next-line no-console
                 console.log(`server is running at ${8000}`)
             )
         })
+    })
+
+    beforeEach(async () => {
+        await models.users.destroy({
+            where: {},
+        })
+
+        await models.followers.destroy({
+            where: {},
+        })
+
+        await models.posts.destroy({
+            where: {},
+        })
+
+        await models.likedPost.destroy({
+            where: {},
+        })
+
+        await models.sharedPost.destroy({
+            where: {},
+        })
+
     })
 
     describe('Encrypting password', () => {
@@ -25,6 +49,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -49,6 +74,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -73,6 +99,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email: 'TEST@GMAIL.COM',
                 password,
             })
@@ -102,12 +129,13 @@ describe('Users', () => {
             try {
                 await models.users.create({
                     username: randomUsername,
+                    nickname: randomUsername,
                     email,
                     password,
                 })
 
                 // Email is invalid so should have thrown an error
-                assert(false)
+                assert.fail('Email should not have been saved as it is invalid')
             } catch (e) {
                 // Check the error is thrown by the email validation
                 const errMessage = 'The email address you entered is invalid'
@@ -125,6 +153,7 @@ describe('Users', () => {
 
             const user = await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -159,6 +188,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -187,6 +217,7 @@ describe('Users', () => {
 
             await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             })
@@ -206,7 +237,7 @@ describe('Users', () => {
         })
     })
 
-    describe('Testing getUsersById endpoint', () => {
+    describe('Testing getUsersByUsername endpoint', () => {
         it('Should return a 200 status response', async () => {
             // GIVEN a created user
             const password = 'PASSWORD'
@@ -218,6 +249,7 @@ describe('Users', () => {
 
             const result = await models.users.create({
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
                 profilePic,
@@ -243,13 +275,13 @@ describe('Users', () => {
 
             // user viewing itself
             const response = await request('http://localhost:8000/api')
-                .get(`/users/${result.id}`)
+                .get(`/users/${result.username}`)
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
             const expectedResponse = {
                 id: response.body.id,
                 username: randomUsername,
-                nickname: '',
+                nickname: randomUsername,
                 profilePic,
                 profileBanner,
                 bio,
@@ -275,6 +307,7 @@ describe('Users', () => {
 
             const requestBody = {
                 username: randomUsername,
+                nickname: randomUsername,
                 email,
                 password,
             }
@@ -283,19 +316,76 @@ describe('Users', () => {
                 .post('/users')
                 .send(requestBody)
 
-            const expectedResponse = {
-                id: response.body.id,
-                username: randomUsername,
-                followers: 0,
-                following: 0,
-                joinedDate: response.body.joinedDate,
-            }
+            const jwt = response.body.authToken // expect a token
+            const user = Authentication.extractUser(`Bearer ${jwt}`)
 
             assert.equal(response.statusCode, 201)
-            assert.equal(
-                JSON.stringify(response.body),
-                JSON.stringify(expectedResponse)
-            )
+            assert.equal(user.username, requestBody.username)
+            assert.equal(user.nickname, requestBody.nickname)
+            assert.equal(user.email, requestBody.email)
+        })
+    })
+
+    describe('Testing getUserActivity endpoint', () => {
+        it('Should return a 200 status response and a list of activities from latest to earliest', async () => {
+            // GIVEN a user who posts, likes, and shares a post
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const newUser = await models.users.create({
+                username: randomUsername,
+                nickname: randomUsername,
+                email,
+                password,
+            })
+
+            const newPost = await models.posts.create({
+                text_content: "Updog is the next big thing",
+                author: newUser.id,
+                createdAt: "2020-03-13 04:56:53"
+            })
+
+            const likedPost = await models.likedPost.create({
+                postId: newPost.id,
+                userId: newUser.id,
+                createdAt: "2021-03-13 04:56:53"
+            })
+
+            const sharedPost = await models.sharedPost.create({
+                postId: newPost.id,
+                userId: newUser.id,
+                createdAt: "2021-03-14 04:56:53"
+            })
+
+            // WHEN the logged in user tries to view the user activity
+            let authToken = Authentication.generateAuthToken(newUser)
+
+            const response = await request('http://localhost:8000/api')
+                .get(`/users/${randomUsername}/activity`)
+                .set('Authorization', `Bearer ${authToken}`)
+
+            // THEN their activity should be listed from latest to earliest
+            const expectedOutput = [
+                {
+                    postID: newPost.id,
+                    timestamp: Date.parse(sharedPost.createdAt),
+                    activity: "SHARED"
+                },
+                {
+                    postID: newPost.id,
+                    timestamp: Date.parse(likedPost.createdAt),
+                    activity: "LIKED"
+                },
+                {
+                    postID: newPost.id,
+                    timestamp: Date.parse(newPost.createdAt),
+                    activity: "POSTED"
+                },
+            ]
+
+            expect(response.statusCode).toEqual(200)
+            expect(response.body).toEqual(expectedOutput)
         })
     })
 
@@ -304,3 +394,4 @@ describe('Users', () => {
         serverInstance.close()
     })
 })
+
