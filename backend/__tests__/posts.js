@@ -404,7 +404,7 @@ describe('Posts', () => {
     })
 
     describe('POST /posts/:id/like', () => {
-        describe('when user like post in a valid way', () => {
+        describe('when user like thier own post in a valid way', () => {
             it('should return response code of 201', async () => {
                 const user1 = await models.users.create({
                     username: 'gandalf',
@@ -415,16 +415,46 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .post(`/api/posts/${createPostResponse.body.id}/like`)
+                    .post(`/api/posts/${newPost.id}/like`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(201)
+            })
+        })
+
+        describe('when user like others post in a valid way', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const user2 = await models.users.create({
+                    username: 'gandalf2',
+                    nickname: 'gandalf2',
+                    email: 'gandalf2@gandalf.com',
+                    password: 'password2',
+                })
+
+                const authToken = Authentication.generateAuthToken(user2)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id}/like`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(201)
@@ -442,15 +472,13 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
-                const invalidId = createPostResponse.body.id + 999
+                const invalidId = newPost.id + 999
 
                 const response = await request(server)
                     .put(`/api/posts/${invalidId}/like`)
@@ -472,20 +500,19 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
-                const likePostresponse = await request(server)
-                    .post(`/api/posts/${createPostResponse.body.id}/like`)
-                    .set('Authorization', `Bearer ${authToken}`)
+                const newLikePost = await models.likedPost.create({
+                    userId: user1.id,
+                    postId: newPost.id,
+                })
 
                 const response = await request(server)
-                    .delete(`/api/posts/${createPostResponse.body.id}/like`)
+                    .delete(`/api/posts/${newPost.id}/like`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(200)
@@ -503,16 +530,14 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .delete(`/api/posts/${createPostResponse.body.id}/like`)
+                    .delete(`/api/posts/${newPost.id}/like`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(500)
