@@ -4,6 +4,7 @@ import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
 import Registration from './pages/registration/RegistrationPagesController'
+import User from './pages/user/UserPageController'
 
 const Router = () => {
     // fetch the token to check if the user is authenticated

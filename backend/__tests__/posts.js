@@ -382,16 +382,14 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .delete(`/api/posts/${createPostResponse.body.id}`)
+                    .delete(`/api/posts/${newPost.id}`)
                     .set('Authorization', `Bearer ${authToken}`)
                 expect(response.statusCode).toBe(200)
             })
@@ -401,5 +399,126 @@ describe('Posts', () => {
         Child posts need to get deleted along with the parent post.
         */
         describe('when deleting a parent post', () => {})
+    })
+
+    describe('POST /posts/:id/share', () => {
+        describe('when not authenticated', () => {
+            it('should return response code of 400', async () => {
+                const response = await request(server).post(
+                    '/api/posts/1/share'
+                )
+                expect(response.statusCode).toBe(400)
+            })
+        })
+
+        describe('when the post does not exist', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id + 99}/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(404)
+            })
+        })
+
+        describe('when a valid user is sharing a post that exists', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id}/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(201)
+            })
+        })
+    })
+
+    describe('DELETE /posts/:id/share', () => {
+        describe('when not authenticated', () => {
+            it('should return response code of 400', async () => {
+                const response = await request(server).delete(
+                    '/api/posts/1/share'
+                )
+                expect(response.statusCode).toBe(400)
+            })
+        })
+
+        describe('when the user is unsharing a post that they did not share', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .delete(`/api/posts/99/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(404)
+            })
+        })
+
+        describe('when a valid user is unsharing a post', () => {
+            it('should return response code of 200', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                await models.sharedPost.create({
+                    postId: newPost.id,
+                    userId: user1.id,
+                })
+
+                const response = await request(server)
+                    .delete(`/api/posts/${newPost.id}/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(200)
+            })
+        })
     })
 })
