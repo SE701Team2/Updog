@@ -465,7 +465,7 @@ describe('Posts', () => {
     describe('DELETE /posts/:id/share', () => {
         describe('when not authenticated', () => {
             it('should return response code of 400', async () => {
-                const response = await request(server).post(
+                const response = await request(server).delete(
                     '/api/posts/1/share'
                 )
                 expect(response.statusCode).toBe(400)
