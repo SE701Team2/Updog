@@ -13,6 +13,8 @@ router.route('/users/:username').get(user.getUsersByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
+router.route('/users/:username/activity').get(user.getUserActivity)
+
 /*
 POSTS
 */
