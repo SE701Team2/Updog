@@ -273,16 +273,26 @@ export const followUser = async (req, res) => {
             res.status(401).send({
                 'Error message': 'Auth token invalid',
             })
-        } else {
-            const follow = await models.followers.create({
+        }
+
+        const alreadyFollow = await models.followers.findOne({
+            where: {
                 followedId: decodedUser.id,
                 followerId: user.id,
-            })
-            res.status(201).send({
-                message: 'Follow successful',
-                follow,
-            })
+            },
+        })
+        if (alreadyFollow) {
+            res.status(409).send({ error: 'Already following this user' })
         }
+
+        const follow = await models.followers.create({
+            followedId: decodedUser.id,
+            followerId: user.id,
+        })
+        res.status(201).send({
+            message: 'Follow successful',
+            follow,
+        })
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
@@ -316,9 +326,28 @@ export const unfollowUser = async (req, res) => {
             res.status(401).send({
                 'Error message': 'Auth token invalid',
             })
-        } else {
-            throw new Error('Unfollow not implemented yet')
         }
+
+        const alreadyFollow = await models.followers.findOne({
+            where: {
+                followedId: decodedUser.id,
+                followerId: user.id,
+            },
+        })
+        if (!alreadyFollow) {
+            res.status(404).send({ error: 'Already not following this user' })
+        }
+
+        const unfollow = await models.followers.destroy({
+            where: {
+                followedId: decodedUser.id,
+                followerId: user.id,
+            },
+        })
+        res.status(200).send({
+            message: 'Unfollow successful',
+            unfollow,
+        })
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
