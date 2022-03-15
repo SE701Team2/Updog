@@ -78,8 +78,12 @@ const RegistrationFormView = ({ state, action }) => {
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={setShowPassword}
-                                            onMouseDown={setShowPassword}
+                                            onClick={() =>
+                                                setShowPassword(!showPassword)
+                                            }
+                                            onMouseDown={() =>
+                                                setShowPassword(!showPassword)
+                                            }
                                             edge="end"
                                         >
                                             {showPassword ? (
