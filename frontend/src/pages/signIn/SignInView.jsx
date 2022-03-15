@@ -12,9 +12,10 @@ import {
     TextField,
 } from '@mui/material'
 import classes from './signIn.module.scss'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const SignInView = ({ state, action }) => {
-    const { email, password, error } = state
+    const { email, password, loading, error } = state
     const { setEmail, setPassword, handleSubmit } = action
 
     const [showPassword, setShowPassword] = useState(false)
@@ -31,7 +32,7 @@ const SignInView = ({ state, action }) => {
                             color: error ? 'red' : 'rgba(0,0,0,0)',
                         }}
                     >
-                        {error ?? 'Blank'}
+                        {error ? error : 'Blank'}
                     </span>
                     <div className={classes.input}>
                         <TextField
@@ -40,7 +41,7 @@ const SignInView = ({ state, action }) => {
                             variant="outlined"
                             value={email}
                             fullWidth
-                            onChange={setEmail}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
@@ -53,13 +54,17 @@ const SignInView = ({ state, action }) => {
                                 id="outlined-adornment-password"
                                 type={showPassword ? 'text' : 'password'}
                                 value={password}
-                                onChange={setPassword}
+                                onChange={(e) => setPassword(e.target.value)}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={setShowPassword}
-                                            onMouseDown={setShowPassword}
+                                            onClick={() =>
+                                                setShowPassword(!showPassword)
+                                            }
+                                            onMouseDown={() =>
+                                                setShowPassword(!showPassword)
+                                            }
                                             edge="end"
                                         >
                                             {showPassword ? (
@@ -77,14 +82,15 @@ const SignInView = ({ state, action }) => {
                 </div>
                 <div className={classes.bottomContainer}>
                     <div className={classes.buttonContainer}>
-                        <Button
+                        <LoadingButton
                             variant="contained"
                             fullWidth
-                            onClick={handleSubmit}
+                            loading={loading}
+                            onClick={(e) => handleSubmit(e)}
                             style={{ borderRadius: 100, padding: 10 }}
                         >
                             Sign in
-                        </Button>
+                        </LoadingButton>
                     </div>
 
                     <span className={classes.signUpText}>

@@ -41,12 +41,6 @@ const LandingView = () => (
                         </Link>
                     </div>
                 </div>
-                <div className={classes.loginText}>
-                    Have an account already?{' '}
-                    <span className={classes.loginLink}>
-                        <Link to="/signIn">Sign in</Link>
-                    </span>
-                </div>
             </div>
         </div>
     </>
