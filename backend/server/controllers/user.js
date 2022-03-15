@@ -177,7 +177,7 @@ Require authentication. (only you can see list of follower and followings)
 Path paramter: username - the username of the account we want 
     to get following and followers for.
 Response Codes:
-200 OK when the post has been successfully found.
+200 OK when the followers and following has been successfully found.
 404 NOT FOUND when the post with that id can not be found.
 500 INTERNAL SERVER ERROR for everything else.
 Returns : List of followers and followings.
@@ -196,9 +196,7 @@ export const getFollow = async (req, res) => {
 
         const decodedUser = Authentication.extractUser(authToken)
         const user = await models.users.findOne({
-            where: {
-                username: params.username,
-            },
+            where: { username: params.username },
         })
 
         if (!user) {
@@ -210,6 +208,7 @@ export const getFollow = async (req, res) => {
         }
 
         if (decodedUser.id === user.id) {
+            // retrieve id of users
             const followersIds = await models.followers
                 .findAll({
                     where: { followedId: user.id },
@@ -217,7 +216,6 @@ export const getFollow = async (req, res) => {
                 .then((followers) =>
                     followers.map((follower) => follower.followerId)
                 )
-
             const followingIds = await models.followers
                 .findAll({
                     where: { followerId: user.id },
@@ -226,6 +224,7 @@ export const getFollow = async (req, res) => {
                     followings.map((following) => following.followedId)
                 )
 
+            // retrieve user object
             const followersUsers = await models.users.findAll({
                 where: { id: followersIds },
             })
@@ -233,12 +232,12 @@ export const getFollow = async (req, res) => {
                 where: { id: followingIds },
             })
 
+            // Transform to DTO
             const followersDTO = await Promise.all(
                 followersUsers.map(async (user) => {
                     return await UserDTO.convertToDto(user)
                 })
             )
-
             const followeringDTO = await Promise.all(
                 followingUsers.map(async (user) => {
                     return await UserDTO.convertToDto(user)
@@ -254,8 +253,6 @@ export const getFollow = async (req, res) => {
             res.status(403).send('Invalid author ID.')
         }
     } catch (error) {
-        console.log('============================')
-        console.log(error.toString())
         res.status(500).send({ 'Error message': error.toString() })
     }
 }
