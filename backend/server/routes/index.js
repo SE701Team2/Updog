@@ -15,6 +15,8 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
+router.route('/users/:username/follow').get(user.getFollow)
+
 /*
 POSTS
 */
