@@ -481,7 +481,7 @@ describe('Posts', () => {
                 const invalidId = newPost.id + 999
 
                 const response = await request(server)
-                    .put(`/api/posts/${invalidId}/like`)
+                    .post(`/api/posts/${invalidId}/like`)
                     .set('Authorization', `Bearer ${authToken}`)
                 expect(response.statusCode).toBe(404)
             })
