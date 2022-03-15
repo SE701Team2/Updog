@@ -382,16 +382,14 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const createPostResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'some random text 2',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .delete(`/api/posts/${createPostResponse.body.id}`)
+                    .delete(`/api/posts/${newPost.id}`)
                     .set('Authorization', `Bearer ${authToken}`)
                 expect(response.statusCode).toBe(200)
             })
@@ -424,18 +422,14 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                const postCreationResponse = await request(server)
-                    .post('/api/posts')
-                    .set('Authorization', `Bearer ${authToken}`)
-                    .send({
-                        text_content: 'what is the meaning of life?',
-                        parent: null,
-                    })
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
 
                 const response = await request(server)
-                    .post(
-                        `/api/posts/${postCreationResponse.body.id + 99}/share`
-                    )
+                    .post(`/api/posts/${newPost.id + 99}/share`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(404)
@@ -510,12 +504,19 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                await request(server)
-                    .post(`/api/posts/2/share`)
-                    .set('Authorization', `Bearer ${authToken}`)
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const postShared = await models.sharedPost.create({
+                    postId: newPost.id,
+                    userId: user1.id,
+                })
 
                 const response = await request(server)
-                    .delete(`/api/posts/2/share`)
+                    .delete(`/api/posts/${newPost.id}/share`)
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(200)
