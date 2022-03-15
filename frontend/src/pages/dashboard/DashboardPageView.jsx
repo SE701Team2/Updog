@@ -1,7 +1,8 @@
 import { Card, Fab, styled } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
-import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
+// import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
+import Header from '../../components/layout/header/HeaderController'
 import Footer from '../../components/layout/footer/FooterController'
 import Post from '../../components/posts/post/PostController'
 
@@ -24,7 +25,7 @@ const FloatingAddButton = styled(Fab)({
 
 const DashboardPageView = ({ feedData }) => (
     <div>
-        <HeaderCustom title="Feed" />
+        <Header />
         {feedData.map((post) => (
             <FeedCard key={post.id}>
                 <Post data={post} condensed />
