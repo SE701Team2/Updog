@@ -1,4 +1,5 @@
 import models from '../database/models'
+import { UserDTO } from '../dto/users'
 import { Authentication } from '../middlewares/authentication'
 import db from '../config/database'
 import server from '../server'
@@ -38,7 +39,6 @@ describe('Users', () => {
         await models.sharedPost.destroy({
             where: {},
         })
-
     })
 
     describe('Encrypting password', () => {
@@ -341,21 +341,21 @@ describe('Users', () => {
             })
 
             const newPost = await models.posts.create({
-                text_content: "Updog is the next big thing",
+                text_content: 'Updog is the next big thing',
                 author: newUser.id,
-                createdAt: "2020-03-13 04:56:53"
+                createdAt: '2020-03-13 04:56:53',
             })
 
             const likedPost = await models.likedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-13 04:56:53"
+                createdAt: '2021-03-13 04:56:53',
             })
 
             const sharedPost = await models.sharedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-14 04:56:53"
+                createdAt: '2021-03-14 04:56:53',
             })
 
             // WHEN the logged in user tries to view the user activity
@@ -370,17 +370,17 @@ describe('Users', () => {
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(sharedPost.createdAt),
-                    activity: "SHARED"
+                    activity: 'SHARED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(likedPost.createdAt),
-                    activity: "LIKED"
+                    activity: 'LIKED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(newPost.createdAt),
-                    activity: "POSTED"
+                    activity: 'POSTED',
                 },
             ]
 
@@ -389,9 +389,182 @@ describe('Users', () => {
         })
     })
 
+    describe('POST /posts/:id/share', () => {
+        describe('when not authenticated', () => {
+            it('should return response code of 400', async () => {
+                const response = await request(server).post(
+                    '/api/posts/1/share'
+                )
+                expect(response.statusCode).toBe(400)
+            })
+        })
+
+        describe('when the post does not exist', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id + 99}/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(404)
+            })
+        })
+
+        describe('when a valid user is sharing a post that exists', () => {
+            it('should return response code of 201', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const newPost = await models.posts.create({
+                    text_content: 'Test text',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                const response = await request(server)
+                    .post(`/api/posts/${newPost.id}/share`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(201)
+            })
+        })
+    })
+
+    describe('GET /users/:username/follow', () => {
+        describe('when not authenticated', () => {
+            it('should return response code of 400', async () => {
+                const response = await request(server).get(
+                    '/api/users/someuser/follow'
+                )
+                expect(response.statusCode).toBe(400)
+            })
+        })
+
+        describe('when user tries to check other accounts followings (not allowed)', () => {
+            it('should return response code of 403', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+                const user2 = await models.users.create({
+                    username: 'gandalf_2',
+                    nickname: 'gandalf_2',
+                    email: 'gandalf_2@gandalf.com',
+                    password: 'password_2',
+                })
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .get(`/api/users/${user2.username}/follow`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(403)
+            })
+        })
+
+        describe('when user correctly checked thier followers but has no followers nor follwings', () => {
+            it('should return response code of 200', async () => {
+                const randomUsername = (Math.random() + 1)
+                    .toString(36)
+                    .substring(7)
+                const user1 = await models.users.create({
+                    username: randomUsername,
+                    nickname: randomUsername,
+                    email: `${randomUsername}@gandalf.com`,
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .get(`/api/users/${user1.username}/follow`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                const expectedOutput = {
+                    following: [],
+                    followers: [],
+                }
+                expect(response.statusCode).toBe(200)
+                expect(response.body).toEqual(expectedOutput)
+            })
+        })
+
+        describe('when user correctly checked thier followers (has followers and followings)', () => {
+            it('should return response code of 200', async () => {
+                async function createRandomUser() {
+                    const randomUsername = (Math.random() + 1)
+                        .toString(36)
+                        .substring(7)
+                    const user = await models.users.create({
+                        username: randomUsername,
+                        nickname: randomUsername,
+                        email: `${randomUsername}@gandalf.com`,
+                        password: 'password',
+                        bio: null,
+                        profileBanner: null,
+                        profilePic: null,
+                    })
+                    return user
+                }
+
+                const user1 = await createRandomUser()
+                const user2 = await createRandomUser()
+                const user3 = await createRandomUser()
+
+                async function createFollowers(followedId, followerId) {
+                    const follower = await models.followers.create({
+                        followedId: followedId,
+                        followerId: followerId,
+                    })
+                }
+
+                await createFollowers(user1.id, user2.id)
+                await createFollowers(user1.id, user3.id)
+                await createFollowers(user2.id, user1.id)
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .get(`/api/users/${user1.username}/follow`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                const expectedOutput = {
+                    following: [await UserDTO.convertToDto(user2)],
+                    followers: [
+                        await UserDTO.convertToDto(user2),
+                        await UserDTO.convertToDto(user3),
+                    ],
+                }
+                expect(response.statusCode).toBe(200)
+                expect(response.body).toEqual(expectedOutput)
+            })
+        })
+    })
+
     afterAll(() => {
         models.sequelize.close()
         serverInstance.close()
     })
 })
-

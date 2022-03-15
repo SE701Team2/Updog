@@ -191,6 +191,7 @@ export const getFollow = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
+            return
         }
 
         const decodedUser = Authentication.extractUser(authToken)
@@ -205,6 +206,7 @@ export const getFollow = async (req, res) => {
                 'Error message':
                     'Invalid param : user with given username does not exist',
             })
+            return
         }
 
         if (decodedUser.id === user.id) {
@@ -252,6 +254,8 @@ export const getFollow = async (req, res) => {
             res.status(403).send('Invalid author ID.')
         }
     } catch (error) {
+        console.log('============================')
+        console.log(error.toString())
         res.status(500).send({ 'Error message': error.toString() })
     }
 }
