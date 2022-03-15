@@ -5,6 +5,7 @@ import Follows from './pages/follows/FollowsPageController'
 import Dashboard from './pages/dashboard/DashboardPageController'
 
 import Registration from './pages/registration/RegistrationPagesController'
+import User from './pages/user/UserPageController'
 
 const Router = () => (
     <Routes>
@@ -13,6 +14,7 @@ const Router = () => (
         <Route path="/signUp" element={<Registration />} />
         <Route path="/user/:username/follows" element={<Follows />} />
         <Route path="/feed" element={<Dashboard />} />
+        <Route path="/user/:username" element={<User />} />
     </Routes>
 )
 
