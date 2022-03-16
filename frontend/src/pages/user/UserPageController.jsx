@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import UserPageView from './UserPageView'
 import useApi from '../../hooks/useApi'
+import { request } from '../../functions'
 
 /**
  * This page renders a user page
@@ -9,7 +10,7 @@ import useApi from '../../hooks/useApi'
 const UserPageController = () => {
     const { username } = useParams()
     const userData = useApi(`/users/${username}`).data
-    const { data, loading, err } = useApi(`/users/${username}/activity`)
+    const { data, loading, err } = useApi(`users/${username}/activity`)
     const [isFollower, setIsFollower] = useState(false)
     const loggedIn = username === localStorage.getItem('username')
     const navigate = useNavigate()
@@ -25,9 +26,11 @@ const UserPageController = () => {
     const handleChange = () => {
         if (loggedIn) {
             navigate(`/user/${username}/settings`)
+        } else {
+            const method = isFollower ? 'DELETE' : 'POST'
+            request(`users/${username}/follow`, method)
+            setIsFollower(!isFollower)
         }
-
-        setIsFollower(!isFollower)
     }
 
     return (
