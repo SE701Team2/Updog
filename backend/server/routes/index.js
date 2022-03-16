@@ -9,21 +9,15 @@ USERS
 */
 router.route('/users').post(user.addUser)
 
-router.route('/users/:username').get(user.getUsersByUsername)
+router.route('/users/:username')
+    .get(user.getUsersByUsername)
+    .get(user.modifyUserByUsername)
+    .get(user.deleteUserByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
-router
-    .route('/users/:username/follow')
-    .post(user.followUser)
-    .delete(user.unfollowUser)
-    .get(user.getFollow)
-
-router.route('/feed').get(user.getFeed)
-
-router.route('/notifications').get(user.getNotifications)
 
 /*
 POSTS

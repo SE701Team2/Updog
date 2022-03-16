@@ -38,6 +38,7 @@ describe('Posts', () => {
                     'what is the meaning of life?'
                 )
                 expect(response.body.author.username).toBe('gandalf')
+                expect(response.body.author.email).toBe('gandalf@gandalf.com')
                 expect(response.body.parent).toBe(null)
                 expect(response.body.children).toStrictEqual([])
                 expect(response.body.usersLiked).toBe(0)
@@ -58,7 +59,6 @@ describe('Posts', () => {
 
                 const authToken = Authentication.generateAuthToken(user1)
 
-                // eslint-disable-next-line global-require
                 const fs = require('fs')
                 const testFile = fs.readFile(
                     '__tests__/files/test_image.png',
@@ -168,6 +168,7 @@ describe('Posts', () => {
                 expect(response.body.id).toBeTruthy()
                 expect(response.body.content).toBe('some random text 2')
                 expect(response.body.author.username).toBe('testUser')
+                expect(response.body.author.email).toBe('testUser@testmail.com')
                 expect(response.body.parent).toBe(null)
                 expect(response.body.children).toStrictEqual([])
                 expect(response.body.usersLiked).toBe(0)
@@ -503,7 +504,7 @@ describe('Posts', () => {
                     parent: null,
                 })
 
-                await models.likedPost.create({
+                const newLikePost = await models.likedPost.create({
                     userId: user1.id,
                     postId: newPost.id,
                 })

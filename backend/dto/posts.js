@@ -1,9 +1,8 @@
 import models from '../database/models'
-import {UserDTO} from "./users";
 
 /* eslint-disable import/prefer-default-export */
 export const convertToPostDto = async (post) => {
-    const author = await UserDTO.convertToDto(await models.users.findByPk(post.author))
+    const author = await models.users.findByPk(post.author)
     const children = await models.posts.findAll({
         attributes: ['id'],
         where: { parent: post.id },
