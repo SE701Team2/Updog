@@ -48,7 +48,7 @@ This guide assumes you have already cloned the repository and installed Node.js 
 
 `sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
 
-# 4. Test and run project
+# 5. Test and run project
 
 To run all backend tests, run `npm test` from the `backend/` folder
 
@@ -58,13 +58,13 @@ To test connection, send a GET request to http://localhost:8080/api/test. Respon
 
 Base URL: http://localhost:8080/api (Check routes folder for endpoints)
 
-# 5. API endpoints
+# 6. API endpoints
 To find further information on the api endpoints, we have configured a swagger api doc. To access, first run `npm start` then
 in a browser, go to URL: <http://localhost:8080/api-docs>.
 
 To add documentation for new endpoints, go to the specs/swagger.yaml file.
 
-# 5. FAQ and Troubleshooting
+# 7. FAQ and Troubleshooting
 ### "Your password does not satisfy the current policy requirements" error
 Open MySQL Shell and run the following commands:
 `SET GLOBAL validate_password.length = 4;`
