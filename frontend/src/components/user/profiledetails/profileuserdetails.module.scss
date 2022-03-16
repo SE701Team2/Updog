@@ -6,11 +6,27 @@
     align-items: top;
     color: theme.$onBackground;
     text-decoration: none;
+    gap: 0.25rem;
 
     > div {
         display: flex;
         flex-direction: column;
     }
+}
+
+h1, h2 {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+
+p {
+    margin-top: 0rem;
+    margin-bottom: 0.25rem;
+}
+
+.biography {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .followCount{

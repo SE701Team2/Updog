@@ -11,16 +11,12 @@ const ProfileUserDetailsView = ({ user }) => (
             src={user.profilePic}
             sx={{ width: 80, height: 80 }}
         />
-        <h1>{user.username}</h1>
+        <h2>{user.username}</h2>
         <p>@{user.nickname}</p>
-        &nbsp;
-        <p>{user.bio}</p>
-        &nbsp;
+        <p className={classes.biography}>{user.bio ?? 'Biography'}</p>
         <p>
-            {' '}
             <CalendarMonth /> Joined {new Date(user.joinedDate).toDateString()}
         </p>
-        &nbsp;
         <Link
             to={`/user/${user.username}/follows`}
             className={classes.followersLink}
