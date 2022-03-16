@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import RegistrationFormView from './RegistrationPageView'
 import validationEmail from '../../functions/validateEmail'
 
-import { postData } from '../../functions'
+import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
 
 const RegistrationFormController = () => {
@@ -44,24 +44,24 @@ const RegistrationFormController = () => {
     const submitForm = async () => {
         if (validation()) {
             setLoading(true)
-            try {
-                const response = await postData('users', {
-                    email,
-                    password,
-                    username,
-                    nickname: username,
-                })
-                const token = response.data.authToken
+            const { data, err } = await request('users', 'POST', {
+                email,
+                password,
+                username,
+                nickname: username,
+            })
+            setLoading(false)
 
-                if (token) {
-                    setLoading(false)
-                    localStorage.setItem('token', token)
-                    authContext.login()
-                    navigate('/')
-                }
-            } catch (e) {
-                setLoading(false)
-                setError(e.message)
+            if (err) {
+                setError(err)
+                return
+            }
+
+            const token = data.authToken
+            if (token) {
+                localStorage.setItem('token', token)
+                authContext.login()
+                navigate('/')
             }
         }
     }

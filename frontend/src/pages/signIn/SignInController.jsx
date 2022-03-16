@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { AuthContext } from '../../contexts/AuthProvider'
-import { postData } from '../../functions'
+import { request } from '../../functions'
 import validationEmail from '../../functions/validateEmail'
 import SignInView from './SignInView'
 
@@ -23,23 +23,23 @@ const SignInController = () => {
         } else if (!validationEmail(email)) {
             setError('Invalid email address')
         } else {
-            try {
-                setLoading(true)
-                const { data } = await postData('users/authenticate', {
-                    email,
-                    password,
-                })
-                const token = data.authToken
+            setLoading(true)
+            const { data, err } = await request('users/authenticate', 'POST', {
+                email,
+                password,
+            })
+            setLoading(false)
 
-                if (token) {
-                    setLoading(false)
-                    localStorage.setItem('token', token)
-                    authContext.login()
-                    navigate('/')
-                }
-            } catch (err) {
-                setLoading(false)
-                setError(err.message)
+            if (err) {
+                setError(err)
+                return
+            }
+
+            const token = data.authToken
+            if (token) {
+                localStorage.setItem('token', token)
+                authContext.login()
+                navigate('/')
             }
         }
     }
