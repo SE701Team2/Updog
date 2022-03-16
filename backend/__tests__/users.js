@@ -459,7 +459,7 @@ describe('Users', () => {
                 followerId: user2.id,
             })
 
-            // WHEN the logged in user tries to view the user activity
+            // WHEN the logged in user tries to view the feed
             let authToken = Authentication.generateAuthToken(user2)
 
             const response = await request('http://localhost:8000/api')
@@ -494,6 +494,92 @@ describe('Users', () => {
         })
     })
 
+    describe('GET /notifications endpoint', () => {
+        it('Should return a 200 status response and a list of notifications', async () => {
+            // GIVEN two users
+            const password = 'PASSWORD'
+            const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
+            const email1 = `test@${randomUsername1}.com`
+
+            const user1 = await models.users.create({
+                username: randomUsername1,
+                nickname: randomUsername1,
+                email: email1,
+                password,
+            })
+
+            const randomUsername2 = (Math.random() + 1).toString(36).substring(7)
+            const email2 = `test@${randomUsername2}.com`
+
+            const user2 = await models.users.create({
+                username: randomUsername2,
+                nickname: randomUsername2,
+                email: email2,
+                password,
+            })
+
+            // WHEN a user interacts with the logged in user's post
+            const parent = await models.posts.create({
+                text_content: "This is a post",
+                author: user1.id,
+                parent: null
+            })
+
+            const reply = await models.posts.create({
+                text_content: "This is my first reply",
+                author: user2.id,
+                parent: parent.id,
+                createdAt: "2021-03-13 04:56:53"
+            })
+
+            const like = await models.likedPost.create({
+                userId: user2.id,
+                postId: parent.id,
+                createdAt: "2021-03-12 04:56:53"
+            })
+
+            const share = await models.sharedPost.create({
+                userId: user2.id,
+                postId: parent.id,
+                createdAt: "2022-03-13 04:56:53"
+            })
+
+            let authToken = Authentication.generateAuthToken(user1)
+
+            // THEN the endpoint should return these notifications
+            const response = await request('http://localhost:8000/api')
+                .get(`/notifications`)
+                .set('Authorization', `Bearer ${authToken}`)
+
+            const expectedOutput = [
+                {
+                    type: "share",
+                    timestamp: Date.parse(share.createdAt),
+                    from: share.userId,
+                    post: share.postId,
+                    content: null
+                },
+                {
+                    type: "reply",
+                    timestamp: Date.parse(reply.createdAt),
+                    from: reply.author,
+                    post: reply.id,
+                    content: reply.text_content
+                },
+                {
+                    type: "like",
+                    timestamp: Date.parse(like.createdAt),
+                    from: like.userId,
+                    post: like.postId,
+                    content: null
+                }
+            ]
+
+            expect(response.statusCode).toEqual(200)
+            expect(response.body).toEqual(expectedOutput)
+        })
+    })
+      
     describe('Testing followUser endpoint', () => {
         it('Should return a 201 status response for successful follow', async () => {
             // GIVEN a user

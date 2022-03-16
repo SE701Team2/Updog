@@ -1,7 +1,8 @@
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import { UserDTO } from '../../dto/users'
-import { Activity } from '../../enums/activity'
+import {Activity} from "../../enums/activity";
+import {Notifications} from "../../enums/notifications";
 
 export const addUser = async (req, res) => {
     try {
@@ -193,9 +194,7 @@ export const getFeed = async (req, res) => {
             })
             return
         }
-
-        console.log('GGGGG')
-
+      
         const following = await models.followers.findAll({
             where: {
                 followerId: loggedInUser.id,
@@ -252,6 +251,32 @@ export const getFeed = async (req, res) => {
     }
 }
 
+export const getNotifications = async (req, res) => {
+    try {
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const loggedInUser = Authentication.extractUser(authToken)
+
+        if (!loggedInUser) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        }
+
+       const notifications = await Notifications.retrieveNotifications(loggedInUser.id);
+       res.status(200).send(notifications)
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+          
 export const followUser = async (req, res) => {
     try {
         const { params } = req
