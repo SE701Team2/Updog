@@ -15,6 +15,8 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
+router.route('/feed').get(user.getFeed)
+
 /*
 POSTS
 */
@@ -32,6 +34,11 @@ router
     .route('/posts/:id/share')
     .post(posts.sharePostById)
     .delete(posts.unsharePostById)
+
+/*
+FEED
+*/
+
 
 /*
 TESTING
