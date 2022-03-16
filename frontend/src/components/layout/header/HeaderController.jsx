@@ -1,6 +1,7 @@
-import { useNavigate } from "react-router"
-import HeaderView from "./HeaderView"
-import user from "./mock-userData"
+import { useNavigate } from 'react-router'
+import HeaderView from './HeaderView'
+import useApi from '../../../hooks/useApi'
+import userData from './mock-userData'
 
 /**
  * Creates a main header component showing the logo and the user profile pic
@@ -8,22 +9,28 @@ import user from "./mock-userData"
  */
 
 const HeaderController = () => {
-    const navigate = useNavigate();
+    const username = localStorage.getItem('username')
+    const { data, loading } = useApi(`/users/${username}`)
+    let user
 
-    const goToFeed = () =>{
-        navigate("/feed");
+    if (loading) {
+        user = userData
+    } else {
+        user = data
     }
 
-    const goToProfile = ()=>{
-        navigate(`/user/${user.username}`);
+    const navigate = useNavigate()
+
+    const goToFeed = () => {
+        navigate('/feed')
     }
 
-    return(
-        <HeaderView 
-            user={user}
-            goToFeed={goToFeed} 
-            goToProfile={goToProfile}
-        />
+    const goToProfile = () => {
+        navigate(`/user/${username}`)
+    }
+
+    return (
+        <HeaderView user={user} goToFeed={goToFeed} goToProfile={goToProfile} />
     )
 }
 
