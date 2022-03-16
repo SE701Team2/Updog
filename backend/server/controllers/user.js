@@ -1,8 +1,8 @@
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import { UserDTO } from '../../dto/users'
-import {Activity} from "../../enums/activity";
-import {Notifications} from "../../enums/notifications";
+import { Activity } from '../../enums/activity'
+import { Notifications } from '../../enums/notifications'
 
 export const addUser = async (req, res) => {
     try {
@@ -194,7 +194,7 @@ export const getFeed = async (req, res) => {
             })
             return
         }
-      
+
         const following = await models.followers.findAll({
             where: {
                 followerId: loggedInUser.id,
@@ -270,13 +270,15 @@ export const getNotifications = async (req, res) => {
             return
         }
 
-       const notifications = await Notifications.retrieveNotifications(loggedInUser.id);
-       res.status(200).send(notifications)
+        const notifications = await Notifications.retrieveNotifications(
+            loggedInUser.id
+        )
+        res.status(200).send(notifications)
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
 }
-          
+
 export const followUser = async (req, res) => {
     try {
         const { params } = req
@@ -374,6 +376,91 @@ export const unfollowUser = async (req, res) => {
         } else {
             const unfollow = await alreadyFollow.destroy()
             res.status(200).send(unfollow)
+        }
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+
+/*
+Require authentication. (only you can see list of follower and followings)
+Path paramter: username - the username of the account we want 
+    to get following and followers for.
+Response Codes:
+200 OK when the followers and following has been successfully found.
+404 NOT FOUND when the post with that id can not be found.
+500 INTERNAL SERVER ERROR for everything else.
+Returns : List of followers and followings.
+*/
+export const getFollow = async (req, res) => {
+    try {
+        const { params } = req
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+            return
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+        const user = await models.users.findOne({
+            where: { username: params.username },
+        })
+
+        if (!user) {
+            res.status(400).send({
+                'Error message':
+                    'Invalid param : user with given username does not exist',
+            })
+            return
+        }
+
+        if (decodedUser.id) {
+            // retrieve id of users
+            const followersIds = await models.followers
+                .findAll({
+                    where: { followedId: user.id },
+                })
+                .then((followers) =>
+                    followers.map((follower) => follower.followerId)
+                )
+            const followingIds = await models.followers
+                .findAll({
+                    where: { followerId: user.id },
+                })
+                .then((followings) =>
+                    followings.map((following) => following.followedId)
+                )
+
+            // retrieve user object
+            const followersUsers = await models.users.findAll({
+                where: { id: followersIds },
+            })
+            const followingUsers = await models.users.findAll({
+                where: { id: followingIds },
+            })
+
+            // Transform to DTO
+            const followersDTO = await Promise.all(
+                followersUsers.map(async (user) => {
+                    return await UserDTO.convertToDto(user)
+                })
+            )
+            const followeringDTO = await Promise.all(
+                followingUsers.map(async (user) => {
+                    return await UserDTO.convertToDto(user)
+                })
+            )
+
+            const follow = {
+                following: followeringDTO,
+                followers: followersDTO,
+            }
+            res.status(200).send(follow)
+        } else {
+            res.status(403).send('Invalid author ID.')
         }
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
