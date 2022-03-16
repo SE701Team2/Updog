@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+First, install all dependencies by running `npm install` in *both* the main `Updog/` directory and in the `Updog/frontend/` folder.
+
 In the project directory, you can run:
 
 ### `npm start`
@@ -28,4 +30,9 @@ The build is minified and the filenames include the hashes.\
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+
+## More Information
+For information on using React, see [React Conventions](../../wiki/React-Conventions)
+
+For information on existing and planned pages, see [Frontend Overview](../../wiki/Frontend-Overview)
 
