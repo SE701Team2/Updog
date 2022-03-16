@@ -23,5 +23,16 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'postId',
         })
     }
+
+    posts.prototype.getReplies = async(id) => {
+        const replies = await posts.findAll({
+            where: {
+                parent: id
+            }
+        });
+
+        return replies
+    }
+
     return posts
 }

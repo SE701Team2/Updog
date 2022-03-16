@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RegistrationFormView from './RegistrationPageView'
+import validationEmail from '../../functions/validateEmail'
 
 import { postData } from '../../functions'
+import { AuthContext } from '../../contexts/AuthProvider'
 
 const RegistrationFormController = () => {
     const [email, setEmail] = useState('')
@@ -13,6 +15,8 @@ const RegistrationFormController = () => {
 
     const navigate = useNavigate()
 
+    const authContext = useContext(AuthContext)
+
     const validation = () => {
         if (!username) {
             setError('Username is required.')
@@ -22,13 +26,15 @@ const RegistrationFormController = () => {
             setError('Email is required.')
             return false
         }
-        if (!/\S+@\S+\.\S+/.test(email)) {
-            setError('Email is invalid.')
+        if (!validationEmail(email)) {
+            setError('Email is not valid.')
             return false
         }
         if (!password) {
             setError('Password is required.')
-        } else if (password.length < 5) {
+            return false
+        }
+        if (password.length < 5) {
             setError('Password must be at least 5 characters long.')
             return false
         }
@@ -36,8 +42,8 @@ const RegistrationFormController = () => {
     }
 
     const submitForm = async () => {
-        setLoading(true)
         if (validation()) {
+            setLoading(true)
             try {
                 const response = await postData('users', {
                     email,
@@ -48,8 +54,9 @@ const RegistrationFormController = () => {
                 const token = response.data.authToken
 
                 if (token) {
-                    localStorage.setItem('token', token)
                     setLoading(false)
+                    localStorage.setItem('token', token)
+                    authContext.login()
                     navigate('/')
                 }
             } catch (e) {
