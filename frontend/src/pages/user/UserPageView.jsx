@@ -28,7 +28,7 @@ const UserPageView = ({
                 className={classes.followButton}
                 onClick={handleChange}
             >
-                {loggedIn ? 'Settings' : isFollower ? 'Follow' : 'Unfollow'}
+                {loggedIn ? 'Settings' : isFollower ? 'Unfollow' : 'Follow'}
             </Button>
 
             <ProfileUserDetails user={userData} />
@@ -38,11 +38,15 @@ const UserPageView = ({
                 <List>
                     {userFeed?.map((post) => (
                         <ListItem
-                            key={post.id}
+                            key={post.timestamp}
                             sx={{ paddingLeft: 0, paddingRight: 0 }}
                             divider
                         >
-                            <Post data={post} condensed />
+                            <Post
+                                id={post.postID}
+                                activity={post.activity}
+                                condensed
+                            />
                         </ListItem>
                     ))}
                 </List>

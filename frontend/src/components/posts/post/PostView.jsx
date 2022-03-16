@@ -1,14 +1,23 @@
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
-import Interactions from '../interactions/InteractionsController';
+import Interactions from '../interactions/InteractionsController'
 // eslint-disable-next-line import/no-cycle
-import Post from './PostController';
+import Post from './PostController'
 import classes from './post.module.scss'
 
-const PostView = ({ postData, condensed, showReplies }) => {
+const PostView = ({ activity, postData, condensed, showReplies }) => {
     if (condensed) {
         return (
             <div className={classes.condensed}>
-                <SimpleUserDetails condensed user={postData.author} time={postData.timestamp} />
+                {activity !== 'POSTED' && (
+                    <div className={classes.activity}>
+                        <span>{activity}</span>
+                    </div>
+                )}
+                <SimpleUserDetails
+                    condensed
+                    user={postData.author}
+                    time={postData.timestamp}
+                />
                 {postData.content}
                 <div className={classes.condensedInteractions}>
                     <Interactions postData={postData} />
@@ -21,17 +30,20 @@ const PostView = ({ postData, condensed, showReplies }) => {
         <div className={classes.container}>
             <SimpleUserDetails user={postData.author} />
             <div className={classes.content}>
-                <span>{new Date(postData.timestamp).toLocaleTimeString()}:</span>
+                <span>
+                    {new Date(postData.timestamp).toLocaleTimeString()}:
+                </span>
                 <span>{postData.content}</span>
             </div>
             <div className={classes.interactions}>
                 <Interactions postData={postData} />
             </div>
-            {showReplies && postData.children.map(id => (
-                <div key={id} className={classes.reply}>
-                    <Post id={id} condensed />
-                </div> 
-            ))}
+            {showReplies &&
+                postData.children.map((id) => (
+                    <div key={id} className={classes.reply}>
+                        <Post id={id} condensed />
+                    </div>
+                ))}
         </div>
     )
 }
