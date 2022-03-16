@@ -460,7 +460,7 @@ describe('Users', () => {
             })
         })
 
-        describe('when user tries to check other accounts followings (not allowed)', () => {
+        describe('when user tries to check other accounts followings (allowed)', () => {
             it('should return response code of 403', async () => {
                 const user1 = await models.users.create({
                     username: 'gandalf',
@@ -480,7 +480,12 @@ describe('Users', () => {
                     .get(`/api/users/${user2.username}/follow`)
                     .set('Authorization', `Bearer ${authToken}`)
 
-                expect(response.statusCode).toBe(403)
+                const expectedOutput = {
+                    following: [],
+                    followers: [],
+                }
+                expect(response.statusCode).toBe(200)
+                expect(response.body).toEqual(expectedOutput)
             })
         })
 

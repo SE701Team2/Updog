@@ -207,7 +207,7 @@ export const getFollow = async (req, res) => {
             return
         }
 
-        if (decodedUser.id === user.id) {
+        if (decodedUser.id) {
             // retrieve id of users
             const followersIds = await models.followers
                 .findAll({
