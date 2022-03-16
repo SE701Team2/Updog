@@ -2,6 +2,7 @@ import models from '../database/models'
 import { Authentication } from '../middlewares/authentication'
 import db from '../config/database'
 import server from '../server'
+import {convertToPostDto} from "../dto/posts";
 
 const assert = require('assert')
 const request = require('supertest')
@@ -170,6 +171,7 @@ describe('Users', () => {
                 .send(loginInfo)
 
             assert.equal(response.statusCode, 200)
+            expect(response.body.username).toEqual(randomUsername)
 
             // AND the correct auth token should be returned
             const authUser = Authentication.extractUser(
@@ -381,6 +383,90 @@ describe('Users', () => {
                     postID: newPost.id,
                     timestamp: Date.parse(newPost.createdAt),
                     activity: "POSTED"
+                },
+            ]
+
+            expect(response.statusCode).toEqual(200)
+            expect(response.body).toEqual(expectedOutput)
+        })
+    })
+
+    describe('GET /feed endpoint', () => {
+        it('Should return a 200 status response and a list of activities from latest to earliest of the followed user', async () => {
+            // GIVEN two users
+            const password = 'PASSWORD'
+            const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
+            const email1 = `test@${randomUsername1}.com`
+
+            const user1 = await models.users.create({
+                username: randomUsername1,
+                nickname: randomUsername1,
+                email: email1,
+                password,
+            })
+
+            const randomUsername2 = (Math.random() + 1).toString(36).substring(7)
+            const email2 = `test@${randomUsername2}.com`
+
+            const user2 = await models.users.create({
+                username: randomUsername2,
+                nickname: randomUsername2,
+                email: email2,
+                password,
+            })
+
+            const newPost = await models.posts.create({
+                text_content: "Updog is the next big thing",
+                author: user1.id,
+                parent: null,
+                createdAt: "2020-03-13 04:56:53"
+            })
+
+            const likedPost = await models.likedPost.create({
+                postId: newPost.id,
+                userId: user1.id,
+                createdAt: "2021-03-13 04:56:53"
+            })
+
+            const sharedPost = await models.sharedPost.create({
+                postId: newPost.id,
+                userId: user1.id,
+                createdAt: "2021-03-14 04:56:53"
+            })
+
+            // WHEN user 2 follows user 1
+            await models.followers.create({
+                followedId: user1.id,
+                followerId: user2.id
+            })
+
+            // WHEN the logged in user tries to view the user activity
+            let authToken = Authentication.generateAuthToken(user2)
+
+            const response = await request('http://localhost:8000/api')
+                .get(`/feed`)
+                .set('Authorization', `Bearer ${authToken}`)
+
+            // THEN their feed should display the activity of the user they follow
+            const dto = await convertToPostDto(newPost)
+            const expectedOutput = [
+                {
+                    post: dto,
+                    timestamp: Date.parse(sharedPost.createdAt),
+                    activity: "SHARED",
+                    userId: user1.id
+                },
+                {
+                    post:dto,
+                    timestamp: Date.parse(likedPost.createdAt),
+                    activity: "LIKED",
+                    userId: user1.id
+                },
+                {
+                    post: dto,
+                    timestamp: Date.parse(newPost.createdAt),
+                    activity: "POSTED",
+                    userId: user1.id
                 },
             ]
 
