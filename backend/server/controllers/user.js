@@ -1,7 +1,7 @@
 import models from '../../database/models'
 import { Authentication } from '../../middlewares/authentication'
 import { UserDTO } from '../../dto/users'
-import {Activity} from "../../enums/activity";
+import { Activity } from '../../enums/activity'
 
 export const addUser = async (req, res) => {
     try {
@@ -53,6 +53,13 @@ export const getUsersByUsername = async (req, res) => {
                 username: params.username,
             },
         })
+        if (!user) {
+            res.status(404).send({
+                error: `User '${params.username}' not found`,
+            })
+            return
+        }
+
         const authToken = req.get('Authorization')
 
         if (!authToken) {
@@ -94,7 +101,7 @@ export const authenticateUser = async (req, res) => {
             res.status(200).send({
                 message: 'Authentication successful',
                 authToken,
-                username: user.username
+                username: user.username,
             })
         }
     } catch (error) {
@@ -107,9 +114,15 @@ export const getUserActivity = async (req, res) => {
         const { params } = req
         const userOfInterest = await models.users.findOne({
             where: {
-                username: params.username
-            }
+                username: params.username,
+            },
         })
+        if (!userOfInterest) {
+            res.status(404).send({
+                error: `User '${params.username}' not found`,
+            })
+            return
+        }
 
         const authToken = req.get('Authorization')
 
@@ -128,14 +141,34 @@ export const getUserActivity = async (req, res) => {
             return
         }
 
-        const unconvertedActivity = await Activity.getUnconvertedActivity(userOfInterest.id)
+        const unconvertedActivity = await Activity.getUnconvertedActivity(
+            userOfInterest.id
+        )
 
-        const postsActivity = unconvertedActivity[0].map(p => Activity.convertToUserActivity(Activity.POSTED, p.id, p.createdAt))
-        const likedPostsActivity = unconvertedActivity[1].map(p => Activity.convertToUserActivity(Activity.LIKED, p.postId, p.createdAt))
-        const sharedPostsActivity = unconvertedActivity[2].map(p => Activity.convertToUserActivity(Activity.SHARED, p.postId, p.createdAt))
+        const postsActivity = unconvertedActivity[0].map((p) =>
+            Activity.convertToUserActivity(Activity.POSTED, p.id, p.createdAt)
+        )
+        const likedPostsActivity = unconvertedActivity[1].map((p) =>
+            Activity.convertToUserActivity(
+                Activity.LIKED,
+                p.postId,
+                p.createdAt
+            )
+        )
+        const sharedPostsActivity = unconvertedActivity[2].map((p) =>
+            Activity.convertToUserActivity(
+                Activity.SHARED,
+                p.postId,
+                p.createdAt
+            )
+        )
 
-        let activity = [...postsActivity, ...sharedPostsActivity, ...likedPostsActivity]
-        activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+        let activity = [
+            ...postsActivity,
+            ...sharedPostsActivity,
+            ...likedPostsActivity,
+        ]
+        activity.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
         res.status(200).send(activity)
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
@@ -161,38 +194,162 @@ export const getFeed = async (req, res) => {
             return
         }
 
-        console.log("GGGGG")
+        console.log('GGGGG')
 
         const following = await models.followers.findAll({
             where: {
-                followerId: loggedInUser.id
-            }
+                followerId: loggedInUser.id,
+            },
         })
-
 
         let postsActivity = []
         let likedPostsActivity = []
         let sharedPostsActivity = []
-        for(const user of following){
-            const unconvertedActivity = await Activity.getUnconvertedActivity(user.followedId)
+        for (const user of following) {
+            const unconvertedActivity = await Activity.getUnconvertedActivity(
+                user.followedId
+            )
 
-            for(const activity of unconvertedActivity[0]){
-                const act = await Activity.convertToFeedActivity(Activity.POSTED, activity.id, activity.author, activity.createdAt)
+            for (const activity of unconvertedActivity[0]) {
+                const act = await Activity.convertToFeedActivity(
+                    Activity.POSTED,
+                    activity.id,
+                    activity.author,
+                    activity.createdAt
+                )
                 postsActivity.push(act)
             }
-            for(const activity of unconvertedActivity[1]){
-                const act = await Activity.convertToFeedActivity(Activity.LIKED, activity.postId, activity.userId, activity.createdAt)
+            for (const activity of unconvertedActivity[1]) {
+                const act = await Activity.convertToFeedActivity(
+                    Activity.LIKED,
+                    activity.postId,
+                    activity.userId,
+                    activity.createdAt
+                )
                 likedPostsActivity.push(act)
             }
-            for(const activity of unconvertedActivity[2]){
-                const act = await Activity.convertToFeedActivity(Activity.SHARED, activity.postId, activity.userId, activity.createdAt)
+
+            for (const activity of unconvertedActivity[2]) {
+                const act = await Activity.convertToFeedActivity(
+                    Activity.SHARED,
+                    activity.postId,
+                    activity.userId,
+                    activity.createdAt
+                )
                 sharedPostsActivity.push(act)
             }
         }
 
-        let activity = [...postsActivity, ...likedPostsActivity, ...sharedPostsActivity]
-        activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+        let activity = [
+            ...postsActivity,
+            ...likedPostsActivity,
+            ...sharedPostsActivity,
+        ]
+        activity.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
         res.status(200).send(activity)
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+
+export const followUser = async (req, res) => {
+    try {
+        const { params } = req
+        const user = await models.users.findOne({
+            where: {
+                username: params.username,
+            },
+        })
+        if (!user) {
+            res.status(404).send({
+                error: `User '${params.username}' not found`,
+            })
+            return
+        }
+
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+            return
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        }
+
+        const alreadyFollow = await models.followers.findOne({
+            where: {
+                followedId: user.id,
+                followerId: decodedUser.id,
+            },
+        })
+        if (alreadyFollow) {
+            res.status(409).send({ error: 'Already following this user' })
+        } else {
+            const follow = await models.followers.create({
+                followedId: user.id,
+                followerId: decodedUser.id,
+            })
+            res.status(201).send(follow)
+        }
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+
+export const unfollowUser = async (req, res) => {
+    try {
+        const { params } = req
+        const user = await models.users.findOne({
+            where: {
+                username: params.username,
+            },
+        })
+        if (!user) {
+            res.status(404).send({
+                error: `User '${params.username}' not found`,
+            })
+            return
+        }
+
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+            return
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        }
+
+        const alreadyFollow = await models.followers.findOne({
+            where: {
+                followedId: user.id,
+                followerId: decodedUser.id,
+            },
+        })
+        if (!alreadyFollow) {
+            res.status(404).send({ error: 'Already not following this user' })
+        } else {
+            const unfollow = await alreadyFollow.destroy()
+            res.status(200).send(unfollow)
+        }
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
