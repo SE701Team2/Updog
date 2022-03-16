@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import { convertToPostDto } from '../../dto/posts'
@@ -261,19 +262,19 @@ export const likePost = async (req, res) => {
                     'Error message': 'Auth token invalid',
                 })
             } else {
-                const { params, body } = req
+                const { params } = req
 
                 // Check whether the post being updated belongs to that user.
                 const post = await models.posts.findByPk(params.id)
                 if (!post) {
                     res.status(404).send('Invalid message ID.')
                 } else {
-                    const likePost = await models.likedPost.create({
+                    const likedPost = await models.likedPost.create({
                         postId: params.id,
                         userId: decodedUser.id,
                     })
 
-                    res.status(201).send(likePost)
+                    res.status(201).send(likedPost)
                 }
             }
         }
@@ -308,7 +309,7 @@ export const unlikePost = async (req, res) => {
                     'Error message': 'Auth token invalid',
                 })
             } else {
-                const { params, body } = req
+                const { params } = req
 
                 const count = await models.likedPost.destroy({
                     where: { postId: params.id, userId: decodedUser.id },

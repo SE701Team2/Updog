@@ -2,7 +2,7 @@ import models from '../database/models'
 import { Authentication } from '../middlewares/authentication'
 import db from '../config/database'
 import server from '../server'
-import {convertToPostDto} from "../dto/posts";
+import { convertToPostDto } from '../dto/posts'
 
 const assert = require('assert')
 const request = require('supertest')
@@ -39,7 +39,6 @@ describe('Users', () => {
         await models.sharedPost.destroy({
             where: {},
         })
-
     })
 
     describe('Encrypting password', () => {
@@ -298,6 +297,22 @@ describe('Users', () => {
                 JSON.stringify(expectedResponse)
             )
         })
+
+        it('Should return a 404 status response', async () => {
+            // random username that doesn't exist
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+
+            // trying to get this user, don't need authentication as 404 should return first
+            const response = await request('http://localhost:8000/api').get(
+                `/users/${randomUsername}`
+            )
+
+            assert.equal(response.statusCode, 404)
+            assert.equal(
+                response.body.error,
+                `User '${randomUsername}' not found`
+            )
+        })
     })
 
     describe('Testing addUser endpoint', () => {
@@ -343,25 +358,25 @@ describe('Users', () => {
             })
 
             const newPost = await models.posts.create({
-                text_content: "Updog is the next big thing",
+                text_content: 'Updog is the next big thing',
                 author: newUser.id,
-                createdAt: "2020-03-13 04:56:53"
+                createdAt: '2020-03-13 04:56:53',
             })
 
             const likedPost = await models.likedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-13 04:56:53"
+                createdAt: '2021-03-13 04:56:53',
             })
 
             const sharedPost = await models.sharedPost.create({
                 postId: newPost.id,
                 userId: newUser.id,
-                createdAt: "2021-03-14 04:56:53"
+                createdAt: '2021-03-14 04:56:53',
             })
 
             // WHEN the logged in user tries to view the user activity
-            let authToken = Authentication.generateAuthToken(newUser)
+            const authToken = Authentication.generateAuthToken(newUser)
 
             const response = await request('http://localhost:8000/api')
                 .get(`/users/${randomUsername}/activity`)
@@ -372,17 +387,17 @@ describe('Users', () => {
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(sharedPost.createdAt),
-                    activity: "SHARED"
+                    activity: 'SHARED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(likedPost.createdAt),
-                    activity: "LIKED"
+                    activity: 'LIKED',
                 },
                 {
                     postID: newPost.id,
                     timestamp: Date.parse(newPost.createdAt),
-                    activity: "POSTED"
+                    activity: 'POSTED',
                 },
             ]
 
@@ -393,6 +408,94 @@ describe('Users', () => {
 
     describe('GET /feed endpoint', () => {
         it('Should return a 200 status response and a list of activities from latest to earliest of the followed user', async () => {
+            // GIVEN two users
+            const password = 'PASSWORD'
+            const randomUsername1 = (Math.random() + 1)
+                .toString(36)
+                .substring(7)
+            const email1 = `test@${randomUsername1}.com`
+
+            const user1 = await models.users.create({
+                username: randomUsername1,
+                nickname: randomUsername1,
+                email: email1,
+                password,
+            })
+
+            const randomUsername2 = (Math.random() + 1)
+                .toString(36)
+                .substring(7)
+            const email2 = `test@${randomUsername2}.com`
+
+            const user2 = await models.users.create({
+                username: randomUsername2,
+                nickname: randomUsername2,
+                email: email2,
+                password,
+            })
+
+            const newPost = await models.posts.create({
+                text_content: 'Updog is the next big thing',
+                author: user1.id,
+                parent: null,
+                createdAt: '2020-03-13 04:56:53',
+            })
+
+            const likedPost = await models.likedPost.create({
+                postId: newPost.id,
+                userId: user1.id,
+                createdAt: '2021-03-13 04:56:53',
+            })
+
+            const sharedPost = await models.sharedPost.create({
+                postId: newPost.id,
+                userId: user1.id,
+                createdAt: '2021-03-14 04:56:53',
+            })
+
+            // WHEN user 2 follows user 1
+            await models.followers.create({
+                followedId: user1.id,
+                followerId: user2.id,
+            })
+
+            // WHEN the logged in user tries to view the feed
+            let authToken = Authentication.generateAuthToken(user2)
+
+            const response = await request('http://localhost:8000/api')
+                .get(`/feed`)
+                .set('Authorization', `Bearer ${authToken}`)
+
+            // THEN their feed should display the activity of the user they follow
+            const dto = await convertToPostDto(newPost)
+            const expectedOutput = [
+                {
+                    post: dto,
+                    timestamp: Date.parse(sharedPost.createdAt),
+                    activity: 'SHARED',
+                    userId: user1.id,
+                },
+                {
+                    post: dto,
+                    timestamp: Date.parse(likedPost.createdAt),
+                    activity: 'LIKED',
+                    userId: user1.id,
+                },
+                {
+                    post: dto,
+                    timestamp: Date.parse(newPost.createdAt),
+                    activity: 'POSTED',
+                    userId: user1.id,
+                },
+            ]
+
+            expect(response.statusCode).toEqual(200)
+            expect(response.body).toEqual(expectedOutput)
+        })
+    })
+
+    describe('GET /notifications endpoint', () => {
+        it('Should return a 200 status response and a list of notifications', async () => {
             // GIVEN two users
             const password = 'PASSWORD'
             const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
@@ -415,63 +518,273 @@ describe('Users', () => {
                 password,
             })
 
-            const newPost = await models.posts.create({
-                text_content: "Updog is the next big thing",
+            // WHEN a user interacts with the logged in user's post
+            const parent = await models.posts.create({
+                text_content: "This is a post",
                 author: user1.id,
-                parent: null,
-                createdAt: "2020-03-13 04:56:53"
+                parent: null
             })
 
-            const likedPost = await models.likedPost.create({
-                postId: newPost.id,
-                userId: user1.id,
+            const reply = await models.posts.create({
+                text_content: "This is my first reply",
+                author: user2.id,
+                parent: parent.id,
                 createdAt: "2021-03-13 04:56:53"
             })
 
-            const sharedPost = await models.sharedPost.create({
-                postId: newPost.id,
-                userId: user1.id,
-                createdAt: "2021-03-14 04:56:53"
+            const like = await models.likedPost.create({
+                userId: user2.id,
+                postId: parent.id,
+                createdAt: "2021-03-12 04:56:53"
             })
 
-            // WHEN user 2 follows user 1
-            await models.followers.create({
-                followedId: user1.id,
-                followerId: user2.id
+            const share = await models.sharedPost.create({
+                userId: user2.id,
+                postId: parent.id,
+                createdAt: "2022-03-13 04:56:53"
             })
 
-            // WHEN the logged in user tries to view the user activity
-            let authToken = Authentication.generateAuthToken(user2)
+            let authToken = Authentication.generateAuthToken(user1)
 
+            // THEN the endpoint should return these notifications
             const response = await request('http://localhost:8000/api')
-                .get(`/feed`)
+                .get(`/notifications`)
                 .set('Authorization', `Bearer ${authToken}`)
 
-            // THEN their feed should display the activity of the user they follow
-            const dto = await convertToPostDto(newPost)
             const expectedOutput = [
                 {
-                    post: dto,
-                    timestamp: Date.parse(sharedPost.createdAt),
-                    activity: "SHARED",
-                    userId: user1.id
+                    type: "share",
+                    timestamp: Date.parse(share.createdAt),
+                    from: share.userId,
+                    post: share.postId,
+                    content: null
                 },
                 {
-                    post:dto,
-                    timestamp: Date.parse(likedPost.createdAt),
-                    activity: "LIKED",
-                    userId: user1.id
+                    type: "reply",
+                    timestamp: Date.parse(reply.createdAt),
+                    from: reply.author,
+                    post: reply.id,
+                    content: reply.text_content
                 },
                 {
-                    post: dto,
-                    timestamp: Date.parse(newPost.createdAt),
-                    activity: "POSTED",
-                    userId: user1.id
-                },
+                    type: "like",
+                    timestamp: Date.parse(like.createdAt),
+                    from: like.userId,
+                    post: like.postId,
+                    content: null
+                }
             ]
 
             expect(response.statusCode).toEqual(200)
             expect(response.body).toEqual(expectedOutput)
+        })
+    })
+      
+    describe('Testing followUser endpoint', () => {
+        it('Should return a 201 status response for successful follow', async () => {
+            // GIVEN a user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const newUser = await models.users.create({
+                username: randomUsername,
+                nickname: randomUsername,
+                email,
+                password,
+            })
+
+            const loginInfo = {
+                email,
+                password,
+            }
+
+            const auth = await request('http://localhost:8000/api')
+                .post('/users/authenticate')
+                .send(loginInfo)
+
+            const secondPassword = 'PASSWORD'
+            const secondUsername = (Math.random() + 1).toString(36).substring(7)
+            const secondEmail = `test@${secondUsername}.com`
+
+            const secondUser = await models.users.create({
+                username: secondUsername,
+                nickname: secondUsername,
+                email: secondEmail,
+                password: secondPassword,
+            })
+
+            const thirdPassword = 'PASSWORD'
+            const thirdUsername = (Math.random() + 1).toString(36).substring(7)
+            const thirdEmail = `test@${thirdUsername}.com`
+
+            const thirdUser = await models.users.create({
+                username: thirdUsername,
+                nickname: thirdUsername,
+                email: thirdEmail,
+                password: thirdPassword,
+            })
+
+            // first user will follow the second and third users
+            const followSecond = await request('http://localhost:8000/api')
+                .post(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            const followThird = await request('http://localhost:8000/api')
+                .post(`/users/${thirdUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            expect(followSecond.statusCode).toEqual(201)
+            expect(followSecond.body.followedId).toEqual(secondUser.id)
+            expect(followSecond.body.followerId).toEqual(newUser.id)
+
+            expect(followThird.statusCode).toEqual(201)
+            expect(followThird.body.followedId).toEqual(thirdUser.id)
+            expect(followThird.body.followerId).toEqual(newUser.id)
+        })
+
+        it('Should return a 409 response for trying to follow twice', async () => {
+            // GIVEN a user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const newUser = await models.users.create({
+                username: randomUsername,
+                nickname: randomUsername,
+                email,
+                password,
+            })
+
+            const loginInfo = {
+                email,
+                password,
+            }
+
+            const auth = await request('http://localhost:8000/api')
+                .post('/users/authenticate')
+                .send(loginInfo)
+
+            const secondPassword = 'PASSWORD'
+            const secondUsername = (Math.random() + 1).toString(36).substring(7)
+            const secondEmail = `test@${secondUsername}.com`
+
+            const secondUser = await models.users.create({
+                username: secondUsername,
+                nickname: secondUsername,
+                email: secondEmail,
+                password: secondPassword,
+            })
+
+            // first user will try to follow the second user twice
+            const response = await request('http://localhost:8000/api')
+                .post(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            const followAgain = await request('http://localhost:8000/api')
+                .post(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            expect(response.statusCode).toEqual(201)
+            expect(response.body.followedId).toEqual(secondUser.id)
+            expect(response.body.followerId).toEqual(newUser.id)
+
+            expect(followAgain.statusCode).toEqual(409)
+            expect(followAgain.body.error).toEqual(
+                'Already following this user'
+            )
+        })
+    })
+
+    describe('Testing unfollowUser endpoint', () => {
+        it('Should return a 200 status response for successful deletion', async () => {
+            // GIVEN a user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            const newUser = await models.users.create({
+                username: randomUsername,
+                nickname: randomUsername,
+                email,
+                password,
+            })
+
+            const loginInfo = {
+                email,
+                password,
+            }
+
+            const auth = await request('http://localhost:8000/api')
+                .post('/users/authenticate')
+                .send(loginInfo)
+
+            const secondPassword = 'PASSWORD'
+            const secondUsername = (Math.random() + 1).toString(36).substring(7)
+            const secondEmail = `test@${secondUsername}.com`
+
+            const secondUser = await models.users.create({
+                username: secondUsername,
+                nickname: secondUsername,
+                email: secondEmail,
+                password: secondPassword,
+            })
+
+            // first user will follow second and then unfollow him
+            await request('http://localhost:8000/api')
+                .post(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            const response = await request('http://localhost:8000/api')
+                .delete(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            expect(response.statusCode).toEqual(200)
+            expect(response.body.followedId).toEqual(secondUser.id)
+            expect(response.body.followerId).toEqual(newUser.id)
+        })
+
+        it('Should return a 404 response for trying to unfollow a not followed user', async () => {
+            // GIVEN a user
+            const password = 'PASSWORD'
+            const randomUsername = (Math.random() + 1).toString(36).substring(7)
+            const email = `test@${randomUsername}.com`
+
+            await models.users.create({
+                username: randomUsername,
+                nickname: randomUsername,
+                email,
+                password,
+            })
+
+            const loginInfo = {
+                email,
+                password,
+            }
+
+            const auth = await request('http://localhost:8000/api')
+                .post('/users/authenticate')
+                .send(loginInfo)
+
+            const secondPassword = 'PASSWORD'
+            const secondUsername = (Math.random() + 1).toString(36).substring(7)
+            const secondEmail = `test@${secondUsername}.com`
+
+            await models.users.create({
+                username: secondUsername,
+                nickname: secondUsername,
+                email: secondEmail,
+                password: secondPassword,
+            })
+
+            const response = await request('http://localhost:8000/api')
+                .delete(`/users/${secondUsername}/follow`)
+                .set('Authorization', `Bearer ${auth.body.authToken}`)
+
+            expect(response.statusCode).toEqual(404)
+            expect(response.body.error).toEqual(
+                'Already not following this user'
+            )
         })
     })
 
@@ -480,4 +793,3 @@ describe('Users', () => {
         serverInstance.close()
     })
 })
-
