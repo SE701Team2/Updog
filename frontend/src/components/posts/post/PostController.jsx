@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-cycle
-import PostView from "./PostView"
-import replyData from './mock-data'
+import PostView from './PostView'
+import useApi from '../../../hooks/useApi'
 
 /**
  * Creates a post. One of either id or data must be provided
@@ -9,21 +9,34 @@ import replyData from './mock-data'
  * @prop {boolean} condensed - optional, makes the post take up less space
  * @prop {boolean} showReplies - optional, also renders each 1st level reply to the post
  */
-const PostController = ({ id = 0, data = null, condensed = false, showReplies = false }) => {
+const PostController = ({
+    id = 0,
+    data = null,
+    condensed = false,
+    showReplies = false,
+}) => {
     let postData = data
     if (id) {
-        // add logic to fetch post from the id.
-        // for mock, we assume that if an id is given its a reply 
-        postData = replyData
+        const res = useApi(`posts/${id}`)
+
+        if (res.loading) {
+            return <div>Loading...</div>
+        }
+
+        if (res.err) {
+            return <div>Error: {res.err}</div>
+        }
+
+        postData = res.data
     } else if (!data) {
         // true if neither id or data is given
         return <div>Error retrieving post data</div>
     }
 
     return (
-        <PostView 
-            condensed={condensed} 
-            postData={postData} 
+        <PostView
+            condensed={condensed}
+            postData={postData}
             showReplies={showReplies}
         />
     )
