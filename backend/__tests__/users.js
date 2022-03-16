@@ -170,6 +170,7 @@ describe('Users', () => {
                 .send(loginInfo)
 
             assert.equal(response.statusCode, 200)
+            expect(response.body.username).toEqual(randomUsername)
 
             // AND the correct auth token should be returned
             const authUser = Authentication.extractUser(

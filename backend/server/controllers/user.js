@@ -94,6 +94,7 @@ export const authenticateUser = async (req, res) => {
             res.status(200).send({
                 message: 'Authentication successful',
                 authToken,
+                username: user.username
             })
         }
     } catch (error) {
