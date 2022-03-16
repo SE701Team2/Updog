@@ -8,7 +8,7 @@ import fileupload from 'express-fileupload'
 import swaggerUi from 'swagger-ui-express'
 import YAML from 'yamljs'
 import path from 'path'
-import config from '../config/default'
+import config from 'config'
 
 import db from '../config/database'
 import routes from './routes'
@@ -17,7 +17,7 @@ const server = express()
 
 // Get different configs for dev and test, this is because in test
 // request conflicts with yaml.load
-const swaggerDocument = config.DEV
+const swaggerDocument = config.get('DEV')
     ? YAML.load(path.resolve('./specs/swagger.yaml'))
     : null
 
