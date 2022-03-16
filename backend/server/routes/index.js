@@ -15,6 +15,8 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
+router.route('/feed').get(user.getFeed)
+
 /*
 POSTS
 */
@@ -25,6 +27,11 @@ router
     .get(posts.getPostById)
     .put(posts.modifyPostById)
     .delete(posts.deletePostById)
+
+/*
+FEED
+*/
+
 
 /*
 TESTING

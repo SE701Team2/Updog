@@ -127,34 +127,69 @@ export const getUserActivity = async (req, res) => {
             return
         }
 
-        // Retrieve user's posts, including the shared and liked posts
+        const unconvertedActivity = await Activity.getUnconvertedActivity(userOfInterest.id)
 
-        const posts = await models.posts.findAll({
-            where:{
-                author: userOfInterest.id
+        const postsActivity = unconvertedActivity[0].map(p => Activity.convertToUserActivity(Activity.POSTED, p.id, p.createdAt))
+        const likedPostsActivity = unconvertedActivity[1].map(p => Activity.convertToUserActivity(Activity.LIKED, p.postId, p.createdAt))
+        const sharedPostsActivity = unconvertedActivity[2].map(p => Activity.convertToUserActivity(Activity.SHARED, p.postId, p.createdAt))
+
+        let activity = [...postsActivity, ...sharedPostsActivity, ...likedPostsActivity]
+        activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
+        res.status(200).send(activity)
+    } catch (error) {
+        res.status(500).send({ 'Error message': error.toString() })
+    }
+}
+
+export const getFeed = async (req, res) => {
+    try {
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const loggedInUser = Authentication.extractUser(authToken)
+
+        if (!loggedInUser) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        }
+
+        console.log("GGGGG")
+
+        const following = await models.followers.findAll({
+            where: {
+                followerId: loggedInUser.id
             }
         })
 
-       const postsActivity = posts.map(p => Activity.convertToActivity(Activity.POSTED, p.id, p.createdAt))
 
-        const sharedPosts = await models.sharedPost.findAll({
-            where:{
-                userID: userOfInterest.id
+        let postsActivity = []
+        let likedPostsActivity = []
+        let sharedPostsActivity = []
+        for(const user of following){
+            const unconvertedActivity = await Activity.getUnconvertedActivity(user.followedId)
+
+            for(const activity of unconvertedActivity[0]){
+                const act = await Activity.convertToFeedActivity(Activity.POSTED, activity.id, activity.author, activity.createdAt)
+                postsActivity.push(act)
             }
-        })
-
-        const sharedPostsActivity = sharedPosts.map(p => Activity.convertToActivity(Activity.SHARED, p.postId, p.createdAt))
-
-        const likedPosts = await models.likedPost.findAll({
-            where:{
-                userID: userOfInterest.id
+            for(const activity of unconvertedActivity[1]){
+                const act = await Activity.convertToFeedActivity(Activity.LIKED, activity.postId, activity.userId, activity.createdAt)
+                likedPostsActivity.push(act)
             }
-        })
+            for(const activity of unconvertedActivity[2]){
+                const act = await Activity.convertToFeedActivity(Activity.SHARED, activity.postId, activity.userId, activity.createdAt)
+                sharedPostsActivity.push(act)
+            }
+        }
 
-        const likedPostsActivity = likedPosts.map(p => Activity.convertToActivity(Activity.LIKED, p.postId, p.createdAt))
-
-        // Merge the posts together into one array, sort them in descending order based on timestamp, and return them
-        let activity = [...postsActivity, ...likedPostsActivity, ...sharedPostsActivity];
+        let activity = [...postsActivity, ...likedPostsActivity, ...sharedPostsActivity]
         activity.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : -1)
         res.status(200).send(activity)
     } catch (error) {

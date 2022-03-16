@@ -38,7 +38,6 @@ describe('Posts', () => {
                     'what is the meaning of life?'
                 )
                 expect(response.body.author.username).toBe('gandalf')
-                expect(response.body.author.email).toBe('gandalf@gandalf.com')
                 expect(response.body.parent).toBe(null)
                 expect(response.body.children).toStrictEqual([])
                 expect(response.body.usersLiked).toBe(0)
@@ -168,7 +167,6 @@ describe('Posts', () => {
                 expect(response.body.id).toBeTruthy()
                 expect(response.body.content).toBe('some random text 2')
                 expect(response.body.author.username).toBe('testUser')
-                expect(response.body.author.email).toBe('testUser@testmail.com')
                 expect(response.body.parent).toBe(null)
                 expect(response.body.children).toStrictEqual([])
                 expect(response.body.usersLiked).toBe(0)
