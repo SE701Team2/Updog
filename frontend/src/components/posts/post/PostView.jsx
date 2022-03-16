@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
 import Interactions from '../interactions/InteractionsController'
 // eslint-disable-next-line import/no-cycle
@@ -18,7 +19,9 @@ const PostView = ({ activity, postData, condensed, showReplies }) => {
                     user={postData.author}
                     time={postData.timestamp}
                 />
-                {postData.content}
+                <Link className={classes.link} to={`/post/${postData.id}`}>
+                    {postData.content}
+                </Link>
                 <div className={classes.condensedInteractions}>
                     <Interactions postData={postData} />
                 </div>
