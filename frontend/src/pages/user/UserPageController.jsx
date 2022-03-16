@@ -1,19 +1,32 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserPageView from './UserPageView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
+
+const follows = (followsData, username) => {
+    const data = followsData?.followers ?? []
+    return data.some((i) => i.username === username)
+}
 
 /**
  * This page renders a user page
  */
 const UserPageController = () => {
     const { username } = useParams()
-    const userData = useApi(`/users/${username}`).data
+    const loggedInUsername = localStorage.getItem('username')
+    const loggedIn = username === loggedInUsername
+    const navigate = useNavigate()
+    const userData = useApi(`users/${username}`).data
+    const followData = useApi(`users/${username}/follow`).data
     const { data, loading, err } = useApi(`users/${username}/activity`)
     const [isFollower, setIsFollower] = useState(false)
-    const loggedIn = username === localStorage.getItem('username')
-    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (followData) {
+            setIsFollower(follows(followData, loggedInUsername))
+        }
+    }, [followData])
 
     if (loading) {
         return <div>Loading...</div>
@@ -30,6 +43,9 @@ const UserPageController = () => {
             const method = isFollower ? 'DELETE' : 'POST'
             request(`users/${username}/follow`, method)
             setIsFollower(!isFollower)
+
+            // update follower count
+            userData.followers += isFollower ? -1 : 1
         }
     }
 
