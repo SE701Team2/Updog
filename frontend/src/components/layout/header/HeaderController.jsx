@@ -10,7 +10,7 @@ import userData from './mock-userData'
 
 const HeaderController = () => {
     const username = localStorage.getItem('username')
-    const { data, loading } = useApi(`/users/${username}`)
+    const { data, loading } = useApi(`users/${username}`)
     let user
 
     if (loading) {
