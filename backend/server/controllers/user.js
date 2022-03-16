@@ -57,6 +57,7 @@ export const getUsersByUsername = async (req, res) => {
             res.status(404).send({
                 error: `User '${params.username}' not found`,
             })
+            return
         }
 
         const authToken = req.get('Authorization')
@@ -116,6 +117,12 @@ export const getUserActivity = async (req, res) => {
                 username: params.username,
             },
         })
+        if (!userOfInterest) {
+            res.status(404).send({
+                error: `User '${params.username}' not found`,
+            })
+            return
+        }
 
         const authToken = req.get('Authorization')
 
@@ -257,6 +264,7 @@ export const followUser = async (req, res) => {
             res.status(404).send({
                 error: `User '${params.username}' not found`,
             })
+            return
         }
 
         const authToken = req.get('Authorization')
@@ -265,6 +273,7 @@ export const followUser = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
+            return
         }
 
         const decodedUser = Authentication.extractUser(authToken)
@@ -273,26 +282,24 @@ export const followUser = async (req, res) => {
             res.status(401).send({
                 'Error message': 'Auth token invalid',
             })
+            return
         }
 
         const alreadyFollow = await models.followers.findOne({
             where: {
-                followedId: decodedUser.id,
-                followerId: user.id,
+                followedId: user.id,
+                followerId: decodedUser.id,
             },
         })
         if (alreadyFollow) {
             res.status(409).send({ error: 'Already following this user' })
+        } else {
+            const follow = await models.followers.create({
+                followedId: user.id,
+                followerId: decodedUser.id,
+            })
+            res.status(201).send(follow)
         }
-
-        const follow = await models.followers.create({
-            followedId: decodedUser.id,
-            followerId: user.id,
-        })
-        res.status(201).send({
-            message: 'Follow successful',
-            follow,
-        })
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }
@@ -310,6 +317,7 @@ export const unfollowUser = async (req, res) => {
             res.status(404).send({
                 error: `User '${params.username}' not found`,
             })
+            return
         }
 
         const authToken = req.get('Authorization')
@@ -318,6 +326,7 @@ export const unfollowUser = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
+            return
         }
 
         const decodedUser = Authentication.extractUser(authToken)
@@ -326,28 +335,21 @@ export const unfollowUser = async (req, res) => {
             res.status(401).send({
                 'Error message': 'Auth token invalid',
             })
+            return
         }
 
         const alreadyFollow = await models.followers.findOne({
             where: {
-                followedId: decodedUser.id,
-                followerId: user.id,
+                followedId: user.id,
+                followerId: decodedUser.id,
             },
         })
         if (!alreadyFollow) {
             res.status(404).send({ error: 'Already not following this user' })
+        } else {
+            const unfollow = await alreadyFollow.destroy()
+            res.status(200).send(unfollow)
         }
-
-        const unfollow = await models.followers.destroy({
-            where: {
-                followedId: decodedUser.id,
-                followerId: user.id,
-            },
-        })
-        res.status(200).send({
-            message: 'Unfollow successful',
-            unfollow,
-        })
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
     }

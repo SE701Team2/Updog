@@ -16,7 +16,7 @@ export class UserDTO {
             username: user.username,
             nickname: user.nickname,
             profilePic: user.profilePic ? user.profilePic : null,
-            profileBanner: user.profileBanner ? user.profilePic : null,
+            profileBanner: user.profileBanner ? user.profileBanner : null,
             bio: user.bio ? user.bio : null,
             followers: numFollowers,
             following: numFollowing,

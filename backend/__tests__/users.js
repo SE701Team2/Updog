@@ -549,12 +549,12 @@ describe('Users', () => {
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
             expect(followSecond.statusCode).toEqual(201)
-            expect(followSecond.body.follow.followedId, secondUser.id)
-            expect(followSecond.body.follow.followerId, newUser.id)
+            expect(followSecond.body.followedId).toEqual(secondUser.id)
+            expect(followSecond.body.followerId).toEqual(newUser.id)
 
             expect(followThird.statusCode).toEqual(201)
-            expect(followThird.body.follow.followedId, thirdUser.id)
-            expect(followThird.body.follow.followerId, newUser.id)
+            expect(followThird.body.followedId).toEqual(thirdUser.id)
+            expect(followThird.body.followerId).toEqual(newUser.id)
         })
 
         it('Should return a 409 response for trying to follow twice', async () => {
@@ -600,8 +600,8 @@ describe('Users', () => {
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
             expect(response.statusCode).toEqual(201)
-            expect(response.body.follow.followedId, secondUser.id)
-            expect(response.body.follow.followerId, newUser.id)
+            expect(response.body.followedId).toEqual(secondUser.id)
+            expect(response.body.followerId).toEqual(newUser.id)
 
             expect(followAgain.statusCode).toEqual(409)
             expect(followAgain.body.error).toEqual(
@@ -654,8 +654,8 @@ describe('Users', () => {
                 .set('Authorization', `Bearer ${auth.body.authToken}`)
 
             expect(response.statusCode).toEqual(200)
-            expect(response.body.unfollow.followedId, secondUser.id)
-            expect(response.body.unfollow.followerId, newUser.id)
+            expect(response.body.followedId).toEqual(secondUser.id)
+            expect(response.body.followerId).toEqual(newUser.id)
         })
 
         it('Should return a 404 response for trying to unfollow a not followed user', async () => {
