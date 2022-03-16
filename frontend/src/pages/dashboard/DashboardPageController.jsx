@@ -6,7 +6,7 @@ import useApi from '../../hooks/useApi'
  * displayed in a condensed view. Refer to PostView Component for more details
  */
 const DashboardPageController = () => {
-    const { data, loading, err } = useApi('/feed')
+    const { data, loading, err } = useApi('feed')
 
     if (loading) {
         return <div>Loading...</div>

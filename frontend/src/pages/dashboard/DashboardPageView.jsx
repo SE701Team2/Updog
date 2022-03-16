@@ -27,9 +27,9 @@ const DashboardPageView = ({ feedData }) => (
     <div className={classes.container}>
         <Header />
         <div className={classes.pageContent}>
-            {feedData.map((post) => (
-                <FeedCard key={post.id}>
-                    <Post data={post} condensed />
+            {feedData.map((data) => (
+                <FeedCard key={data.timestamp}>
+                    <Post data={data.post} condensed />
                 </FeedCard>
             ))}
         </div>
