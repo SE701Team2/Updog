@@ -25,7 +25,6 @@ This guide assumes you have already cloned the repository and installed Node.js 
 # 3. Create a new connection
 1. Create a new connection with the following settings:
 
-
 `username: 'updogDev'`
 
 `password: 'password'`
@@ -56,19 +55,24 @@ To start the project, run `npm start`
 
 To test connection, send a GET request to http://localhost:8080/api/test. Response should be "Hello World!" 
 
-Base URL: http://localhost:8080/api (Check routes folder for endpoints)
+Base URL: http://localhost:8080/api (Check routes folder or [Swagger](#6-api-endpoints) for endpoints)
 
 # 6. API endpoints
-To find further information on the api endpoints, we have configured a swagger api doc. To access, first run `npm start` then
-in a browser, go to URL: <http://localhost:8080/api-docs>.
+Updog's API endpoints are documented using Swagger
 
-To add documentation for new endpoints, go to the specs/swagger.yaml file.
+To access, first run `npm start` then go to the following URL: <http://localhost:8080/api-docs>
+
+When adding new endpoints, ensure you update the documentation in the `specs/swagger.yaml` file
 
 # 7. FAQ and Troubleshooting
-### "Your password does not satisfy the current policy requirements" error
+
+## "Your password does not satisfy the current policy requirements" error
+
 Open MySQL Shell and run the following commands:
+
 `SET GLOBAL validate_password.length = 4;`
+
 `SET GLOBAL validate_password.policy=LOW;`
 
-### Test Connection failed
+## Test Connection failed
 If the "Test Connection" button fails, you may need to reinstall MySQL - sometimes the installation process doesn't work correctly.
