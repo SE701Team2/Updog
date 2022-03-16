@@ -17,6 +17,11 @@ router.route('/users/:username/activity').get(user.getUserActivity)
 
 router.route('/feed').get(user.getFeed)
 
+router
+    .route('/users/:username/follow')
+    .post(user.followUser)
+    .delete(user.unfollowUser)
+
 router.route('/notifications').get(user.getNotifications)
 
 /*
@@ -37,7 +42,6 @@ router
     .post(posts.sharePostById)
     .delete(posts.unsharePostById)
 
-/*
 TESTING
 */
 router.route('/test').get(test.helloWorld)

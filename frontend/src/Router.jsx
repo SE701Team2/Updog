@@ -3,6 +3,8 @@ import Landing from './pages/landing/LandingController'
 import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
+import Dashboard from './pages/dashboard/DashboardPageController'
+
 import Registration from './pages/registration/RegistrationPagesController'
 import User from './pages/user/UserPageController'
 import { AuthContext } from './contexts/AuthProvider'
@@ -23,6 +25,7 @@ const Router = () => {
             <Routes>
                 <Route path="/post/:id" element={<Post />} />
                 <Route path="/user/:username/follows" element={<Follows />} />
+                <Route path="/feed" element={<Dashboard />} />
             </Routes>
         )
     } else {
@@ -39,5 +42,6 @@ const Router = () => {
 
     return routes
 }
+
 
 export default Router
