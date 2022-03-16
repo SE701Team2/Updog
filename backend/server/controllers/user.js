@@ -3,8 +3,6 @@ import { Authentication } from '../../middlewares/authentication'
 import { UserDTO } from '../../dto/users'
 import {Activity} from "../../enums/activity";
 import {Notifications} from "../../enums/notifications";
-import { Activity } from '../../enums/activity'
-
 
 export const addUser = async (req, res) => {
     try {

@@ -42,6 +42,7 @@ router
     .post(posts.sharePostById)
     .delete(posts.unsharePostById)
 
+/*
 TESTING
 */
 router.route('/test').get(test.helloWorld)

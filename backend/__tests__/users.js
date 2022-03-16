@@ -551,7 +551,7 @@ describe('Users', () => {
                 .get(`/notifications`)
                 .set('Authorization', `Bearer ${authToken}`)
 
-            const expectedOutput =[
+            const expectedOutput = [
                 {
                     type: "share",
                     timestamp: Date.parse(share.createdAt),
@@ -578,6 +578,7 @@ describe('Users', () => {
             expect(response.statusCode).toEqual(200)
             expect(response.body).toEqual(expectedOutput)
         })
+    })
       
     describe('Testing followUser endpoint', () => {
         it('Should return a 201 status response for successful follow', async () => {
