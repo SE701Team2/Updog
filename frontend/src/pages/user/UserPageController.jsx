@@ -1,36 +1,42 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import UserPageView from './UserPageView'
-import { sampleUser, sampleFeed } from './mock-data'
+import useApi from '../../hooks/useApi'
 
 /**
  * This page renders a user page
  */
 const UserPageController = () => {
-    // will be used when api call is implemented
-    // eslint-disable-next-line no-unused-vars
     const { username } = useParams()
+    const userData = useApi(`/users/${username}`).data
+    const { data, loading, err } = useApi(`/users/${username}/activity`)
+    const [isFollower, setIsFollower] = useState(false)
+    const loggedIn = username === localStorage.getItem('username')
+    const navigate = useNavigate()
 
-    // once auth is implemented this will be removed
-    const logginState = true
+    if (loading) {
+        return <div>Loading...</div>
+    }
 
-    // once api calls are implemented will be changed
-    let isFollower = true
+    if (err) {
+        return <div>Error: {err}</div>
+    }
 
-    const [buttonText, setButtonText] = useState(isFollower)
+    const handleChange = () => {
+        if (loggedIn) {
+            navigate(`/user/${username}/settings`)
+        }
 
-    const changeText = () => {
-        setButtonText(!buttonText)
-        isFollower = !isFollower
+        setIsFollower(!isFollower)
     }
 
     return (
         <UserPageView
-            userData={sampleUser}
-            userFeed={sampleFeed}
-            loggedIn={logginState}
-            buttonText={buttonText}
-            handleChange={changeText}
+            userData={userData}
+            userFeed={data}
+            loggedIn={loggedIn}
+            isFollower={isFollower}
+            handleChange={handleChange}
         />
     )
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { List, ListItem } from '@mui/material'
 import Button from '@mui/material/Button'
 import classes from './userpage.module.scss'
@@ -6,13 +7,11 @@ import HeaderCustom from '../../components/layout/headercustom/HeaderCustomContr
 import ProfileUserDetails from '../../components/user/profiledetails/ProfileUserDetailsController'
 import Post from '../../components/posts/post/PostController'
 
-// eslint-disable-next-line no-unused-vars
 const UserPageView = ({
     userData,
     userFeed,
     loggedIn,
-    // eslint-disable-next-line no-unused-vars
-    buttonText,
+    isFollower,
     handleChange,
 }) => (
     <div className={classes.container}>
@@ -20,7 +19,7 @@ const UserPageView = ({
         <img
             className={classes.banner}
             alt="Profile Banner"
-            src={userData.profileBanner}
+            src={userData.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
         />
         <div className={classes.pageContent}>
             <Button
@@ -29,7 +28,7 @@ const UserPageView = ({
                 className={classes.followButton}
                 onClick={handleChange}
             >
-                {loggedIn ? 'Settings' : 'Follow'}
+                {loggedIn ? 'Settings' : isFollower ? 'Follow' : 'Unfollow'}
             </Button>
 
             <ProfileUserDetails user={userData} />
