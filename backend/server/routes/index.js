@@ -15,7 +15,15 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
-router.route('/users/:username/follow').get(user.getFollow)
+router
+    .route('/users/:username/follow')
+    .post(user.followUser)
+    .delete(user.unfollowUser)
+    .get(user.getFollow)
+
+router.route('/feed').get(user.getFeed)
+
+router.route('/notifications').get(user.getNotifications)
 
 /*
 POSTS
