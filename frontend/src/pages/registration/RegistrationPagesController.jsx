@@ -57,9 +57,10 @@ const RegistrationFormController = () => {
                 return
             }
 
-            const token = data.authToken
-            if (token) {
-                localStorage.setItem('token', token)
+            const { authToken } = data
+            if (authToken) {
+                localStorage.setItem('token', authToken)
+                localStorage.setItem('username', username)
                 authContext.login()
                 navigate('/')
             }

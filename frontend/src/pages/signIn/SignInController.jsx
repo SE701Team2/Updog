@@ -35,9 +35,10 @@ const SignInController = () => {
                 return
             }
 
-            const token = data.authToken
-            if (token) {
-                localStorage.setItem('token', token)
+            const { authToken, username } = data
+            if (authToken && username) {
+                localStorage.setItem('token', authToken)
+                localStorage.setItem('username', username)
                 authContext.login()
                 navigate('/')
             }
