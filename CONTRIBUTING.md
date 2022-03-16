@@ -4,8 +4,11 @@ Updog is an open-source social media webapp. Currently, contribution is limited 
 
 ## Creating Issues
 
-When creating an issue, use the appropriate template for a bug report or feature request. Sufficient detail must be provided for a developer not familiar with the issue to fix the bug or implement the feature.
+Issues should be discussed in a team meeting or on Discord prior to their creation. When creating an issue, use the appropriate template for a bug report or feature request. Sufficient detail must be provided for a developer not familiar with the issue to fix the bug or implement the feature
+
 If your issue is blocked by or blocks another issue, it should be noted in the description, e.g. “blocked by #57”
+
+Once created, issues should be added to the relevant project board(s), [located here](https://github.com/SE701Team2/Updog/projects)
 
 ## Instructions for setting up linting and formatting
 
@@ -61,5 +64,4 @@ Appropriate documentation of features should be added to the [Wiki](https://gith
 
 ## Coding Style
 
-This section is a work in progress.
-Formatting and style is enforced by ESLint and Prettier.
+Developers must use the [Airbnb style guide](https://airbnb.io/javascript/react/) when making Javascript contributions. Prettier and ESLint will catch most deviations from these rules, but it is important to be mindful of them.
