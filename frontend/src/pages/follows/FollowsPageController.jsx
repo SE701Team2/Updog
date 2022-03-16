@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FollowsPageView from './FollowsPageView'
-import followers from './mock-followers'
-import follows from './mock-follows'
+import useApi from '../../hooks/useApi'
 
 /**
  * This page renders a user's followers. It also contains
@@ -11,15 +10,24 @@ import follows from './mock-follows'
 const FollowsPageController = () => {
     // gets the username from the current url
     const { username } = useParams()
-
+    const { data, loading, error } = useApi(`users/${username}/follow`)
+    const [followsData, setFollowsData] = useState()
     const [tab, setTab] = useState(0)
-    const [followsData, setFollowsData] = useState(followers)
+
+    if (loading) {
+        return <div>Loading...</div>
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>
+    }
+
+    setFollowsData(data.followers)
 
     const handleChange = (event, newTab) => {
         setTab(newTab)
-        setFollowsData(newTab === 0 ? followers : follows)
+        setFollowsData(newTab === 0 ? data.followers : data.follows)
     }
-    // we are going to fetch followers from the user
 
     return (
         <FollowsPageView
