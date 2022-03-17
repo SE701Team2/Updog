@@ -4,6 +4,7 @@ import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
 import Dashboard from './pages/dashboard/DashboardPageController'
+import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 
 import Registration from './pages/registration/RegistrationPagesController'
 import User from './pages/user/UserPageController'
@@ -36,6 +37,7 @@ const Router = () => {
                 <Route path="/signUp" element={<Registration />} />
                 <Route path="/signIn" element={<SignIn />} />
                 <Route path="*" element={<Navigate to="/" />} />
+                <Route path="/profile/settings" element={<ProfileSettings />} />
             </Routes>
         )
     }
