@@ -48,7 +48,9 @@ const NotificationsPageController = () => {
                 break // error handling potentially could be added here
         }
         notifItems.push(
-            <ListItem className={classes.container}>{notif}</ListItem>
+            <ListItem className={classes.container} key={i}>
+                {notif}
+            </ListItem>
         )
     }
 
