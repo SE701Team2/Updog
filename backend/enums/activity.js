@@ -1,20 +1,23 @@
-import {convertToPostDto} from "../dto/posts";
+/* eslint-disable import/prefer-default-export */
+import { convertToPostDto } from '../dto/posts'
 import models from '../database/models'
 
 export class Activity {
-    static POSTED = new Activity('POSTED');
-    static LIKED= new Activity('LIKED');
-    static SHARED = new Activity('SHARED');
+    static POSTED = new Activity('POSTED')
+
+    static LIKED = new Activity('LIKED')
+
+    static SHARED = new Activity('SHARED')
 
     constructor(type) {
-        this.type = type;
+        this.type = type
     }
 
     static convertToUserActivity(activity, postId, postTime) {
         return {
             postID: postId,
             timestamp: Date.parse(postTime),
-            activity: activity.type
+            activity: activity.type,
         }
     }
 
@@ -25,7 +28,7 @@ export class Activity {
             post: postDto,
             timestamp: Date.parse(postTime),
             activity: activity.type,
-            userId: authorId
+            userId: authorId,
         }
     }
 
@@ -33,23 +36,23 @@ export class Activity {
         // Retrieve user's posts, including the shared and liked posts
         const postsDB = await models.posts.findAll({
             where: {
-                author: userId
-            }
+                author: userId,
+            },
         })
 
         const sharedPosts = await models.sharedPost.findAll({
             where: {
-                userID: userId
-            }
+                userID: userId,
+            },
         })
 
         const likedPosts = await models.likedPost.findAll({
             where: {
-                userID: userId
-            }
+                userID: userId,
+            },
         })
 
         // Merge the posts together into one array
-        return [postsDB, likedPosts, sharedPosts];
+        return [postsDB, likedPosts, sharedPosts]
     }
 }

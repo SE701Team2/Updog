@@ -3,6 +3,7 @@ import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import { convertToPostDto } from '../../dto/posts'
 import { Authentication } from '../../middlewares/authentication'
+import { Interactions } from '../../enums/interactions'
 
 // Upload a file to the storage, then create attachment object to be appended into the Database.
 async function uploadFileToCloud(file, postID) {
@@ -399,6 +400,53 @@ export const unsharePostById = async (req, res) => {
                     )
                 }
             }
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const getInteractedUsers = async (req, res) => {
+    try {
+        const { params } = req
+        const post = await models.posts.findOne({
+            where: {
+                id: params.id,
+            },
+        })
+        if (!post) {
+            res.status(404).send({
+                error: `Post with id '${params.id}' not found`,
+            })
+            return
+        }
+
+        // Authentication
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+            return
+        }
+
+        const decodedUser = Authentication.extractUser(authToken)
+
+        if (!decodedUser.id) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+        } else {
+            /** Return userDTO arrays for the likes and shares on that post */
+            const usersThatLiked = Interactions.getUsersThatLiked(post.id)
+            const usersThatShared = Interactions.getUsersThatShared(post.id)
+
+            const interactions = {
+                likes: usersThatLiked,
+                shares: usersThatShared,
+            }
+            res.status(200).send(interactions)
         }
     } catch (error) {
         res.status(500).send(error)
