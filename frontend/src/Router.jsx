@@ -4,6 +4,7 @@ import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
 import Dashboard from './pages/dashboard/DashboardPageController'
+import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 
 import Registration from './pages/registration/RegistrationPagesController'
 import User from './pages/user/UserPageController'
@@ -26,6 +27,7 @@ const Router = () => {
                 <Route path="/post/:id" element={<Post />} />
                 <Route path="/user/:username/follows" element={<Follows />} />
                 <Route path="/feed" element={<Dashboard />} />
+                <Route path="/settings" element={<ProfileSettings />} />
             </Routes>
         )
     } else {
