@@ -27,6 +27,7 @@ const Router = () => {
                 <Route path="/post/:id" element={<Post />} />
                 <Route path="/user/:username/follows" element={<Follows />} />
                 <Route path="/feed" element={<Dashboard />} />
+                <Route path="/settings" element={<ProfileSettings />} />
             </Routes>
         )
     } else {
@@ -37,7 +38,6 @@ const Router = () => {
                 <Route path="/signUp" element={<Registration />} />
                 <Route path="/signIn" element={<SignIn />} />
                 <Route path="*" element={<Navigate to="/" />} />
-                <Route path="/profile/settings" element={<ProfileSettings />} />
             </Routes>
         )
     }
