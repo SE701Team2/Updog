@@ -11,38 +11,38 @@ import useApi from '../../../hooks/useApi'
  * @prop {boolean} showReplies - optional, also renders each 1st level reply to the post
  */
 const PostController = ({
-    activity = 'POSTED',
-    id = 0,
-    data = null,
-    condensed = false,
-    showReplies = false,
+  activity = 'POSTED',
+  id = 0,
+  data = null,
+  condensed = false,
+  showReplies = false,
 }) => {
-    let postData = data
-    if (id) {
-        const res = useApi(`posts/${id}`)
+  let postData = data
+  if (id) {
+    const { data: resData, loading, err } = useApi(`posts/${id}`)
 
-        if (res.loading) {
-            return <div>Loading...</div>
-        }
-
-        if (res.err) {
-            return <div>Error: {res.err}</div>
-        }
-
-        postData = res.data
-    } else if (!data) {
-        // true if neither id or data is given
-        return <div>Error retrieving post data</div>
+    if (loading) {
+      return <div>Loading...</div>
     }
 
-    return (
-        <PostView
-            activity={activity}
-            condensed={condensed}
-            postData={postData}
-            showReplies={showReplies}
-        />
-    )
+    if (err) {
+      return <div>Error: {err}</div>
+    }
+
+    postData = resData
+  } else if (!data) {
+    // true if neither id or data is given
+    return <div>Error retrieving post data</div>
+  }
+
+  return (
+    <PostView
+      activity={activity}
+      condensed={condensed}
+      postData={postData}
+      showReplies={showReplies}
+    />
+  )
 }
 
 export default PostController
