@@ -9,29 +9,29 @@ import userData from './mock-userData'
  */
 
 const HeaderController = () => {
-    const username = localStorage.getItem('username')
-    const { data, loading } = useApi(`users/${username}`)
-    let user
+  const username = localStorage.getItem('username')
+  const { data, loading } = useApi(`users/${username}`)
+  let user
 
-    if (loading) {
-        user = userData
-    } else {
-        user = data
-    }
+  if (loading) {
+    user = userData
+  } else {
+    user = data
+  }
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const goToFeed = () => {
-        navigate('/feed')
-    }
+  const goToFeed = () => {
+    navigate('/')
+  }
 
-    const goToProfile = () => {
-        navigate(`/user/${username}`)
-    }
+  const goToProfile = () => {
+    navigate(`/user/${username}`)
+  }
 
-    return (
-        <HeaderView user={user} goToFeed={goToFeed} goToProfile={goToProfile} />
-    )
+  return (
+    <HeaderView user={user} goToFeed={goToFeed} goToProfile={goToProfile} />
+  )
 }
 
 export default HeaderController
