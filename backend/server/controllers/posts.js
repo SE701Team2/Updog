@@ -408,19 +408,6 @@ export const unsharePostById = async (req, res) => {
 
 export const getInteractedUsers = async (req, res) => {
     try {
-        const { params } = req
-        const post = await models.posts.findOne({
-            where: {
-                id: params.id,
-            },
-        })
-        if (!post) {
-            res.status(404).send({
-                error: `Post with id '${params.id}' not found`,
-            })
-            return
-        }
-
         // Authentication
         const authToken = req.get('Authorization')
 
@@ -438,9 +425,24 @@ export const getInteractedUsers = async (req, res) => {
                 'Error message': 'Auth token invalid',
             })
         } else {
+            const { params } = req
+            const post = await models.posts.findOne({
+                where: {
+                    id: params.id,
+                },
+            })
+            if (!post) {
+                res.status(404).send({
+                    error: `Post with id '${params.id}' not found`,
+                })
+                return
+            }
+
             /** Return userDTO arrays for the likes and shares on that post */
-            const usersThatLiked = Interactions.getUsersThatLiked(post.id)
-            const usersThatShared = Interactions.getUsersThatShared(post.id)
+            const usersThatLiked = await Interactions.getUsersThatLiked(post.id)
+            const usersThatShared = await Interactions.getUsersThatShared(
+                post.id
+            )
 
             const interactions = {
                 likes: usersThatLiked,

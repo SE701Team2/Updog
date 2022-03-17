@@ -4,32 +4,39 @@ import { UserDTO } from '../dto/users'
 
 export class Interactions {
     static async getUsersThatLiked(postId) {
-        const users = []
         const likes = await models.likedPost.findAll({
             where: {
                 postId,
             },
         })
-        likes.map(async (l) => {
-            const user = await models.users.findOne({
-                where: { id: l.userId },
+
+        const users = await Promise.all(
+            likes.map(async (l) => {
+                const user = await models.users.findOne({
+                    where: { id: l.userId },
+                })
+                return UserDTO.convertToDto(user)
             })
-            users.push(UserDTO.convertToDto(user))
-        })
+        )
+
+        return users
     }
 
     static async getUsersThatShared(postId) {
-        const users = []
         const shares = await models.sharedPost.findAll({
             where: {
                 postId,
             },
         })
-        shares.map(async (s) => {
-            const user = await models.users.findOne({
-                where: { id: s.userId },
+        const users = await Promise.all(
+            shares.map(async (s) => {
+                const user = await models.users.findOne({
+                    where: { id: s.userId },
+                })
+                return UserDTO.convertToDto(user)
             })
-            users.push(UserDTO.convertToDto(user))
-        })
+        )
+
+        return users
     }
 }

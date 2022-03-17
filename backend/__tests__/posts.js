@@ -2,6 +2,7 @@ import request from 'supertest'
 import server from '../server/index'
 import models from '../database/models'
 import { Authentication } from '../middlewares/authentication'
+import { UserDTO } from '../dto/users'
 
 describe('Posts', () => {
     describe('POST /posts', () => {
@@ -659,6 +660,90 @@ describe('Posts', () => {
                     .set('Authorization', `Bearer ${authToken}`)
 
                 expect(response.statusCode).toBe(200)
+            })
+        })
+    })
+
+    describe('GET /posts/:id/interactions', () => {
+        describe('when not authenticated', () => {
+            it('should return response code of 400', async () => {
+                const response = await request(server).get(
+                    '/api/posts/1/interactions'
+                )
+                expect(response.statusCode).toBe(400)
+            })
+        })
+
+        describe('when the post does not exist', () => {
+            it('should return response code of 404', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const response = await request(server)
+                    .delete(`/api/posts/99/interactions`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(404)
+            })
+        })
+
+        describe('when the post does exist', () => {
+            it('should return response code of 200', async () => {
+                const user1 = await models.users.create({
+                    username: 'gandalf',
+                    nickname: 'gandalf',
+                    email: 'gandalf@gandalf.com',
+                    password: 'password',
+                })
+
+                const authToken = Authentication.generateAuthToken(user1)
+
+                const user2 = await models.users.create({
+                    username: 'frodo',
+                    nickname: 'frodo',
+                    email: 'frodo@frodo.com',
+                    password: 'password',
+                })
+
+                const newPost = await models.posts.create({
+                    text_content: 'You shall not pass!',
+                    author: user1.id,
+                    parent: null,
+                })
+
+                await models.sharedPost.create({
+                    postId: newPost.id,
+                    userId: user1.id,
+                })
+
+                await models.likedPost.create({
+                    postId: newPost.id,
+                    userId: user1.id,
+                })
+
+                await models.likedPost.create({
+                    postId: newPost.id,
+                    userId: user2.id,
+                })
+
+                const response = await request(server)
+                    .get(`/api/posts/${newPost.id}/interactions`)
+                    .set('Authorization', `Bearer ${authToken}`)
+
+                expect(response.statusCode).toBe(200)
+
+                const user1DTO = await UserDTO.convertToDto(user1)
+                const user2DTO = await UserDTO.convertToDto(user2)
+                expect(response.body).toStrictEqual({
+                    likes: [user1DTO, user2DTO],
+                    shares: [user1DTO],
+                })
             })
         })
     })
