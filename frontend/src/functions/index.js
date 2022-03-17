@@ -2,36 +2,36 @@ import axios from 'axios'
 import SERVER_URL from '../config'
 
 export const getHeaders = () => {
-    const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token')
 
-    if (!token) return null
-    const headers = { Authorization: `Bearer ${token}` }
+  if (!token) return null
+  const headers = { Authorization: `Bearer ${token}` }
 
-    return headers
+  return headers
 }
 
 const tokenExpired = (message) => {
-    if (message === 'JWT has expired') {
-        localStorage.removeItem('token')
-        window.location.reload()
-    }
+  if (message === 'TokenExpiredError: jwt expired') {
+    localStorage.removeItem('token')
+    window.location.reload()
+  }
 }
 
 export const request = async (url, method = 'GET', data = {}, jwt = null) => {
-    const headers = jwt ? { Authorization: `Bearer ${jwt}` } : getHeaders()
-    let error = null
+  const headers = jwt ? { Authorization: `Bearer ${jwt}` } : getHeaders()
+  let error = null
 
-    const response = await axios
-        .request({
-            url: `${SERVER_URL}/${url}`,
-            method,
-            data,
-            headers,
-        })
-        .catch((err) => {
-            error = err.response.data.error
-            tokenExpired(err.response.data.error)
-        })
+  const response = await axios
+    .request({
+      url: `${SERVER_URL}/${url}`,
+      method,
+      data,
+      headers,
+    })
+    .catch((err) => {
+      error = err.response.data['Error message']
+      tokenExpired(error)
+    })
 
-    return { data: response?.data ?? null, err: error }
+  return { data: response?.data ?? null, err: error }
 }
