@@ -5,6 +5,7 @@ import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
 import Follows from './pages/follows/FollowsPageController'
 import Dashboard from './pages/dashboard/DashboardPageController'
+import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
 import { AuthContext } from './contexts/AuthProvider'
@@ -26,6 +27,7 @@ const Router = () => {
                 <Route path="/user/:username/follows" element={<Follows />} />
                 <Route path="/feed" element={<Dashboard />} />
                 <Route path="/notifications" element={<Notifications />} />
+                <Route path="/settings" element={<ProfileSettings />} />
             </Routes>
         )
     } else {
