@@ -84,7 +84,7 @@ const ProfileSettingsView = ({
         <Divider className={classes.divider} variant="middle" />
 
         <div className={classes.save}>
-            <Button type="submit" variant="contained" onClick={updateProfile()}>
+            <Button type="submit" variant="contained" onClick={updateProfile}>
                 Save
             </Button>
         </div>
