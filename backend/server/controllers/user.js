@@ -466,3 +466,104 @@ export const getFollow = async (req, res) => {
         res.status(500).send({ 'Error message': error.toString() })
     }
 }
+
+export const modifyUserByUsername = async (req, res) => {
+    try {
+        const { params } = req
+        const userOfInterest = await models.users.findOne({
+            where: {
+                username: params.username
+            }
+        })
+
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const loggedInUser = Authentication.extractUser(authToken)
+
+        if (!loggedInUser) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        } else {
+
+            const { params, body} = req
+
+            if (!userOfInterest) {
+                res.status(404).send('Invalid username.')
+
+            } else {
+
+                const updatedUser = await models.userOfInterest.update({
+                    nickname: body.nickname,
+                    email: body.email,
+                    password: body.password,
+                },
+                { returning: true, where: { username: params.username } }
+                )
+
+                if (updatedUser) {
+                    res.status(200).send('The profile has been updated.')
+                } else {
+                    res.status(500).send('Failed to update the profile.')
+                }
+            }
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const deleteUserByUsername = async (req, res) => {
+    try {
+        const { params } = req
+        const userOfInterest = await models.users.findOne({
+            where: {
+                username: params.username
+            }
+        })
+
+        const authToken = req.get('Authorization')
+
+        if (!authToken) {
+            res.status(400).send({
+                'Error message': 'Auth token not provided',
+            })
+        }
+
+        const loggedInUser = Authentication.extractUser(authToken)
+
+        if (!loggedInUser) {
+            res.status(401).send({
+                'Error message': 'Auth token invalid',
+            })
+            return
+        } else {
+
+            const { params, body} = req
+
+            if (!userOfInterest) {
+                res.status(404).send('Invalid username.')
+
+            } else {
+                const deleteUser = await models.users.destroy({
+                    where: { username: params.username}
+                })
+
+                if (deleteUser !== 0) {
+                    res.status(200).send('The user has been deleted.')
+                } else {
+                    res.status(500).send('Failed to destroy the user.')
+                }
+            }
+        }
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}

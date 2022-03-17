@@ -9,7 +9,10 @@ USERS
 */
 router.route('/users').post(user.addUser)
 
-router.route('/users/:username').get(user.getUsersByUsername)
+router.route('/users/:username')
+    .get(user.getUsersByUsername)
+    .get(user.modifyUserByUsername)
+    .get(user.deleteUserByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
