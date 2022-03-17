@@ -2,9 +2,9 @@ import React from 'react'
 // import AvatarEditor from 'react-avatar-editor'
 import { Box, Button, Divider, Modal, Typography, Input } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
+import Avatar from '@mui/material/Avatar'
 import Footer from '../../components/layout/footer/FooterController'
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
-import Logo from '../../images/logo.png'
 import classes from './profilesettings.module.scss'
 
 const ProfileSettingsView = ({
@@ -19,7 +19,11 @@ const ProfileSettingsView = ({
       <HeaderCustom title="Edit Profile" />
     </div>
     <div className={classes.banner}>
-      <img className={classes.bannerImg} src={Logo} alt="Banner" />
+      <img
+        className={classes.bannerImg}
+        src={user.profilePic ?? 'https://i.imgur.com/PcEvuMw.png'}
+        alt="Banner"
+      />
       <Button
         className={classes.edit}
         variant="contained"
@@ -32,7 +36,11 @@ const ProfileSettingsView = ({
     <Divider className={classes.divider} variant="middle" />
 
     <div className={classes.flex}>
-      <img className={classes.avatar} src={Logo} alt="Avatar" />
+      <Avatar
+        className={classes.avatar}
+        sx={{ width: 80, height: 80 }}
+        src={user.profileBanner}
+      />
       <Button
         variant="outlined"
         endIcon={<EditIcon />}
