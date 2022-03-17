@@ -1,0 +1,96 @@
+@use '~/src/styles/theme';
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 50%;
+    margin: 8px;
+}
+
+.banner {
+    width: auto;
+    height: 15%;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 20px;
+    margin-bottom: 56px;
+}
+
+.bannerImg {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.divider {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.left {
+    padding-left: 20px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.right {
+    margin-left: auto;
+    padding-right: 20px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.subtext {
+    color: grey;
+    font-size: small;
+    padding-left: 20px;
+    margin-top: -4px;
+    margin-bottom: 2px;
+}
+
+.save {
+    margin-top: 8px;
+    margin-right: 20px;
+    float: right;
+    width: auto;
+}
+
+.modal {
+    text-align: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    background-color: white;
+    margin-top: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.avatarEditor {
+    border-radius: 4px;
+    border-color: black;
+    border-width: 2px;
+}
+
+.upload {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
