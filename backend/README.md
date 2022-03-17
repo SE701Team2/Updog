@@ -39,7 +39,7 @@ This guide assumes you have already cloned the repository and installed Node.js 
 
 # 4. Create tables
 
-1. If you haven't already, execute `npm install` from within the `backend/` folder, then `npm install -g sequelize-cli`
+1. If you haven't already, execute `npm install` in *both* the main `Updog/` directory and in the `Updog/backend/` folder., then `npm install -g sequelize-cli`
 
 2. Execute the following to add the tables to the database via Sequelize ORM:
 
