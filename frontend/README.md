@@ -32,7 +32,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 ## More Information
-For information on using React, see [React Conventions](../../wiki/React-Conventions)
+For information on using React, see [React Conventions](https://github.com/SE701Team2/Updog/wiki/React-Conventions)
 
-For information on existing and planned pages, see [Frontend Overview](../../wiki/Frontend-Overview)
+For information on existing and planned pages, see [Frontend Overview](https://github.com/SE701Team2/Updog/wiki/Frontend-Overview)
 
