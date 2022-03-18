@@ -334,6 +334,8 @@ describe('Users', () => {
                 .post('/users')
                 .send(requestBody)
 
+            expect(response.body.username).toEqual(requestBody.username)
+
             const jwt = response.body.authToken // expect a token
             const user = Authentication.extractUser(`Bearer ${jwt}`)
 
@@ -560,21 +562,21 @@ describe('Users', () => {
                 {
                     type: 'share',
                     timestamp: Date.parse(share.createdAt),
-                    from: share.userId,
+                    from: user2.username,
                     post: share.postId,
                     content: null,
                 },
                 {
                     type: 'reply',
                     timestamp: Date.parse(reply.createdAt),
-                    from: reply.author,
+                    from: user2.username,
                     post: reply.id,
                     content: reply.text_content,
                 },
                 {
                     type: 'like',
                     timestamp: Date.parse(like.createdAt),
-                    from: like.userId,
+                    from: user2.username,
                     post: like.postId,
                     content: null,
                 },

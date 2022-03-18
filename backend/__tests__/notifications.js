@@ -1,4 +1,3 @@
-import {Activity} from "../enums/activity";
 import models from "../database/models";
 import {Notifications} from "../enums/notifications";
 
@@ -46,7 +45,7 @@ describe('Notifications', () => {
                 {
                     type: "reply",
                     timestamp: Date.parse(reply.createdAt),
-                    from: reply.author,
+                    from: user2.username,
                     post: reply.id,
                     content: reply.text_content
                 }
@@ -99,7 +98,7 @@ describe('Notifications', () => {
                 {
                     type: "like",
                     timestamp: Date.parse(like.createdAt),
-                    from: like.userId,
+                    from: user2.username,
                     post: like.postId,
                     content: null
                 }
@@ -152,7 +151,7 @@ describe('Notifications', () => {
                 {
                     type: "share",
                     timestamp: Date.parse(share.createdAt),
-                    from: share.userId,
+                    from: user2.username,
                     post: share.postId,
                     content: null
                 }
