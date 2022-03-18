@@ -25,20 +25,31 @@ export class Notifications {
         return notifications
     }
 
-    static convertToNotifications(notificationType, details){
-        if(notificationType === Notifications.reply){
+    static async convertToNotifications(notificationType, details) {
+        if (notificationType === Notifications.reply) {
+            const user = await models.users.findOne({
+                where: {
+                    id: details.author
+                }
+            })
+
             return {
                 type: notificationType.type,
-                from: details.author,
+                from: user.username,
                 post: details.id,
                 timestamp: Date.parse(details.createdAt),
                 content: details.text_content
             }
         }
+        const user = await models.users.findOne({
+            where: {
+                id: details.userId
+            }
+        })
 
         return {
             type: notificationType.type,
-            from: details.userId,
+            from: user.username,
             post: details.postId,
             timestamp: Date.parse(details.createdAt),
             content: null
@@ -49,7 +60,9 @@ export class Notifications {
         let allReplies = [];
         for(const post of userPosts){
             let replies = await post.getReplies(post.id)
-            replies.map(r => allReplies.push(this.convertToNotifications(Notifications.reply, r)))
+            for(const reply of replies){
+                allReplies.push(await this.convertToNotifications(Notifications.reply, reply))
+            }
         }
 
         return allReplies
@@ -63,8 +76,9 @@ export class Notifications {
                     postId: post.id
                 }
             })
-
-            likes.map(l => allLikes.push(this.convertToNotifications(Notifications.like, l)))
+            for(const like of likes){
+                allLikes.push(await this.convertToNotifications(Notifications.like, like))
+            }
         }
 
         return allLikes
@@ -78,8 +92,9 @@ export class Notifications {
                     postId: post.id
                 }
             })
-
-            shares.map(s => allShares.push(this.convertToNotifications(Notifications.share, s)))
+            for(const share of shares){
+                allShares.push(await this.convertToNotifications(Notifications.share, share))
+            }
         }
 
         return allShares

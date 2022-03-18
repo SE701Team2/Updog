@@ -40,6 +40,7 @@ export const addUser = async (req, res) => {
         res.status(201).send({
             message: 'User successfully created',
             authToken,
+            username: createUser.username
         })
     } catch (error) {
         res.status(500).send(error)
