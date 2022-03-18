@@ -993,7 +993,7 @@ describe('Users', () => {
 
             const response = await request(server)
                 .put('/api/users/')
-                .set('Authoriation', `Bearer ${authToken}`)
+                .set('Authorization', `Bearer ${authToken}`)
                 .send(user2)
 
             const dbUser = await models.users.findOne({
