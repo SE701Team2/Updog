@@ -469,13 +469,6 @@ export const getFollow = async (req, res) => {
 
 export const modifyUserByID = async (req, res) => {
     try {
-        const { params } = req
-        const userOfInterest = await models.users.findOne({
-            where: {
-                id: params.id
-            }
-        })
-
         const authToken = req.get('Authorization')
 
         if (!authToken) {
@@ -493,28 +486,20 @@ export const modifyUserByID = async (req, res) => {
             return
         } else {
 
-            const { params, body} = req
+            const { body } = req
 
-            if (!userOfInterest) {
-                res.status(404).send('Invalid user.')
+            const updatedUser = await models.userOfInterest.update({
+                username: body.username,
+                nickname: body.nickname,
+                bio: body.bio,
+                profilePic: body.profilePic,
+                profileBanner: body.profileBanner
+            })
 
+            if (updatedUser) {
+                res.status(200).send('The profile has been updated.')
             } else {
-
-                const updatedUser = await models.userOfInterest.update({
-                    username: body.username,
-                    nickname: body.nickname,
-                    bio: body.bio,
-                    profilePic: body.profilePic,
-                    profileBanner: body.profileBanner
-                },
-                { returning: true, where: { id: params.id } }
-                )
-
-                if (updatedUser) {
-                    res.status(200).send('The profile has been updated.')
-                } else {
-                    res.status(500).send('Failed to update the profile.')
-                }
+                res.status(500).send('Failed to update the profile.')
             }
         }
     } catch (error) {
@@ -524,13 +509,6 @@ export const modifyUserByID = async (req, res) => {
 
 export const deleteUserByID = async (req, res) => {
     try {
-        const { params } = req
-        const userOfInterest = await models.users.findOne({
-            where: {
-                id: params.id
-            }
-        })
-
         const authToken = req.get('Authorization')
 
         if (!authToken) {
@@ -548,21 +526,14 @@ export const deleteUserByID = async (req, res) => {
             return
         } else {
 
-            const { params, body} = req
+            const deleteUser = await models.users.destroy({
+                where: { id: loggedInUser.id}
+            })
 
-            if (!userOfInterest) {
-                res.status(404).send('Invalid user.')
-
+            if (deleteUser !== 0) {
+                res.status(200).send('The user has been deleted.')
             } else {
-                const deleteUser = await models.users.destroy({
-                    where: { id: params.id}
-                })
-
-                if (deleteUser !== 0) {
-                    res.status(200).send('The user has been deleted.')
-                } else {
-                    res.status(500).send('Failed to destroy the user.')
-                }
+                res.status(500).send('Failed to destroy the user.')
             }
         }
     } catch (error) {
