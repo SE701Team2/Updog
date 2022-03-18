@@ -475,6 +475,7 @@ export const modifyUserByID = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
+            return
         }
 
         const loggedInUser = Authentication.extractUser(authToken)
@@ -515,6 +516,7 @@ export const deleteUserByID = async (req, res) => {
             res.status(400).send({
                 'Error message': 'Auth token not provided',
             })
+            return
         }
 
         const loggedInUser = Authentication.extractUser(authToken)
