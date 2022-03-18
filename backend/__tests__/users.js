@@ -996,11 +996,18 @@ describe('Users', () => {
                 .set('Authoriation', `Bearer ${authToken}`)
                 .send(user2)
 
-            expect(response.body.username).toBe(user2.username)
-            expect(response.body.nickname).toBe(user2.nickname)
-            expect(response.body.bio).toBe(user2.bio)
-            expect(response.body.profilePic).toBe(user2.profilePic)
-            expect(response.body.profileBanner).toBe(user2.profileBanner)
+            const dbUser = await models.users.findOne({
+                where: {
+                    username: user2.username,
+                },
+            })
+
+            expect(dbUser.username).toBe(user2.username)
+            expect(dbUser.nickname).toBe(user2.nickname)
+            expect(dbUser.bio).toBe(user2.bio)
+            expect(dbUser.profilePic).toBe(user2.profilePic)
+            expect(dbUser.profileBanner).toBe(user2.profileBanner)
+            expect(response.body).toBe('The profile has been updated.')
             expect(response.statusCode).toBe(200)
         })
     })
@@ -1046,7 +1053,7 @@ describe('Users', () => {
 
             const response = await request(server)
                 .delete('/api/users/')
-                .set('Authoriation', `Bearer ${authToken}`)
+                .set('Authorization', `Bearer ${authToken}`)
 
             expect(response.body).toBe('The user has been deleted.')
             expect(response.statusCode).toBe(200)
