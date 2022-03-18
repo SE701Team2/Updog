@@ -496,7 +496,7 @@ export const modifyUserByID = async (req, res) => {
             const { params, body} = req
 
             if (!userOfInterest) {
-                res.status(404).send('Invalid email.')
+                res.status(404).send('Invalid user.')
 
             } else {
 
@@ -551,7 +551,7 @@ export const deleteUserByID = async (req, res) => {
             const { params, body} = req
 
             if (!userOfInterest) {
-                res.status(404).send('Invalid username.')
+                res.status(404).send('Invalid user.')
 
             } else {
                 const deleteUser = await models.users.destroy({
