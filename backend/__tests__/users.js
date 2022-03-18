@@ -1046,6 +1046,7 @@ describe('Users', () => {
 
             const response = await request(server)
                 .delete('/api/users/')
+                .set('Authoriation', `Bearer ${authToken}`)
 
             expect(response.body).toBe('The user has been deleted.')
             expect(response.statusCode).toBe(200)
