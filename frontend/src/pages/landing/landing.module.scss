@@ -5,6 +5,11 @@
     left: 50%;
     margin-top: 5%;
     transform: translate(-50%, 0);
+
+    > img {
+        height: 80px;
+        width: 80px;
+    }
 }
 
 .container {
