@@ -11,8 +11,8 @@ router.route('/users').post(user.addUser)
 
 router.route('/users/:username')
     .get(user.getUsersByUsername)
-    .get(user.modifyUserByUsername)
-    .get(user.deleteUserByUsername)
+    .get(user.modifyUserByID)
+    .get(user.deleteUserByID)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
