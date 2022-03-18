@@ -65,8 +65,12 @@ export default class Notifications {
       userPosts.map(async (post) => {
         const replies = await post.getReplies(post.id)
 
-        replies.map((r) =>
-          allReplies.push(this.convertToNotifications(Notifications.reply, r))
+        await Promise.all(
+          replies.map(async (r) =>
+            allReplies.push(
+              await this.convertToNotifications(Notifications.reply, r)
+            )
+          )
         )
       })
     )
@@ -85,8 +89,12 @@ export default class Notifications {
           },
         })
 
-        likes.map((l) =>
-          allLikes.push(this.convertToNotifications(Notifications.like, l))
+        await Promise.all(
+          likes.map(async (l) =>
+            allLikes.push(
+              await this.convertToNotifications(Notifications.like, l)
+            )
+          )
         )
       })
     )
@@ -105,8 +113,12 @@ export default class Notifications {
           },
         })
 
-        shares.map((s) =>
-          allShares.push(this.convertToNotifications(Notifications.share, s))
+        await Promise.all(
+          shares.map(async (s) =>
+            allShares.push(
+              await this.convertToNotifications(Notifications.share, s)
+            )
+          )
         )
       })
     )
