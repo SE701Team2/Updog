@@ -1,9 +1,9 @@
 import models from '../database/models'
-import { UserDTO } from '../dto/users'
-import { Authentication } from '../middlewares/authentication'
+import UserDTO from '../dto/users'
+import Authentication from '../middlewares/authentication'
 import db from '../config/database'
 import server from '../server'
-import { convertToPostDto } from '../dto/posts'
+import PostDTO from '../dto/posts'
 
 const assert = require('assert')
 const request = require('supertest')
@@ -463,14 +463,14 @@ describe('Users', () => {
             })
 
             // WHEN the logged in user tries to view the feed
-            let authToken = Authentication.generateAuthToken(user2)
+            const authToken = Authentication.generateAuthToken(user2)
 
             const response = await request('http://localhost:8000/api')
                 .get(`/feed`)
                 .set('Authorization', `Bearer ${authToken}`)
 
             // THEN their feed should display the activity of the user they follow
-            const dto = await convertToPostDto(newPost)
+            const dto = await PostDTO.convertToDto(newPost)
             const expectedOutput = [
                 {
                     post: dto,
@@ -551,7 +551,7 @@ describe('Users', () => {
                 createdAt: '2022-03-13 04:56:53',
             })
 
-            let authToken = Authentication.generateAuthToken(user1)
+            const authToken = Authentication.generateAuthToken(user1)
 
             // THEN the endpoint should return these notifications
             const response = await request('http://localhost:8000/api')
@@ -924,6 +924,7 @@ describe('Users', () => {
 
         describe('when user correctly checked thier followers (has followers and followings)', () => {
             it('should return response code of 200', async () => {
+                // TODO: put these helper functions into a shared file?
                 async function createRandomUser() {
                     const randomUsername = (Math.random() + 1)
                         .toString(36)
@@ -946,9 +947,10 @@ describe('Users', () => {
 
                 async function createFollowers(followedId, followerId) {
                     const follower = await models.followers.create({
-                        followedId: followedId,
-                        followerId: followerId,
+                        followedId,
+                        followerId,
                     })
+                    return follower
                 }
 
                 await createFollowers(user1.id, user2.id)

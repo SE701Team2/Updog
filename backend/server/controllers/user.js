@@ -1,8 +1,8 @@
 import models from '../../database/models'
-import { Authentication } from '../../middlewares/authentication'
-import { UserDTO } from '../../dto/users'
-import { Activity } from '../../enums/activity'
-import { Notifications } from '../../enums/notifications'
+import Authentication from '../../middlewares/authentication'
+import UserDTO from '../../dto/users'
+import Activity from '../../enums/activity'
+import Notifications from '../../enums/notifications'
 
 export const addUser = async (req, res) => {
     try {
@@ -165,7 +165,7 @@ export const getUserActivity = async (req, res) => {
             )
         )
 
-        let activity = [
+        const activity = [
             ...postsActivity,
             ...sharedPostsActivity,
             ...likedPostsActivity,
@@ -202,50 +202,8 @@ export const getFeed = async (req, res) => {
             },
         })
 
-        let postsActivity = []
-        let likedPostsActivity = []
-        let sharedPostsActivity = []
-        for (const user of following) {
-            const unconvertedActivity = await Activity.getUnconvertedActivity(
-                user.followedId
-            )
+        const activity = await Activity.retrieveActivities(following)
 
-            for (const activity of unconvertedActivity[0]) {
-                const act = await Activity.convertToFeedActivity(
-                    Activity.POSTED,
-                    activity.id,
-                    activity.author,
-                    activity.createdAt
-                )
-                postsActivity.push(act)
-            }
-            for (const activity of unconvertedActivity[1]) {
-                const act = await Activity.convertToFeedActivity(
-                    Activity.LIKED,
-                    activity.postId,
-                    activity.userId,
-                    activity.createdAt
-                )
-                likedPostsActivity.push(act)
-            }
-
-            for (const activity of unconvertedActivity[2]) {
-                const act = await Activity.convertToFeedActivity(
-                    Activity.SHARED,
-                    activity.postId,
-                    activity.userId,
-                    activity.createdAt
-                )
-                sharedPostsActivity.push(act)
-            }
-        }
-
-        let activity = [
-            ...postsActivity,
-            ...likedPostsActivity,
-            ...sharedPostsActivity,
-        ]
-        activity.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
         res.status(200).send(activity)
     } catch (error) {
         res.status(500).send({ 'Error message': error.toString() })
@@ -445,13 +403,15 @@ export const getFollow = async (req, res) => {
 
             // Transform to DTO
             const followersDTO = await Promise.all(
-                followersUsers.map(async (user) => {
-                    return await UserDTO.convertToDto(user)
+                followersUsers.map(async (u) => {
+                    const userDTO = await UserDTO.convertToDto(u)
+                    return userDTO
                 })
             )
             const followeringDTO = await Promise.all(
-                followingUsers.map(async (user) => {
-                    return await UserDTO.convertToDto(user)
+                followingUsers.map(async (u) => {
+                    const userDTO = await UserDTO.convertToDto(u)
+                    return userDTO
                 })
             )
 

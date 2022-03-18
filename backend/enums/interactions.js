@@ -1,8 +1,7 @@
-/* eslint-disable import/prefer-default-export */
 import models from '../database/models'
-import { UserDTO } from '../dto/users'
+import UserDTO from '../dto/users'
 
-export class Interactions {
+export default class Interactions {
     static async getUsersThatLiked(postId) {
         const likes = await models.likedPost.findAll({
             where: {
@@ -10,12 +9,13 @@ export class Interactions {
             },
         })
 
-        const users = await Promise.all(
+        const users = Promise.all(
             likes.map(async (l) => {
                 const user = await models.users.findOne({
                     where: { id: l.userId },
                 })
-                return UserDTO.convertToDto(user)
+                const userDTO = await UserDTO.convertToDto(user)
+                return userDTO
             })
         )
 
@@ -28,12 +28,13 @@ export class Interactions {
                 postId,
             },
         })
-        const users = await Promise.all(
+        const users = Promise.all(
             shares.map(async (s) => {
                 const user = await models.users.findOne({
                     where: { id: s.userId },
                 })
-                return UserDTO.convertToDto(user)
+                const userDTO = await UserDTO.convertToDto(user)
+                return userDTO
             })
         )
 

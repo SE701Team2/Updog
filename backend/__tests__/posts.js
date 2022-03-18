@@ -1,8 +1,8 @@
 import request from 'supertest'
 import server from '../server/index'
 import models from '../database/models'
-import { Authentication } from '../middlewares/authentication'
-import { UserDTO } from '../dto/users'
+import Authentication from '../middlewares/authentication'
+import UserDTO from '../dto/users'
 
 describe('Posts', () => {
     describe('POST /posts', () => {

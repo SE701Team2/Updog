@@ -1,9 +1,6 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable import/prefer-default-export */
 import models from '../database/models'
 
-export class Notifications {
+export default class Notifications {
   static reply = new Notifications('reply')
 
   static like = new Notifications('like')
@@ -63,46 +60,56 @@ export class Notifications {
 
   static async retrieveAllReplies(userPosts) {
     const allReplies = []
-    for (const post of userPosts) {
-      const replies = await post.getReplies(post.id)
-      replies.map((r) =>
-        allReplies.push(this.convertToNotifications(Notifications.reply, r))
-      )
-    }
+
+    await Promise.all(
+      userPosts.map(async (post) => {
+        const replies = await post.getReplies(post.id)
+
+        replies.map((r) =>
+          allReplies.push(this.convertToNotifications(Notifications.reply, r))
+        )
+      })
+    )
 
     return allReplies
   }
 
   static async retrieveAllLikes(userPosts) {
     const allLikes = []
-    for (const post of userPosts) {
-      const likes = await models.likedPost.findAll({
-        where: {
-          postId: post.id,
-        },
-      })
 
-      likes.map((l) =>
-        allLikes.push(this.convertToNotifications(Notifications.like, l))
-      )
-    }
+    await Promise.all(
+      userPosts.map(async (post) => {
+        const likes = await models.likedPost.findAll({
+          where: {
+            postId: post.id,
+          },
+        })
+
+        likes.map((l) =>
+          allLikes.push(this.convertToNotifications(Notifications.like, l))
+        )
+      })
+    )
 
     return allLikes
   }
 
   static async retrieveAllShares(userPosts) {
     const allShares = []
-    for (const post of userPosts) {
-      const shares = await models.sharedPost.findAll({
-        where: {
-          postId: post.id,
-        },
-      })
 
-      shares.map((s) =>
-        allShares.push(this.convertToNotifications(Notifications.share, s))
-      )
-    }
+    await Promise.all(
+      userPosts.map(async (post) => {
+        const shares = await models.sharedPost.findAll({
+          where: {
+            postId: post.id,
+          },
+        })
+
+        shares.map((s) =>
+          allShares.push(this.convertToNotifications(Notifications.share, s))
+        )
+      })
+    )
 
     return allShares
   }

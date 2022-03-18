@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
-import { convertToPostDto } from '../../dto/posts'
-import { Authentication } from '../../middlewares/authentication'
-import { Interactions } from '../../enums/interactions'
+import PostDTO from '../../dto/posts'
+import Authentication from '../../middlewares/authentication'
+import Interactions from '../../enums/interactions'
 
 // Upload a file to the storage, then create attachment object to be appended into the Database.
 async function uploadFileToCloud(file, postID) {
@@ -85,7 +85,7 @@ export const createPost = async (req, res) => {
                     author: decodedUser.id,
                     parent: body.parent,
                 })
-                const postDTO = await convertToPostDto(post)
+                const postDTO = await PostDTO.convertToDto(post)
 
                 if (req.files) {
                     const file = req.files.attachments
@@ -124,7 +124,7 @@ export const getPostById = async (req, res) => {
         const post = await models.posts.findByPk(params.id)
         if (post != null) {
             // Returns the postDTO object if a post with the id exists.
-            const postDTO = await convertToPostDto(post)
+            const postDTO = await PostDTO.convertToDto(post)
             res.status(200).send(postDTO)
         } else {
             res.status(404).send('ID not found.')
