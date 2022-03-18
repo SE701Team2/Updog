@@ -8,41 +8,43 @@ import Dashboard from './pages/dashboard/DashboardPageController'
 import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
+import PostComposer from './pages/postComposer/PostComposerController'
 import { AuthContext } from './contexts/AuthProvider'
 
 const Router = () => {
-    // fetch the token to check if the user is authenticated
+  // fetch the token to check if the user is authenticated
 
-    let routes
-    const { isAuthenticated } = useContext(AuthContext)
-    const token = localStorage.getItem('token')
+  let routes
+  const { isAuthenticated } = useContext(AuthContext)
+  const token = localStorage.getItem('token')
 
-    useEffect(() => {}, [isAuthenticated]) // enables rerendering when token is updated
+  useEffect(() => {}, [isAuthenticated]) // enables rerendering when token is updated
 
-    if (token) {
-        // Auth routes
-        routes = (
-            <Routes>
-                <Route path="/post/:id" element={<Post />} />
-                <Route path="/user/:username/follows" element={<Follows />} />
-                <Route path="/feed" element={<Dashboard />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/settings" element={<ProfileSettings />} />
-            </Routes>
-        )
-    } else {
-        // Unauth routes
-        routes = (
-            <Routes>
-                <Route path="/" element={<Landing />} />
-                <Route path="/signUp" element={<Registration />} />
-                <Route path="/signIn" element={<SignIn />} />
-                <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-        )
-    }
+  if (token) {
+    // Auth routes
+    routes = (
+      <Routes>
+        <Route path="/post/:id" element={<Post />} />
+        <Route path="/user/:username/follows" element={<Follows />} />
+        <Route path="/feed" element={<Dashboard />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/settings" element={<ProfileSettings />} />
+        <Route path="/new-post" element={<PostComposer />} />
+      </Routes>
+    )
+  } else {
+    // Unauth routes
+    routes = (
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/signUp" element={<Registration />} />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    )
+  }
 
-    return routes
+  return routes
 }
 
 export default Router

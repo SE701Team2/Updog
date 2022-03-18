@@ -1,4 +1,4 @@
-@use '~/src/styles/theme';
+@use "~/src/styles/theme";
 
 .container {
     display: flex;
@@ -6,6 +6,7 @@
     min-height: 3rem;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .headerCustom {
@@ -14,7 +15,7 @@
     justify-content: space-between;
 }
 
-.headerLeft{
+.headerLeft {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -24,6 +25,6 @@
     color: theme.$onPrimary !important;
 }
 
-.headerText{
+.headerText {
     color: theme.$onPrimary;
 }
