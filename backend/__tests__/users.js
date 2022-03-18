@@ -980,15 +980,13 @@ describe('Users', () => {
                 email: 'testUser@tesmail.com',
                 password: 'password',
                 bio: 'test user: gandalf',
-                profilePic: 'linktoPic',
-                profileBanner: 'profileBanner',
             })
 
             const user2 = { username: 'newtestUser',
                             nickname: 'newNickname',
                             bio: 'test user: newGandalf',
-                            profilePic: 'newLinktoPic',
-                            profileBanner: 'newprofileBanner'
+                            profilePic: 'https://imgur.com/gallery/zIMAzsV',
+                            profileBanner: 'https://imgur.com/gallery/RstwImS'
             }
 
             const authToken = Authentication.generateAuthToken(user1)
@@ -1015,15 +1013,13 @@ describe('Users', () => {
                 email: 'testUser@tesmail.com',
                 password: 'password',
                 bio: 'test user: gandalf',
-                profilePic: 'linktoPic',
-                profileBanner: 'profileBanner',
             })
 
             const user2 = { username: 'newtestUser',
                             nickname: 'newNickname',
                             bio: 'test user: newGandalf',
-                            profilePic: 'newLinktoPic',
-                            profileBanner: 'newprofileBanner'
+                            profilePic: 'https://imgur.com/gallery/zIMAzsV',
+                            profileBanner: 'https://imgur.com/gallery/RstwImS'
             }
 
             const authToken = Authentication.generateAuthToken(user1)
@@ -1044,8 +1040,6 @@ describe('Users', () => {
                 email: 'testUser@tesmail.com',
                 password: 'password',
                 bio: 'test user: gandalf',
-                profilePic: 'linktoPic',
-                profileBanner: 'profileBanner',
             })
 
             const authToken = Authentication.generateAuthToken(user1)
