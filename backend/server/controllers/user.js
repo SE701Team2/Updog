@@ -472,7 +472,7 @@ export const modifyUserByUsername = async (req, res) => {
         const { params } = req
         const userOfInterest = await models.users.findOne({
             where: {
-                username: params.username
+                id: params.id
             }
         })
 
@@ -496,16 +496,18 @@ export const modifyUserByUsername = async (req, res) => {
             const { params, body} = req
 
             if (!userOfInterest) {
-                res.status(404).send('Invalid username.')
+                res.status(404).send('Invalid email.')
 
             } else {
 
                 const updatedUser = await models.userOfInterest.update({
+                    username: body.username,
                     nickname: body.nickname,
-                    email: body.email,
-                    password: body.password,
+                    bio: body.bio,
+                    profilePic: body.profilePic,
+                    profileBanner: body.profileBanner
                 },
-                { returning: true, where: { username: params.username } }
+                { returning: true, where: { id: params.id } }
                 )
 
                 if (updatedUser) {
@@ -525,7 +527,7 @@ export const deleteUserByUsername = async (req, res) => {
         const { params } = req
         const userOfInterest = await models.users.findOne({
             where: {
-                username: params.username
+                id: params.id
             }
         })
 
@@ -553,7 +555,7 @@ export const deleteUserByUsername = async (req, res) => {
 
             } else {
                 const deleteUser = await models.users.destroy({
-                    where: { username: params.username}
+                    where: { id: params.id}
                 })
 
                 if (deleteUser !== 0) {
