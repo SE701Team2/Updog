@@ -1,7 +1,6 @@
 import models from '../database/models'
 import UserDTO from '../dto/users'
 import Authentication from '../middlewares/authentication'
-import db from '../config/database'
 import server from '../server'
 import PostDTO from '../dto/posts'
 import Helper from './helper/helper'
@@ -10,17 +9,6 @@ const assert = require('assert')
 const request = require('supertest')
 
 describe('Users', () => {
-  let serverInstance
-  beforeAll(() => {
-    // Testing on a different port to avoid conflict
-    db.sync().then(() => {
-      serverInstance = server.listen(8000, () =>
-        // eslint-disable-next-line no-console
-        console.log(`server is running at ${8000}`)
-      )
-    })
-  })
-
   beforeEach(async () => {
     await models.users.destroy({
       where: {},
@@ -139,8 +127,8 @@ describe('Users', () => {
       }
 
       // THEN response status code should be 200
-      const response = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const response = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       assert.equal(response.statusCode, 200)
@@ -168,8 +156,8 @@ describe('Users', () => {
         email,
         password: 'WrongPassword',
       }
-      const response = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const response = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       // THEN a response with status code 401 should be returned along with an error message
@@ -192,8 +180,8 @@ describe('Users', () => {
         email: 'wrong@email.com',
         password,
       }
-      const response = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const response = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       // THEN a response with status code 401 should be returned along with an error message
@@ -226,8 +214,8 @@ describe('Users', () => {
         password,
       }
 
-      const auth = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const auth = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       // add to followers table, userDTO just needs to count Ids
@@ -238,8 +226,8 @@ describe('Users', () => {
       await models.followers.bulkCreate(followers)
 
       // user viewing itself
-      const response = await request('http://localhost:8000/api')
-        .get(`/users/${result.username}`)
+      const response = await request(server)
+        .get(`/api/users/${result.username}`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
       const expectedResponse = {
@@ -266,9 +254,7 @@ describe('Users', () => {
       const randomUsername = (Math.random() + 1).toString(36).substring(7)
 
       // trying to get this user, don't need authentication as 404 should return first
-      const response = await request('http://localhost:8000/api').get(
-        `/users/${randomUsername}`
-      )
+      const response = await request(server).get(`/api/users/${randomUsername}`)
 
       assert.equal(response.statusCode, 404)
       assert.equal(response.body.error, `User '${randomUsername}' not found`)
@@ -289,8 +275,8 @@ describe('Users', () => {
         password,
       }
 
-      const response = await request('http://localhost:8000/api')
-        .post('/users')
+      const response = await request(server)
+        .post('/api/users')
         .send(requestBody)
 
       expect(response.body.username).toEqual(requestBody.username)
@@ -332,8 +318,8 @@ describe('Users', () => {
       // WHEN the logged in user tries to view the user activity
       const authToken = Authentication.generateAuthToken(newUser)
 
-      const response = await request('http://localhost:8000/api')
-        .get(`/users/${newUser.username}/activity`)
+      const response = await request(server)
+        .get(`/api/users/${newUser.username}/activity`)
         .set('Authorization', `Bearer ${authToken}`)
 
       // THEN their activity should be listed from latest to earliest
@@ -391,8 +377,8 @@ describe('Users', () => {
       // WHEN the logged in user tries to view the feed
       const authToken = Authentication.generateAuthToken(user2)
 
-      const response = await request('http://localhost:8000/api')
-        .get(`/feed`)
+      const response = await request(server)
+        .get(`/api/feed`)
         .set('Authorization', `Bearer ${authToken}`)
 
       // THEN their feed should display the activity of the user they follow
@@ -476,8 +462,8 @@ describe('Users', () => {
       const authToken = Authentication.generateAuthToken(user1)
 
       // THEN the endpoint should return these notifications
-      const response = await request('http://localhost:8000/api')
-        .get(`/notifications`)
+      const response = await request(server)
+        .get(`/api/notifications`)
         .set('Authorization', `Bearer ${authToken}`)
 
       const expectedOutput = [
@@ -528,8 +514,8 @@ describe('Users', () => {
         password,
       }
 
-      const auth = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const auth = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       const secondPassword = 'PASSWORD'
@@ -555,12 +541,12 @@ describe('Users', () => {
       })
 
       // first user will follow the second and third users
-      const followSecond = await request('http://localhost:8000/api')
-        .post(`/users/${secondUsername}/follow`)
+      const followSecond = await request(server)
+        .post(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
-      const followThird = await request('http://localhost:8000/api')
-        .post(`/users/${thirdUsername}/follow`)
+      const followThird = await request(server)
+        .post(`/api/users/${thirdUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
       expect(followSecond.statusCode).toEqual(201)
@@ -590,8 +576,8 @@ describe('Users', () => {
         password,
       }
 
-      const auth = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const auth = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       const secondPassword = 'PASSWORD'
@@ -606,12 +592,12 @@ describe('Users', () => {
       })
 
       // first user will try to follow the second user twice
-      const response = await request('http://localhost:8000/api')
-        .post(`/users/${secondUsername}/follow`)
+      const response = await request(server)
+        .post(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
-      const followAgain = await request('http://localhost:8000/api')
-        .post(`/users/${secondUsername}/follow`)
+      const followAgain = await request(server)
+        .post(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
       expect(response.statusCode).toEqual(201)
@@ -642,8 +628,8 @@ describe('Users', () => {
         password,
       }
 
-      const auth = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const auth = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       const secondPassword = 'PASSWORD'
@@ -658,12 +644,12 @@ describe('Users', () => {
       })
 
       // first user will follow second and then unfollow him
-      await request('http://localhost:8000/api')
-        .post(`/users/${secondUsername}/follow`)
+      await request(server)
+        .post(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
-      const response = await request('http://localhost:8000/api')
-        .delete(`/users/${secondUsername}/follow`)
+      const response = await request(server)
+        .delete(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
       expect(response.statusCode).toEqual(200)
@@ -689,8 +675,8 @@ describe('Users', () => {
         password,
       }
 
-      const auth = await request('http://localhost:8000/api')
-        .post('/users/authenticate')
+      const auth = await request(server)
+        .post('/api/users/authenticate')
         .send(loginInfo)
 
       const secondPassword = 'PASSWORD'
@@ -704,8 +690,8 @@ describe('Users', () => {
         password: secondPassword,
       })
 
-      const response = await request('http://localhost:8000/api')
-        .delete(`/users/${secondUsername}/follow`)
+      const response = await request(server)
+        .delete(`/api/users/${secondUsername}/follow`)
         .set('Authorization', `Bearer ${auth.body.authToken}`)
 
       expect(response.statusCode).toEqual(404)
@@ -960,6 +946,5 @@ describe('Users', () => {
 
   afterAll(() => {
     models.sequelize.close()
-    serverInstance.close()
   })
 })
