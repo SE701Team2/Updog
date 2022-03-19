@@ -1,90 +1,86 @@
-# Backend development setup
+# Quick-Start Guide
 
-## Dependencies needed
+This is a quick start guide for setting up the backend database of Updog
 
-Node version: v14.17.3
+This guide assumes you have already cloned the repository and installed Node.js v14.x or later
 
-MySQL version: v8.0.28
+## 1. Install and set up MySQL
 
-Node dependencies:
+1. [Install MySQL here](https://dev.mysql.com/downloads/installer/)
 
-```md
-• @babel/cli@7.12.10
-• @babel/core@7.12.10
-• @babel/node@7.12.10
-• @babel/polyfill@7.12.1
-• @babel/preset-env@7.12.11
-• apidoc@0.22.1
-• babel-jest@24.9.0
-• bcryptjs@2.4.3
-• body-parser@1.19.0
-• cors@2.8.5
-• crypto@1.0.1
-• eslint@6.8.0
-• eslint-config-prettier@6.15.0
-• eslint-plugin-prettier@3.3.1
-• express@4.17.1
-• express-fileupload@1.2.0
-• generate-password@1.5.1
-• jest@24.9.0
-• jsonwebtoken@8.5.1
-• morgan@1.10.0
-• mysql2@2.3.3
-• nodemon@1.19.4
-• pg@7.18.2
-• pg-hstore@2.3.3
-• pre-commit@1.2.2
-• prettier@1.19.1
-• sequelize@5.22.3
-• sequelize-cli@5.5.1
-• supertest@4.0.2
-• swagger-jsdoc@3.7.0
-• swagger-ui-express@4.1.6
-```
+2. In the "Choosing a Setup Type" page of the installer, select "Developer Default"
 
-## 1. Start a local MySQL DB server
+3. Click "next" (using default settings) until you reach the "Accounts and Roles" page
 
-Start a MySQL DB server on your machine with the following configuration
+4. Add a root password for yourself
+
+5. Click "Add User" and create a user with username "updogDev" and password "password"
+
+6. Continue to click "next" or "execute" until the install process is done
+
+## 2. Check that your local MySQL server is working correctly
+
+1. In MySQL Workbench, click Database->Manage Connections
+2. Click "Test Connection" and input the root password you set up earlier if prompted
+3. If successful, a popup similar to below should appear:
+   ![Test connection success popup](../readme-images/backend-mysql-test-connection-success.PNG)
+
+## 3. Create a new connection
+
+1. Create a new connection with the following settings:
 
 `username: 'updogDev'`
 
 `password: 'password'`
 
-`database: 'updog'`
+`connection name: 'updog'`
 
-`host: '127.0.0.1'`
+2. Click the home icon, and open the connection you just made
 
-`port: 3306`
+3. Under "Users and Privileges"->"Administrative Roles", check that the updogDev user you created has the DBA (Database Admin) permission - if you followed the steps in the [installer section](#1-install-and-set-up-mysql) you should already have this
 
-The config on the backend is already done, so once you get the db running locally it should be able to connect
+4. Click the database icon on the toolbar to create a new schema with the name "updog", all settings default, and click "Apply"
 
-NOTE: You do not need to create any tables, we just need a working db server
+## 4. Create tables
 
-## 2. Install dependencies
+1. If you haven't already, execute `npm install` in _both_ the main `Updog/` directory and in the `Updog/backend/` folder., then `npm install -g sequelize-cli`
 
-`npm install`
-
-## 3. Migrate models to DB so tables would be created
-
-To migrate the tables to the database, run the following commands:
-
-`npm install -g sequelize-cli` (only needs to be executed the first time)
+2. Execute the following to add the tables to the database via Sequelize ORM:
 
 `sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"`
 
 `sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
 
-## 4. Run project
+## 5. Test and run project
 
-`npm start`
+To run all backend tests, run `npm test` from the `backend/` folder
 
-To test connection, send a GET request to <http://localhost:8080/api/test>. Response should be "Hello World!"
+To start the project, run `npm start`
 
-Base URL: <http://localhost:8080/api> (Check routes folder for endpoints)
+To test connection, send a GET request to [http://localhost:8080/api/test](http://localhost:8080/api/test). Response should be "Hello World!"
 
-## Further Documentation
+Base URL: [http://localhost:8080/api](http://localhost:8080/api) (Check routes folder or [Swagger](#6-api-endpoints) for endpoints)
 
-To find further information on the api endpoints, we have configured a swagger api doc. To access, first run step 4 then
-in a webpage, go to URL: <http://localhost:8080/api-docs>.
+## 6. API endpoints
 
-To add documentation for new endpoints, go to the specs/swagger.yaml file.
+Updog's API endpoints are documented using Swagger
+
+To access, first run `npm start` then go to the following URL: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+
+When adding new endpoints, ensure you update the documentation in the `specs/swagger.yaml` file
+
+## 7. FAQ and Troubleshooting
+
+### Invalid password error
+
+If you receive a "Your password does not satisfy the current policy requirements" error, do the following:
+
+1. Open MySQL Shell
+
+2. run `SET GLOBAL validate_password.length = 4;`
+
+3. run `SET GLOBAL validate_password.policy=LOW;`
+
+### Test Connection failed
+
+If the "Test Connection" button fails, you may need to reinstall MySQL - sometimes the installation process doesn't work correctly.
