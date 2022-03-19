@@ -17,9 +17,15 @@ const UserPageController = () => {
   const loggedInUsername = localStorage.getItem('username')
   const loggedIn = username === loggedInUsername
   const navigate = useNavigate()
-  const { data: userData } = useApi(`users/${username}`)
-  const { data: followData } = useApi(`users/${username}/follow`)
-  const { data, loading, err } = useApi(`users/${username}/activity`)
+  const { data: userData, loading: userLoading } = useApi(`users/${username}`)
+  const { data: followData, loading: followLoading } = useApi(
+    `users/${username}/follow`
+  )
+  const {
+    data: activityData,
+    loading: activityLoading,
+    err,
+  } = useApi(`users/${username}/activity`)
   const [isFollower, setIsFollower] = useState(false)
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const UserPageController = () => {
     }
   }, [followData])
 
-  if (loading) {
+  if (activityLoading || userLoading || followLoading) {
     return <div>Loading...</div>
   }
 
@@ -52,7 +58,7 @@ const UserPageController = () => {
   return (
     <UserPageView
       userData={userData}
-      userFeed={data}
+      userFeed={activityData}
       loggedIn={loggedIn}
       isFollower={isFollower}
       handleChange={handleChange}
