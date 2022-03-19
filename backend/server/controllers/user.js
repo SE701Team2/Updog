@@ -489,13 +489,16 @@ export const modifyUserByID = async (req, res) => {
 
             const { body } = req
 
-            const updatedUser = await models.users.update({
+            const updatedUser = await models.users.update(
+            {
                 username: body.username,
                 nickname: body.nickname,
                 bio: body.bio,
                 profilePic: body.profilePic,
                 profileBanner: body.profileBanner
-            })
+            }, 
+            { returning: true, where : { id: loggedInUser.id } }
+            )
 
             if (updatedUser) {
                 res.status(200).send( { message: 'The profile has been updated.' })
@@ -530,7 +533,8 @@ export const deleteUserByID = async (req, res) => {
 
             const deleteUser = await models.users.destroy({
                 where: { id: loggedInUser.id}
-            })
+            } 
+            )
 
             if (deleteUser !== 0) {
                 res.status(200).send( { message: 'The user has been deleted.' } )
