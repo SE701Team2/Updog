@@ -1062,7 +1062,7 @@ describe('Users', () => {
             })
 
             expect(response.body.message).toBe('The user has been deleted.')
-            expect(dbUser.username).toBe(null)
+            expect(dbUser).toBe(null)
             expect(response.statusCode).toBe(200)
         })
     })
