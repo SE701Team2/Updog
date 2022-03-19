@@ -38,7 +38,7 @@ const UserPageController = () => {
 
   const handleChange = () => {
     if (loggedIn) {
-      navigate(`/user/${username}/settings`)
+      navigate(`/settings`)
     } else {
       const method = isFollower ? 'DELETE' : 'POST'
       request(`users/${username}/follow`, method)
