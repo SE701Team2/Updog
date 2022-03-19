@@ -974,6 +974,101 @@ describe('Users', () => {
         })
     })
 
+    describe('when modifying user profile in a valid way', () => {
+        it('should return response code of 200', async () => {
+            const user1 = await models.users.create({
+                username: 'testUser1',
+                nickname: 'gandalf1',
+                email: 'testUser@tesmail.com',
+                password: 'password',
+                bio: 'test user: gandalf',
+            })
+
+            const user2 = { username: 'newtestUser',
+                            nickname: 'newNickname',
+                            bio: 'test user: newGandalf',
+                            profilePic: 'https://imgur.com/gallery/zIMAzsV',
+                            profileBanner: 'https://imgur.com/gallery/RstwImS'
+            }
+
+            const authToken = Authentication.generateAuthToken(user1)
+
+            const response = await request(server)
+                .put('/api/users/')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send(user2)
+
+            const dbUser = await models.users.findOne({
+                where: {
+                    username: user2.username,
+                },
+            })
+
+            expect(dbUser.username).toBe(user2.username)
+            expect(dbUser.nickname).toBe(user2.nickname)
+            expect(dbUser.bio).toBe(user2.bio)
+            expect(dbUser.profilePic).toBe(user2.profilePic)
+            expect(dbUser.profileBanner).toBe(user2.profileBanner)
+            expect(response.body.message).toBe('The profile has been updated.')
+            expect(response.statusCode).toBe(200)
+        })
+    })
+
+    describe('when modifying user profile in a invalid way', () => {
+        it('should return response code of 400', async () => {
+            const user1 = await models.users.create({
+                username: 'testUser1',
+                nickname: 'gandalf1',
+                email: 'testUser@tesmail.com',
+                password: 'password',
+                bio: 'test user: gandalf',
+            })
+
+            const user2 = { username: 'newtestUser',
+                            nickname: 'newNickname',
+                            bio: 'test user: newGandalf',
+                            profilePic: 'https://imgur.com/gallery/zIMAzsV',
+                            profileBanner: 'https://imgur.com/gallery/RstwImS'
+            }
+
+            const authToken = Authentication.generateAuthToken(user1)
+
+            const response = await request(server)
+                .put('/api/users/')
+                .send(user2)
+
+            expect(response.statusCode).toBe(400)
+        })
+    })
+
+    describe('when deleting user profile', () => {
+        it('should return response code of 200', async () => {
+            const user1 = await models.users.create({
+                username: 'testUser1',
+                nickname: 'gandalf1',
+                email: 'testUser@tesmail.com',
+                password: 'password',
+                bio: 'test user: gandalf',
+            })
+
+            const authToken = Authentication.generateAuthToken(user1)
+
+            const response = await request(server)
+                .delete('/api/users/')
+                .set('Authorization', `Bearer ${authToken}`)
+
+            const dbUser = await models.users.findOne({
+                where: {
+                    username: user1.username,
+                },
+            })
+
+            expect(response.body.message).toBe('The user has been deleted.')
+            expect(dbUser).toBe(null)
+            expect(response.statusCode).toBe(200)
+        })
+    })
+
     afterAll(() => {
         models.sequelize.close()
         serverInstance.close()
