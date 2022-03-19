@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router'
 import HeaderView from './HeaderView'
 import useApi from '../../../hooks/useApi'
-import userData from './mock-userData'
 
 /**
  * Creates a main header component showing the logo and the user profile pic
@@ -14,7 +13,7 @@ const HeaderController = () => {
   let user
 
   if (loading) {
-    user = userData
+    user = { username: '', profilePic: '' }
   } else {
     user = data
   }
