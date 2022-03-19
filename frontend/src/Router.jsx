@@ -9,7 +9,9 @@ import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
+import SearchPage from './pages/post/SearchPage'
 import { AuthContext } from './contexts/AuthProvider'
+
 
 const Router = () => {
   // fetch the token to check if the user is authenticated
@@ -30,6 +32,7 @@ const Router = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<ProfileSettings />} />
         <Route path="/new-post" element={<PostComposer />} />
+        <Route path="/SeachPage" element={<SearchPage/>} />
       </Routes>
     )
   } else {
@@ -44,7 +47,7 @@ const Router = () => {
     )
   }
 
-  return routes
+  return routes 
 }
 
 export default Router
