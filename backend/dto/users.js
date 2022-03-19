@@ -1,7 +1,6 @@
 import models from '../database/models'
 
-/* eslint-disable import/prefer-default-export */
-export class UserDTO {
+export default class UserDTO {
     static async convertToDto(user) {
         const numFollowers = await models.followers.count({
             where: { followedId: user.id },
