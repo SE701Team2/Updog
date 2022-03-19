@@ -1055,7 +1055,14 @@ describe('Users', () => {
                 .delete('/api/users/')
                 .set('Authorization', `Bearer ${authToken}`)
 
+            const dbUser = await models.users.findOne({
+                where: {
+                    username: user1.username,
+                },
+            })
+
             expect(response.body.message).toBe('The user has been deleted.')
+            expect(dbUser.username).toBe(null)
             expect(response.statusCode).toBe(200)
         })
     })
