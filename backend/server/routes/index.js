@@ -47,6 +47,8 @@ router
     .post(posts.sharePostById)
     .delete(posts.unsharePostById)
 
+router.route('/posts/:id/interactions').get(posts.getInteractedUsers)
+
 /*
 TESTING
 */
