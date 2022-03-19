@@ -7,9 +7,13 @@ const router = Router()
 /*
 USERS
 */
-router.route('/users').post(user.addUser)
+router.route('/users')
+    .post(user.addUser)
+    .put(user.modifyUser)
+    .delete(user.deleteUser)
 
-router.route('/users/:username').get(user.getUsersByUsername)
+router.route('/users/:username')
+    .get(user.getUsersByUsername)
 
 router.route('/users/authenticate').post(user.authenticateUser)
 
