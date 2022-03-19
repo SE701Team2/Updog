@@ -533,8 +533,7 @@ export const deleteUserByID = async (req, res) => {
 
             const deleteUser = await models.users.destroy({
                 where: { id: loggedInUser.id}
-            } 
-            )
+            })
 
             if (deleteUser !== 0) {
                 res.status(200).send( { message: 'The user has been deleted.' } )
