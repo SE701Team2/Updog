@@ -46,10 +46,6 @@ const RegistrationFormView = ({ state, action }) => {
               fullWidth
               onChange={(e) => setUsername(e.target.value)}
             />
-
-            {error.userName && (
-              <p className={classes.error}>{error.userName}</p>
-            )}
           </div>
 
           <div className={classes.input}>
@@ -61,8 +57,6 @@ const RegistrationFormView = ({ state, action }) => {
               fullWidth
               onChange={(e) => setEmail(e.target.value)}
             />
-
-            {error.email && <p className={classes.error}>{error.email}</p>}
           </div>
           <div className={classes.input}>
             <FormControl variant="outlined" fullWidth>
@@ -89,9 +83,6 @@ const RegistrationFormView = ({ state, action }) => {
                 label="Password"
               />
             </FormControl>
-            {error.password && (
-              <p className={classes.error}>{error.password}</p>
-            )}
           </div>
         </div>
 

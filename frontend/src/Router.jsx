@@ -9,6 +9,7 @@ import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
 import User from './pages/user/UserPageController'
+import PostComposer from './pages/postComposer/PostComposerController'
 import { AuthContext } from './contexts/AuthProvider'
 
 const Router = () => {
@@ -31,6 +32,7 @@ const Router = () => {
         <Route path="/user/:username/follows" element={<Follows />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<ProfileSettings />} />
+        <Route path="/new-post" element={<PostComposer />} />
       </Routes>
     )
   } else {
