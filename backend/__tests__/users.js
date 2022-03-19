@@ -1007,13 +1007,13 @@ describe('Users', () => {
             expect(dbUser.bio).toBe(user2.bio)
             expect(dbUser.profilePic).toBe(user2.profilePic)
             expect(dbUser.profileBanner).toBe(user2.profileBanner)
-            expect(response.body).toBe('The profile has been updated.')
+            expect(response.body.message).toBe('The profile has been updated.')
             expect(response.statusCode).toBe(200)
         })
     })
 
     describe('when modifying user profile in a invalid way', () => {
-        it('should return response code of 401', async () => {
+        it('should return response code of 400', async () => {
             const user1 = await models.users.create({
                 username: 'testUser1',
                 nickname: 'gandalf1',
@@ -1055,7 +1055,7 @@ describe('Users', () => {
                 .delete('/api/users/')
                 .set('Authorization', `Bearer ${authToken}`)
 
-            expect(response.body).toBe('The user has been deleted.')
+            expect(response.body.message).toBe('The user has been deleted.')
             expect(response.statusCode).toBe(200)
         })
     })

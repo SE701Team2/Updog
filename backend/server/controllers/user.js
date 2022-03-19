@@ -489,7 +489,7 @@ export const modifyUserByID = async (req, res) => {
 
             const { body } = req
 
-            const updatedUser = await models.userOfInterest.update({
+            const updatedUser = await models.users.update({
                 username: body.username,
                 nickname: body.nickname,
                 bio: body.bio,
@@ -498,9 +498,9 @@ export const modifyUserByID = async (req, res) => {
             })
 
             if (updatedUser) {
-                res.status(200).send('The profile has been updated.')
+                res.status(200).send( { message: 'The profile has been updated.' })
             } else {
-                res.status(500).send('Failed to update the profile.')
+                res.status(500).send( { error: 'Failed to update the profile.' })
             }
         }
     } catch (error) {
@@ -533,9 +533,9 @@ export const deleteUserByID = async (req, res) => {
             })
 
             if (deleteUser !== 0) {
-                res.status(200).send('The user has been deleted.')
+                res.status(200).send( { message: 'The user has been deleted.' } )
             } else {
-                res.status(500).send('Failed to destroy the user.')
+                res.status(500).send( { error: 'Failed to destroy the user.' } )
             }
         }
     } catch (error) {
