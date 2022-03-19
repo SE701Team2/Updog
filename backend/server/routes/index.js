@@ -9,8 +9,8 @@ USERS
 */
 router.route('/users')
     .post(user.addUser)
-    .put(user.modifyUserByID)
-    .delete(user.deleteUserByID)
+    .put(user.modifyUser)
+    .delete(user.deleteUser)
 
 router.route('/users/:username')
     .get(user.getUsersByUsername)

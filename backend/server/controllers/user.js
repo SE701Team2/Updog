@@ -467,7 +467,7 @@ export const getFollow = async (req, res) => {
     }
 }
 
-export const modifyUserByID = async (req, res) => {
+export const modifyUser = async (req, res) => {
     try {
         const authToken = req.get('Authorization')
 
@@ -511,7 +511,7 @@ export const modifyUserByID = async (req, res) => {
     }
 }
 
-export const deleteUserByID = async (req, res) => {
+export const deleteUser = async (req, res) => {
     try {
         const authToken = req.get('Authorization')
 
