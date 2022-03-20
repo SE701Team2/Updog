@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { postData } from '../../functions'
 import PostComposerView from './PostComposerView'
+import { request } from '../../functions'
 
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
@@ -13,15 +13,13 @@ const PostComposerController = () => {
     if (postText) {
       try {
         setLoading(true)
-        const response = await postData('posts', {
+        const response = await request('posts', 'POST', {
           text_content: postText,
         })
 
-        if (response.status === 201) {
-          // navigate to the newly made post
-          setLoading(false)
-          navigate(`/posts/${response.data.id}`)
-        }
+        // navigate to the newly made post
+        setLoading(false)
+        navigate(`/posts/${response.data.id}`)
       } catch (e) {
         // this should not error happen for now
         setLoading(false)

@@ -1,21 +1,24 @@
-import { useState, useEffect } from 'react'
-import ProfileSettingsView from "./ProfileSettingsView"
-import MockUser from './mock-user'
+import { useState } from 'react'
+import ProfileSettingsView from './ProfileSettingsView'
+import useApi from '../../hooks/useApi'
 
 /**
  * This page is where users can edit their profile
  */
 const ProfileSettingsController = () => {
-  const [user, setUser] = useState([]);
-  const [avatarModalOpen, setAvatarModalOpen] = useState(false);
+  const username = localStorage.getItem('username')
+  const { data, loading, err } = useApi(`users/${username}`)
+  const [avatarModalOpen, setAvatarModalOpen] = useState(false)
+  // const [bannerModalOpen, setBannerModalOpen] = useState(false)
 
-  // const [bannerModalOpen, setBannerModalOpen] = useState(false);
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
-  useEffect(() => {
-    // call get user api
-    setUser(MockUser)
-  });
-  
+  if (err) {
+    return <div>Error: {err.message}</div>
+  }
+
   const updateProfile = async () => {
     // call update user api
   }
@@ -30,13 +33,13 @@ const ProfileSettingsController = () => {
 
   return (
     <ProfileSettingsView
-    user={user}
-    updateProfile={updateProfile}
-    avatarOpen = {avatarModalOpen}
-    handleAvatarOpen={handleAvatarOpen}
-    handleAvatarClose={handleAvatarClose}
+      user={data}
+      updateProfile={updateProfile}
+      avatarOpen={avatarModalOpen}
+      handleAvatarOpen={handleAvatarOpen}
+      handleAvatarClose={handleAvatarClose}
     />
-  );
-} 
+  )
+}
 
 export default ProfileSettingsController

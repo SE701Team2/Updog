@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
-  Button,
   FormControl,
   IconButton,
   InputAdornment,
@@ -12,7 +12,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import classes from './registrationpage.module.scss'
-import LoadingButton from '@mui/lab/LoadingButton'
+import Logo from '../../images/logo.png'
 
 const RegistrationFormView = ({ state, action }) => {
   const { email, password, username, error, loading } = state
@@ -22,7 +22,9 @@ const RegistrationFormView = ({ state, action }) => {
 
   return (
     <>
-      <div className={classes.logo}>Logo</div>
+      <div className={classes.logo}>
+        <img src={Logo} alt="logo" />
+      </div>
       <div className={classes.container}>
         <div className={classes.inputsContainer}>
           <h2>Create an account</h2>
