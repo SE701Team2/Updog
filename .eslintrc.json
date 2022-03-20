@@ -7,7 +7,8 @@
     "extends": [
         "airbnb",
         "prettier",
-        "plugin:md/prettier"
+        "plugin:md/prettier",
+        "plugin:cypress/recommended"
     ],
     "plugins": [
         "prettier"

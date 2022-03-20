@@ -1,10 +1,10 @@
-# Quick-start Guide 
+# Quick-start Guide
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
-First, install all dependencies by running `npm install` in *both* the main `Updog/` directory and in the `Updog/frontend/` folder.
+First, install all dependencies by running `npm install` in _both_ the main `Updog/` directory and in the `Updog/frontend/` folder.
 
 In the project directory, you can run:
 
@@ -30,8 +30,12 @@ The build is minified and the filenames include the hashes.\
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run e2e`
+
+Runs all Cypress tests. Requires having already run `npm start` in both frontend and backend.
 
 ## More Information
+
 For information on using React, see [React Conventions](https://github.com/SE701Team2/Updog/wiki/React-Conventions)
 
 For information on existing and planned pages, see [Frontend Overview](https://github.com/SE701Team2/Updog/wiki/Frontend-Overview)
