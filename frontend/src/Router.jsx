@@ -9,7 +9,7 @@ import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
-import SearchPage from './pages/post/SearchPage'
+import SearchPage from './pages/post/Search/SearchPage'
 import { AuthContext } from './contexts/AuthProvider'
 
 
@@ -32,7 +32,7 @@ const Router = () => {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/settings" element={<ProfileSettings />} />
         <Route path="/new-post" element={<PostComposer />} />
-        <Route path="/SeachPage" element={<SearchPage/>} />
+        <Route path="/search-page" element={<SearchPage/>} />
       </Routes>
     )
   } else {

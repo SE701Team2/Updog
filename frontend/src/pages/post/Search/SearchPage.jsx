@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom"
-import PostPageView from "./PostPageView"
-import postData from './mock-data'
+import postData from '../mock-data'
+import { useState } from 'react';
+import TextField from '@mui/material/InputBase';
 
 const SearchPage = () => {
     const [searchTerm, setSeachTerm] = useState('')
 
     return (
         <div className="Search">
-            <input type="text" placeholder="Seach..." onChange={event => {setSeachTerm(event.target.value);}} />
+            <TextField id="standard-basic" label="Standard" variant="standard" size="normal" placeholder="Seach..." onChange={event => {setSeachTerm(event.target.value);}} />
             <br></br>
             {postData.filter((val) => {
             if (searchTerm=="") {
@@ -16,7 +17,7 @@ const SearchPage = () => {
             return val
             }
         }).map((val, key)=> {
-            return (<div className="content" key={key}>{" "} <p>{val.author}</p><p>{val.content}</p><br></br></div>);
+            return (<div className="content" key={key}>{" "} <p><Post key={key} data={val}/></p><br></br></div>);
           })}
         </div>
     );
