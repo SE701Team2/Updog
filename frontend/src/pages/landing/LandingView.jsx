@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
-
 import Button from '@mui/material/Button'
 import classes from './landing.module.scss'
+import Logo from '../../images/logo.png'
 
 const LandingView = () => (
   <>
-    <div className={classes.logo}>Logo</div>
+    <div className={classes.logo}>
+      <img src={Logo} alt="logo" />
+    </div>
     <div className={classes.container}>
       <div className={classes.slogan}>
         Check out what&apos;s going on
