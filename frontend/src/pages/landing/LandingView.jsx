@@ -10,7 +10,7 @@ const LandingView = () => (
     </div>
     <div className={classes.container}>
       <div className={classes.slogan}>
-        Check out whats going on
+        Check out what&apos;s going on
         <br /> in the world right now.
       </div>
       <div className={classes.content}>

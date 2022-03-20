@@ -1,5 +1,5 @@
 import models from '../database/models'
-import { Authentication } from '../middlewares/authentication'
+import Authentication from '../middlewares/authentication'
 
 const assert = require('assert')
 
