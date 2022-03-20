@@ -54,7 +54,7 @@ Before a PR can be completed, it must pass a code review process, in which a tea
 -   Check that the code is high-quality and adheres to our [coding style](#coding-style)
 -   Build and run the branch to ensure that it works as expected
 -   Ensure that the branch passes all tests in the test suite
--   All commited files pass lint checking (ESLint/Prettier)
+-   All committed files pass lint checking (ESLint/Prettier)
 -   Raise any issues with the above steps
 
 Once all raised issues have been resolved and any merge conflicts have been fixed, the commits should be squashed and merged into master by the creator of the PR.
