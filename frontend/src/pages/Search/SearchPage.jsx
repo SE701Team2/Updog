@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TextField from '@mui/material/InputBase'
-import SampleFeed from './mockData'
+import sampleFeed from './mockData'
 import Footer from '../../components/layout/footer/FooterController'
 import Header from '../../components/layout/header/HeaderController'
+import Post from '../../components/posts/post/PostController'
 
 const SearchPage = () => {
-  const [searchTerm, setSeachTerm] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filteredPosts, setFilteredPosts] = useState([])
+
+  useEffect(() => {
+    const filtered = sampleFeed.filter((post) => {
+      if (!searchTerm) return true
+      return post.content.toLowerCase().includes(searchTerm.toLowerCase())
+    })
+
+    setFilteredPosts(filtered)
+  }, [searchTerm])
 
   return (
     <div className="App">
@@ -14,28 +25,20 @@ const SearchPage = () => {
       <TextField
         id="standard-basic"
         label="Standard"
-        variant="standard"
+        variant="outlined"
         size="normal"
-        placeholder="Seach..."
+        placeholder="Search..."
         onChange={(event) => {
-          setSeachTerm(event.target.value)
+          setSearchTerm(event.target.value)
         }}
       />
       <br />
-      {SampleFeed.filter((val) => {
-        if (val.content.toLowerCase().includes(searchTerm.toLowerCase())) {
-          return val
-        }
-        return 1
+      {filteredPosts.map((val, id) => (
         /* eslint-disable */
-      }).map((val, id) => (
-        <div className="title" key={id}>
-          {' '}
-          <p>{val.content}</p>
-          <br />
+        <div key={id}>
+          <Post data={val} condensed />
         </div>
       ))}
-      ;
       <Footer />
     </div>
   )
