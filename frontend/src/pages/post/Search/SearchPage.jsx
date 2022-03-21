@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom"
-import postData from '../mock-data'
 import { useState } from 'react';
+import Post from '../../../components/posts/post/PostController'
 import TextField from '@mui/material/InputBase';
 
 const SearchPage = () => {
@@ -10,7 +10,7 @@ const SearchPage = () => {
         <div className="Search">
             <TextField id="standard-basic" label="Standard" variant="standard" size="normal" placeholder="Seach..." onChange={event => {setSeachTerm(event.target.value);}} />
             <br></br>
-            {postData.filter((val) => {
+            {Post.filter((val) => {
             if (searchTerm=="") {
             return val
             } else if ((val.content.toLowerCase().includes(searchTerm.toLowerCase())) || (val.author.toLowerCase().includes(searchTerm.toLowerCase()))) {
