@@ -31,8 +31,8 @@ Please set this up before making any contributions
 "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  }
+  },
+  "editor.formatOnSave": true,
 ```
 
 Your settings.json may look something like this in the end
