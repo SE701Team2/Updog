@@ -1,45 +1,43 @@
 @use '~/src/styles/theme';
 
 .container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    color: theme.$onBackground;
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: theme.$onBackground;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
 
-    > div {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 }
 
 .condensedContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: left;
+  gap: 1rem;
+  align-items: center;
+  color: theme.$onBackground;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+
+  > div {
+    font-size: 1rem;
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: left;
-    gap: 1rem;
-    align-items: center;
-    color: theme.$onBackground;
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
-
-    > div {
-        font-size: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0rem;
-    }
-
-    
+    flex-direction: column;
+    gap: 0rem;
+  }
 }
 
 .timestamp {
-    display: flex;
-    flex-direction: row;
-    gap: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
 }

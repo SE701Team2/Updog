@@ -1,15 +1,15 @@
 @use '~/src/styles/theme';
 
 .subHeader {
-    text-align: center;
-    padding-top: 8px;
-    padding-bottom: 8px;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .container {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    display: flex;
-    border-top: 1px solid theme.$divider;
-    border-bottom: 1px solid theme.$divider;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: flex;
+  border-top: 1px solid theme.$divider;
+  border-bottom: 1px solid theme.$divider;
 }

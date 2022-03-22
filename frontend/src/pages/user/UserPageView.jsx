@@ -8,52 +8,48 @@ import ProfileUserDetails from '../../components/user/profiledetails/ProfileUser
 import Post from '../../components/posts/post/PostController'
 
 const UserPageView = ({
-    userData,
-    userFeed,
-    loggedIn,
-    isFollower,
-    handleChange,
+  userData,
+  userFeed,
+  loggedIn,
+  isFollower,
+  handleChange,
 }) => (
-    <div className={classes.container}>
-        <HeaderCustom title={userData.username} />
-        <img
-            className={classes.banner}
-            alt="Profile Banner"
-            src={userData.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
-        />
-        <div className={classes.pageContent}>
-            <Button
-                variant="contained"
-                disableElevation
-                className={classes.followButton}
-                onClick={handleChange}
+  <div className={classes.container}>
+    <HeaderCustom title={userData.username} />
+    <img
+      className={classes.banner}
+      alt="Profile Banner"
+      src={userData.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
+    />
+    <div className={classes.pageContent}>
+      <Button
+        variant="contained"
+        disableElevation
+        className={classes.followButton}
+        onClick={handleChange}
+      >
+        {loggedIn ? 'Settings' : isFollower ? 'Unfollow' : 'Follow'}
+      </Button>
+
+      <ProfileUserDetails user={userData} />
+
+      <div className={classes.posts}>
+        <h2>Activity</h2>
+        <List>
+          {userFeed?.map((post) => (
+            <ListItem
+              key={post.timestamp}
+              sx={{ paddingLeft: 0, paddingRight: 0 }}
+              divider
             >
-                {loggedIn ? 'Settings' : isFollower ? 'Unfollow' : 'Follow'}
-            </Button>
-
-            <ProfileUserDetails user={userData} />
-
-            <div className={classes.posts}>
-                <h2>Activity</h2>
-                <List>
-                    {userFeed?.map((post) => (
-                        <ListItem
-                            key={post.timestamp}
-                            sx={{ paddingLeft: 0, paddingRight: 0 }}
-                            divider
-                        >
-                            <Post
-                                id={post.postID}
-                                activity={post.activity}
-                                condensed
-                            />
-                        </ListItem>
-                    ))}
-                </List>
-            </div>
-        </div>
-        <Footer />
+              <Post id={post.postID} activity={post.activity} condensed />
+            </ListItem>
+          ))}
+        </List>
+      </div>
     </div>
+    <Footer />
+  </div>
 )
 
 export default UserPageView

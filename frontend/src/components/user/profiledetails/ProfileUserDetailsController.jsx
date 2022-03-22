@@ -6,7 +6,7 @@ import ProfileUserDetailsView from './ProfileUserDetailsView'
  *
  */
 const ProfileUserDetailsController = ({ user }) => (
-    <ProfileUserDetailsView user={user} />
+  <ProfileUserDetailsView user={user} />
 )
 
 export default ProfileUserDetailsController

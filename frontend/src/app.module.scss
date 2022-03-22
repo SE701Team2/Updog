@@ -1,14 +1,14 @@
 @use '~/src/styles/theme';
 
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background-color: theme.$background;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: theme.$background;
 }

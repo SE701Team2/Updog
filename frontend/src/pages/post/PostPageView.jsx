@@ -4,13 +4,13 @@ import HeaderCustom from '../../components/layout/headercustom/HeaderCustomContr
 import Post from '../../components/posts/post/PostController'
 
 const PostPageView = ({ postData }) => (
-    <div className={classes.container}>
-        <HeaderCustom title="Post" />
-        <div className={classes.pageContent}>
-            <Post data={postData} showReplies />
-        </div>
-        <Footer />
+  <div className={classes.container}>
+    <HeaderCustom title="Post" />
+    <div className={classes.pageContent}>
+      <Post data={postData} showReplies />
     </div>
+    <Footer />
+  </div>
 )
 
 export default PostPageView

@@ -6,24 +6,24 @@ import SimpleUserDetails from '../../components/user/simpledetails/SimpleUserDet
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
 
 const FollowsPageView = ({ followsData, tab, handleChange }) => (
-    <div className={classes.container}>
-        <HeaderCustom title="Follows" />
+  <div className={classes.container}>
+    <HeaderCustom title="Follows" />
 
-        <Tabs value={tab} onChange={handleChange} variant="fullWidth">
-            <Tab label="Followers" />
-            <Tab label="Follows" />
-        </Tabs>
-        <div className={classes.pageContent}>
-            <List>
-                {followsData.map((follower) => (
-                    <ListItem key={follower.id} divider>
-                        <SimpleUserDetails user={follower} />
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-        <Footer />
+    <Tabs value={tab} onChange={handleChange} variant="fullWidth">
+      <Tab label="Followers" />
+      <Tab label="Follows" />
+    </Tabs>
+    <div className={classes.pageContent}>
+      <List>
+        {followsData.map((follower) => (
+          <ListItem key={follower.id} divider>
+            <SimpleUserDetails user={follower} />
+          </ListItem>
+        ))}
+      </List>
     </div>
+    <Footer />
+  </div>
 )
 
 export default FollowsPageView
