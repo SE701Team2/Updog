@@ -16,5 +16,5 @@ module.exports = {
         type: Sequelize.STRING,
       },
     }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('attachments'),
+  down: (queryInterface) => queryInterface.dropTable('attachments'),
 }

@@ -14,5 +14,17 @@
     "linebreak-style": "off",
     "quotes": ["error", "single"],
     "semi": ["error", "never"]
-  }
+  },
+  "ignorePatterns": [
+    "**/*.scss",
+    "**/*.png",
+    "**/*.ico",
+    "**/*.md",
+    "**/*.json",
+    "**/*.html",
+    "**/*.txt",
+    "**/*.yml",
+    "**/*.yaml",
+    "**/*.txt"
+  ]
 }

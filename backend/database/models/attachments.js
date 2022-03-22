@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   )
-  attachments.associate = function (models) {
+  attachments.associate = function () {
     // associations can be defined heresss
   }
   return attachments

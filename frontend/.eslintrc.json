@@ -4,13 +4,17 @@
     "es2021": true,
     "jest": true
   },
-  "extends": [
-    "airbnb",
-    "prettier",
-    "plugin:md/prettier",
-    "plugin:cypress/recommended"
-  ],
+  "extends": ["airbnb", "prettier", "plugin:cypress/recommended"],
   "plugins": ["prettier"],
+  "ignorePatterns": [
+    "**/*.scss",
+    "**/*.png",
+    "**/*.ico",
+    "**/*.md",
+    "**/*.json",
+    "**/*.html",
+    "**/*.txt"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
