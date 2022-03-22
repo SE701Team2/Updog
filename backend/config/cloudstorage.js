@@ -5,8 +5,8 @@ const serviceAccount = require('../updog-attachments-firebase-adminsdk-ygs6y-00f
 
 // Initialising the app and storage bucket
 firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(serviceAccount),
-    storageBucket: 'gs://updog-attachments.appspot.com',
+  credential: firebaseAdmin.credential.cert(serviceAccount),
+  storageBucket: 'gs://updog-attachments.appspot.com',
 })
 const bucket = firebaseAdmin.storage().bucket()
 

@@ -18,25 +18,25 @@ const server = express()
 // Get different configs for dev and test, this is because in test
 // request conflicts with yaml.load
 const swaggerDocument = config.get('DEV')
-    ? YAML.load(path.resolve('./specs/swagger.yaml'))
-    : null
+  ? YAML.load(path.resolve('./specs/swagger.yaml'))
+  : null
 
 db.authenticate()
-    .then(() => console.log('Database connected...'))
-    .catch((err) => console.log('Error DB: => ', err))
+  .then(() => console.log('Database connected...'))
+  .catch((err) => console.log('Error DB: => ', err))
 
 server.use(cors())
 server.use(morgan('dev'))
 server.use(fileupload())
 server.use(
-    express.json({
-        limit: '50mb',
-    })
+  express.json({
+    limit: '50mb',
+  })
 )
 server.use(
-    express.urlencoded({
-        limit: '50mb',
-    })
+  express.urlencoded({
+    limit: '50mb',
+  })
 )
 server.use(bodyParser.json())
 

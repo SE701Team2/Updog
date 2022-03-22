@@ -4,18 +4,18 @@ This is a quick start guide for setting up the backend database of Updog
 
 This guide assumes you have already cloned the repository and installed Node.js v14.x or later
 
-## 1. Install and set up MySQL
+## 1. Use Docker to Install and set up MySQL
+
+1. [Install Docker here](https://www.docker.com/get-started/)
+2. Run `docker-compose up` in the backend folder
+
+## 1. Alternative Install and set up MySQL (not recommended)
 
 1. [Install MySQL here](https://dev.mysql.com/downloads/installer/)
-
 2. In the "Choosing a Setup Type" page of the installer, select "Developer Default"
-
 3. Click "next" (using default settings) until you reach the "Accounts and Roles" page
-
 4. Add a root password for yourself
-
 5. Click "Add User" and create a user with username "updogDev" and password "password"
-
 6. Continue to click "next" or "execute" until the install process is done
 
 ## 2. Check that your local MySQL server is working correctly
@@ -23,22 +23,20 @@ This guide assumes you have already cloned the repository and installed Node.js 
 1. In MySQL Workbench, click Database->Manage Connections
 2. Click "Test Connection" and input the root password you set up earlier if prompted
 3. If successful, a popup similar to below should appear:
-   ![Test connection success popup](../readme-images/backend-mysql-test-connection-success.PNG)
+   ![Test connection success popup](https://user-images.githubusercontent.com/23299540/159444420-0157413d-13af-4c4e-a754-2628116f4e95.PNG)
 
 ## 3. Create a new connection
 
 1. Create a new connection with the following settings:
 
-`username: 'updogDev'`
+   `username: 'updogDev'`
 
-`password: 'password'`
+   `password: 'password'`
 
-`connection name: 'updog'`
+   `connection name: 'updog'`
 
 2. Click the home icon, and open the connection you just made
-
 3. Under "Users and Privileges"->"Administrative Roles", check that the updogDev user you created has the DBA (Database Admin) permission - if you followed the steps in the [installer section](#1-install-and-set-up-mysql) you should already have this
-
 4. Click the database icon on the toolbar to create a new schema with the name "updog", all settings default, and click "Apply"
 
 ## 4. Create tables
@@ -47,9 +45,9 @@ This guide assumes you have already cloned the repository and installed Node.js 
 
 2. Execute the following to add the tables to the database via Sequelize ORM:
 
-`sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"`
+   `sequelize db:migrate:undo:all --url "mysql://updogDev:password@localhost:3306/updog"`
 
-`sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
+   `sequelize db:migrate --url "mysql://updogDev:password@localhost:3306/updog"`
 
 ## 5. Test and run project
 
@@ -76,9 +74,7 @@ When adding new endpoints, ensure you update the documentation in the `specs/swa
 If you receive a "Your password does not satisfy the current policy requirements" error, do the following:
 
 1. Open MySQL Shell
-
 2. run `SET GLOBAL validate_password.length = 4;`
-
 3. run `SET GLOBAL validate_password.policy=LOW;`
 
 ### Test Connection failed
