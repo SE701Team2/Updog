@@ -419,80 +419,78 @@ export const getFollow = async (req, res) => {
 }
 
 export const modifyUser = async (req, res) => {
-    try {
-        const authToken = req.get('Authorization')
+  try {
+    const authToken = req.get('Authorization')
 
-        if (!authToken) {
-            res.status(400).send({
-                'Error message': 'Auth token not provided',
-            })
-            return
-        }
-
-        const loggedInUser = Authentication.extractUser(authToken)
-
-        if (!loggedInUser) {
-            res.status(401).send({
-                'Error message': 'Auth token invalid',
-            })
-            return
-        } else {
-
-            const { body } = req
-
-            const updatedUser = await models.users.update(
-            {
-                username: body.username,
-                nickname: body.nickname,
-                bio: body.bio,
-                profilePic: body.profilePic,
-                profileBanner: body.profileBanner
-            }, 
-            { returning: true, where : { id: loggedInUser.id } }
-            )
-
-            if (updatedUser) {
-                res.status(200).send( { message: 'The profile has been updated.' })
-            } else {
-                res.status(500).send( { error: 'Failed to update the profile.' })
-            }
-        }
-    } catch (error) {
-        res.status(500).send(error)
+    if (!authToken) {
+      res.status(400).send({
+        'Error message': 'Auth token not provided',
+      })
+      return
     }
+
+    const loggedInUser = Authentication.extractUser(authToken)
+
+    if (!loggedInUser) {
+      res.status(401).send({
+        'Error message': 'Auth token invalid',
+      })
+      return
+    } else {
+      const { body } = req
+
+      const updatedUser = await models.users.update(
+        {
+          username: body.username,
+          nickname: body.nickname,
+          bio: body.bio,
+          profilePic: body.profilePic,
+          profileBanner: body.profileBanner,
+        },
+        { returning: true, where: { id: loggedInUser.id } }
+      )
+
+      if (updatedUser) {
+        res.status(200).send({ message: 'The profile has been updated.' })
+      } else {
+        res.status(500).send({ error: 'Failed to update the profile.' })
+      }
+    }
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }
 
 export const deleteUser = async (req, res) => {
-    try {
-        const authToken = req.get('Authorization')
+  try {
+    const authToken = req.get('Authorization')
 
-        if (!authToken) {
-            res.status(400).send({
-                'Error message': 'Auth token not provided',
-            })
-            return
-        }
-
-        const loggedInUser = Authentication.extractUser(authToken)
-
-        if (!loggedInUser) {
-            res.status(401).send({
-                'Error message': 'Auth token invalid',
-            })
-            return
-        } else {
-
-            const deleteUser = await models.users.destroy({
-                where: { id: loggedInUser.id}
-            })
-
-            if (deleteUser !== 0) {
-                res.status(200).send( { message: 'The user has been deleted.' } )
-            } else {
-                res.status(500).send( { error: 'Failed to destroy the user.' } )
-            }
-        }
-    } catch (error) {
-        res.status(500).send(error)
+    if (!authToken) {
+      res.status(400).send({
+        'Error message': 'Auth token not provided',
+      })
+      return
     }
+
+    const loggedInUser = Authentication.extractUser(authToken)
+
+    if (!loggedInUser) {
+      res.status(401).send({
+        'Error message': 'Auth token invalid',
+      })
+      return
+    } else {
+      const deleteUser = await models.users.destroy({
+        where: { id: loggedInUser.id },
+      })
+
+      if (deleteUser !== 0) {
+        res.status(200).send({ message: 'The user has been deleted.' })
+      } else {
+        res.status(500).send({ error: 'Failed to destroy the user.' })
+      }
+    }
+  } catch (error) {
+    res.status(500).send(error)
+  }
 }

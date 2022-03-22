@@ -378,7 +378,7 @@ describe('Users', () => {
       const authToken = Authentication.generateAuthToken(user2)
 
       const response = await request(server)
-        .get(`/api/feed`)
+        .get('/api/feed')
         .set('Authorization', `Bearer ${authToken}`)
 
       // THEN their feed should display the activity of the user they follow
@@ -463,7 +463,7 @@ describe('Users', () => {
 
       // THEN the endpoint should return these notifications
       const response = await request(server)
-        .get(`/api/notifications`)
+        .get('/api/notifications')
         .set('Authorization', `Bearer ${authToken}`)
 
       const expectedOutput = [
@@ -892,14 +892,6 @@ describe('Users', () => {
 
   describe('when modifying user profile in a invalid way', () => {
     it('should return response code of 400', async () => {
-      const user1 = await models.users.create({
-        username: 'testUser1',
-        nickname: 'gandalf1',
-        email: 'testUser@tesmail.com',
-        password: 'password',
-        bio: 'test user: gandalf',
-      })
-
       const user2 = {
         username: 'newtestUser',
         nickname: 'newNickname',
@@ -907,8 +899,6 @@ describe('Users', () => {
         profilePic: 'https://imgur.com/gallery/zIMAzsV',
         profileBanner: 'https://imgur.com/gallery/RstwImS',
       }
-
-      const authToken = Authentication.generateAuthToken(user1)
 
       const response = await request(server).put('/api/users/').send(user2)
 

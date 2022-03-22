@@ -4,5 +4,5 @@ import db from './config/database'
 import { PORT } from './config/default'
 
 db.sync().then(() => {
-    server.listen(PORT, () => console.log(`server is running at ${PORT}`))
+  server.listen(PORT, () => console.log(`server is running at ${PORT}`))
 })

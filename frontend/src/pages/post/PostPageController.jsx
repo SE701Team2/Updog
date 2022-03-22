@@ -7,19 +7,19 @@ import useApi from '../../hooks/useApi'
  * a header and the navigation footer.
  */
 const PostPageController = () => {
-    // gets the id from the current url
-    const { id } = useParams()
-    const { data, loading, err } = useApi(`posts/${id}`)
+  // gets the id from the current url
+  const { id } = useParams()
+  const { data, loading, err } = useApi(`posts/${id}`)
 
-    if (loading) {
-        return <div>Loading...</div>
-    }
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
-    if (err) {
-        return <div>Error: {err}</div>
-    }
+  if (err) {
+    return <div>Error: {err}</div>
+  }
 
-    return <PostPageView postData={data} />
+  return <PostPageView postData={data} />
 }
 
 export default PostPageController

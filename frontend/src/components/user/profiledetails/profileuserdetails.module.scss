@@ -1,43 +1,43 @@
 @use '~/src/styles/theme';
 
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: top;
+  color: theme.$onBackground;
+  text-decoration: none;
+  gap: 0.25rem;
+
+  > div {
     display: flex;
     flex-direction: column;
-    align-items: top;
-    color: theme.$onBackground;
-    text-decoration: none;
-    gap: 0.25rem;
-
-    > div {
-        display: flex;
-        flex-direction: column;
-    }
+  }
 }
 
-h1, h2 {
-    margin-top: 0rem;
-    margin-bottom: 0rem;
+h1,
+h2 {
+  margin-top: 0rem;
+  margin-bottom: 0rem;
 }
 
 p {
-    margin-top: 0rem;
-    margin-bottom: 0.25rem;
+  margin-top: 0rem;
+  margin-bottom: 0.25rem;
 }
 
 .biography {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.followCount{
-    color: black;
+.followCount {
+  color: black;
 }
 .followersLink {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .followersLink:visited {
-    text-decoration: none;
-    color: gray;
+  text-decoration: none;
+  color: gray;
 }
-

@@ -1,50 +1,50 @@
-@use "../../styles/theme.scss";
+@use '../../styles/theme.scss';
 
 .logo {
-    position: absolute;
-    left: 50%;
-    margin-top: 5%;
-    transform: translate(-50%, 0);
+  position: absolute;
+  left: 50%;
+  margin-top: 5%;
+  transform: translate(-50%, 0);
 
-    > img {
-        height: 80px;
-        width: 80px;
-    }
+  > img {
+    height: 80px;
+    width: 80px;
+  }
 }
 
 .container {
-    height: 100%;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  .inputsContainer {
+    width: 90%;
+    padding-top: 30%;
+    margin: 10% auto;
+
+    .input {
+      margin: 5% auto;
+    }
+
+    h2 {
+      padding-bottom: 5%;
+    }
+  }
+
+  .bottomContainer {
     width: 100%;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    .inputsContainer {
-        width: 90%;
-        padding-top: 30%;
-        margin: 10% auto;
-
-        .input {
-            margin: 5% auto;
-        }
-
-        h2 {
-            padding-bottom: 5%;
-        }
+    .buttonContainer {
+      width: 90%;
     }
-
-    .bottomContainer {
-        width: 100%;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        .buttonContainer {
-            width: 90%;
-        }
-        .signUpText {
-            padding-bottom: 5%;
-            padding-top: 5%;
-        }
+    .signUpText {
+      padding-bottom: 5%;
+      padding-top: 5%;
     }
+  }
 }

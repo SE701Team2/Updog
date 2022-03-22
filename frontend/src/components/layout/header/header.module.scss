@@ -1,17 +1,17 @@
 @use '~/src/styles/theme';
 
 .container {
-    display: flex;
-    flex-direction: row;
-    background-color: theme.$primary;
-    color: theme.$onPrimary;
-    border-bottom: 1px solid black;
-    min-height: 3rem;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  background-color: theme.$primary;
+  color: theme.$onPrimary;
+  border-bottom: 1px solid black;
+  min-height: 3rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .photo {
-    height: 40px;
-    width: 40px;
+  height: 40px;
+  width: 40px;
 }

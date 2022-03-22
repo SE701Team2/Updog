@@ -176,8 +176,6 @@ paths:
           description: Auth token not provided
         '401':
           description: Auth token invalid
-        '401':
-          description: Invalid message ID
         '500':
           description: Internal Server Error
       security:
@@ -278,15 +276,15 @@ paths:
       responses:
         '200':
           description: Successful Operation
-           content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  likes:
-                    $ref: '#/components/schemas/User'
-                  shares:
-                    $ref: '#/components/schemas/User'
+          content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                likes:
+                  $ref: '#/components/schemas/User'
+                shares:
+                  $ref: '#/components/schemas/User'
         '400':
           description: Auth token not provided
         '401':
@@ -564,16 +562,16 @@ paths:
           description: successful operation
           content:
             application/json:
-                schema:
-                    type: object
-                    properties:
-                        postId:
-                            type: string
-                        timestamp:
-                            type: string
-                            format: date-time
-                        activity:
-                            type: string
+              schema:
+                type: object
+                properties:
+                  postId:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  activity:
+                    type: string
         '400':
           description: Auth token not provided
         '401':
@@ -603,16 +601,16 @@ paths:
           description: successful operation
           content:
             application/json:
-                schema:
-                    type: object
-                    properties:
-                        postId:
-                            type: string
-                        timestamp:
-                            type: string
-                            format: date-time
-                        activity:
-                            type: string
+              schema:
+                type: object
+                properties:
+                  postId:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  activity:
+                    type: string
         '400':
           description: Auth token not provided
         '401':
@@ -640,20 +638,20 @@ paths:
           description: successful operation
           content:
             application/json:
-                schema:
-                    type: object
-                    properties:
-                        type:
-                            type: string
-                        from:
-                            type: string
-                        post:
-                            type: string
-                        timestamp:
-                            type: string
-                            format: date-time
-                        content:
-                            type: string
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  from:
+                    type: string
+                  post:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  content:
+                    type: string
         '400':
           description: Auth token not provided
         '401':

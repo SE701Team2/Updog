@@ -1,14 +1,14 @@
 @use '~/src/styles/theme';
 
 .container {
-    width: 100%;
-    text-decoration: none;
-    color: black;
-    padding: 8px;
+  width: 100%;
+  text-decoration: none;
+  color: black;
+  padding: 8px;
 }
 
 .container > * {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
 }

@@ -16,8 +16,8 @@ Please set this up before making any contributions
 
 1. Install ESLint and Prettier plugins for VS Code
 
-    - https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
-    - https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+   - https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+   - https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 2. `npm install` from root (from \Updog)
 3. Navigate to `settings.json`
@@ -25,7 +25,7 @@ Please set this up before making any contributions
 
      <img width="253" alt="image" src="https://user-images.githubusercontent.com/61653096/157187749-e441e3fc-c4e2-47b2-995d-679c890abb4c.png">
 
-    Open settings.json and add these lines somewhere in the file
+   Open settings.json and add these lines somewhere in the file
 
 ```
 "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -51,11 +51,11 @@ Once your code is written and appropriate unit tests have been added, create a P
 
 Before a PR can be completed, it must pass a code review process, in which a team member who did not write the PR must do the following:
 
--   Check that the code is high-quality and adheres to our [coding style](#coding-style)
--   Build and run the branch to ensure that it works as expected
--   Ensure that the branch passes all tests in the test suite
--   All committed files pass lint checking (ESLint/Prettier)
--   Raise any issues with the above steps
+- Check that the code is high-quality and adheres to our [coding style](#coding-style)
+- Build and run the branch to ensure that it works as expected
+- Ensure that the branch passes all tests in the test suite
+- All committed files pass lint checking (ESLint/Prettier)
+- Raise any issues with the above steps
 
 Once all raised issues have been resolved and any merge conflicts have been fixed, the commits should be squashed and merged into master by the creator of the PR.
 

@@ -3,14 +3,14 @@ $primary: #1d3557;
 $primaryVariant: #457b9d;
 $secondary: #a8dadc;
 $secondaryVariant: #f1faee;
-$surface: #FFFFFF;
-$background: #FFFFFF;
+$surface: #ffffff;
+$background: #ffffff;
 $error: #e63946;
-$onPrimary: #FFFFFF;
-$onSecondary: #FFFFFF;
+$onPrimary: #ffffff;
+$onSecondary: #ffffff;
 $onSurface: #000000;
 $onBackground: #000000;
-$onError: #FFFFFF;
+$onError: #ffffff;
 $divider: lightgray;
 
 // font sizes
@@ -29,15 +29,15 @@ $text-8xl: 6rem;
 $text-9xl: 8rem;
 
 body {
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 :export {
-    primary: $primary;
-    primaryVariant: $primaryVariant;
-    secondary: $secondary;
-    secondaryVariant: $secondaryVariant;
-    error: $error;
-    onPrimary: $onPrimary;
-    onSecondary: $onSecondary;
+  primary: $primary;
+  primaryVariant: $primaryVariant;
+  secondary: $secondary;
+  secondaryVariant: $secondaryVariant;
+  error: $error;
+  onPrimary: $onPrimary;
+  onSecondary: $onSecondary;
 }
