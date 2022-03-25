@@ -1,7 +1,3 @@
-.container {
-  width: 300px;
-}
-
 .tagsContainer {
   display: flex;
   flex-wrap: wrap;
