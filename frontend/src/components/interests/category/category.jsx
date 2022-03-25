@@ -1,6 +1,6 @@
 import React from 'react'
-import Tag from '../tag/tag'
-import classes from './category.module.css'
+import Tag from '../tag/Tag'
+import classes from './category.module.scss'
 
 /**
  * This component will be used in 'Choose your interests' screen, and it can be used in the

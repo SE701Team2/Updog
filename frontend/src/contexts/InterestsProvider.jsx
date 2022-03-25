@@ -1,5 +1,4 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 
 export const InterestsContext = React.createContext({})
 
@@ -25,7 +24,10 @@ export function InterestsContextProvider({ children }) {
   }
 
   // Passing the two mutation functions, and state itself to the children components.
-  const context = { selectedTags, addToSelectedTags, removeFromSelectedTags }
+  const context = useMemo(
+    () => ({ selectedTags, addToSelectedTags, removeFromSelectedTags }),
+    [selectedTags]
+  )
 
   return (
     <InterestsContext.Provider value={context}>
