@@ -220,7 +220,7 @@ describe('Posts', () => {
     })
 
     describe('when the author is invalid', () => {
-      it('should return response code of 404', async () => {
+      it('should return response code of 403', async () => {
         const user1 = await models.users.create({
           username: 'testUser1',
           nickname: 'gandalf',
@@ -254,7 +254,7 @@ describe('Posts', () => {
             parent: null,
           })
           .set('Authorization', `Bearer ${authToken2}`)
-        expect(response.statusCode).toBe(404)
+        expect(response.statusCode).toBe(403)
       })
     })
 

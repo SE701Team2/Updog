@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import express from 'express'
 import morgan from 'morgan'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 import fileupload from 'express-fileupload'
 
@@ -35,10 +34,10 @@ server.use(
 )
 server.use(
   express.urlencoded({
+    extended: true,
     limit: '50mb',
   })
 )
-server.use(bodyParser.json())
 
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 server.use('/api', routes)
