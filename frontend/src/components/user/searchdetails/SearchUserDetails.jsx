@@ -16,6 +16,7 @@ import FollowButton from './FollowButton'
  */
 
 export default function SearchUserDetails({username, handle, profilePic, bio}) {
+  
   return (
   <Link to={`/user/${username}`} className ={classes.container} >
     <div className={classes.top}>
@@ -31,7 +32,7 @@ export default function SearchUserDetails({username, handle, profilePic, bio}) {
           <p className={classes.handle}>@{handle}</p>
         </div>
       </div>
-      <FollowButton className= {classes.topRight}/>      
+      <FollowButton isFollowingProp= {false} onClick={() => {}}/>
     </div>
     <p className={classes.biography}>{bio ?? 'Biography'}</p>
   </Link>

@@ -7,16 +7,19 @@ import classes from './followbutton.module.scss'
  *  
  */
 
-export default function followButton() {
-    const [buttonText, setButtonText] = React.useState("Follow");
+export default function followButton({isFollowingProp, onClick}) {
+    const [isFollowing, setIsFollowing] = React.useState(isFollowingProp);
 
-    const changeText = () => {
-        if(buttonText === "Follow")  setButtonText("Following")
-        else if (buttonText === "Following")  setButtonText("Follow")
+    const change = () => {
+       setIsFollowing(boolean => {
+           onClick(!boolean);
+           return !boolean;
+       });
+       
     };
 
     return (
-        <Button className={classes.followButton} onClick= {()=> changeText()}>{buttonText}</Button>
+        <Button className={classes.followButton} onClick= {change}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>
         )
 
 }
