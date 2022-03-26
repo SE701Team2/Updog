@@ -4,10 +4,25 @@
 // import Post from './SearchBarController'
 // import classes from './searchbar.module.scss'
 import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import SearchIcon from '@mui/icons-material/Search'
 
 const SearchBarView = ({ data }) => {
   console.log(data)
-  return <TextField variant="filled" placeholder="Search Updog" />
+  return (
+    <TextField
+      fullWidth
+      variant="filled"
+      placeholder="Search Updog"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+    />
+  )
 }
 
 export default SearchBarView
