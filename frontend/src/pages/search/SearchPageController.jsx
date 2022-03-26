@@ -1,9 +1,8 @@
 import SearchPageView from './SearchPageView'
-// import classes from './SearchPage.module.scss'
 import useApi from '../../hooks/useApi'
 
 /**
- * This page renders a list of notifications for the user.
+ * This page renders the search UI.
  */
 const SearchPageController = () => {
   const { data, loading, err } = useApi(`search`)
