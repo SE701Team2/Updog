@@ -8,11 +8,12 @@ import FollowButton from './FollowButton'
  * The Search User Details component is used to display the any results for users while performing a search.
  * 
  * Props:
- * The username prop is the username of the appropriate user.
- * The handle prop is the handle (@) of the appropriate user.
- * The bio prop is the biography of the appropriate user.
- * The profilePic prop is the link to the profile image of the appropriate user.
+ * username : the username of the appropriate user.
+ * handle : the handle (@) of the appropriate user.
+ * bio : the biography of the appropriate user.
+ * profilePic : the link to the profile image of the appropriate user.
  * 
+ * The FollowButton function has two props isFollowing and OnClick which are can be change to appropriate values when needed. 
  */
 
 export default function SearchUserDetails({username, handle, profilePic, bio}) {
@@ -32,7 +33,7 @@ export default function SearchUserDetails({username, handle, profilePic, bio}) {
           <p className={classes.handle}>@{handle}</p>
         </div>
       </div>
-      <FollowButton isFollowingProp= {false} onClick={() => {}}/>
+      <FollowButton isFollowingProp= {false} onClick={() => {}}/> 
     </div>
     <p className={classes.biography}>{bio ?? 'Biography'}</p>
   </Link>
