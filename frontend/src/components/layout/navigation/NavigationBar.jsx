@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext } from 'react'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
+import { Tabs, Tab } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { NavigationContext } from './contexts/NavigationProvider'
 import classes from './navigation.module.scss'
