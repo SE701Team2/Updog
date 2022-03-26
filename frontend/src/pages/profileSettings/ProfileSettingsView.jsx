@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import AvatarEditor from 'react-avatar-editor'
 import { Box, Button, Divider, Modal, Typography, Input } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
@@ -6,6 +6,15 @@ import Avatar from '@mui/material/Avatar'
 import Footer from '../../components/layout/footer/FooterController'
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
 import classes from './profilesettings.module.scss'
+import BannerSetting from '../../components/user/BannerSetting/BannerSetting'
+
+// TODO: Remove when is ready
+const mock = [
+  'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
+  'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
+  'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
+  'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
+]
 
 const ProfileSettingsView = ({
   user,
@@ -13,118 +22,131 @@ const ProfileSettingsView = ({
   avatarOpen,
   handleAvatarOpen,
   handleAvatarClose,
-}) => (
-  <div>
-    <div style={{ flex: 'true' }}>
-      <HeaderCustom title="Edit Profile" />
-    </div>
-    <div className={classes.banner}>
-      <img
-        className={classes.bannerImg}
-        src={user.profilePic ?? 'https://i.imgur.com/PcEvuMw.png'}
-        alt="Banner"
-      />
-      <Button
-        className={classes.edit}
-        variant="contained"
-        endIcon={<EditIcon />}
-      >
-        Change Banner Image
-      </Button>
-    </div>
+}) => {
+  const [openDialog, setOpenDialog] = useState(false)
 
-    <Divider className={classes.divider} variant="middle" />
-
-    <div className={classes.flex}>
-      <Avatar
-        className={classes.avatar}
-        sx={{ width: 80, height: 80 }}
-        src={user.profileBanner}
-      />
-      <Button
-        variant="outlined"
-        endIcon={<EditIcon />}
-        onClick={handleAvatarOpen}
-      >
-        Edit Avatar
-      </Button>
-    </div>
-
-    <Divider className={classes.divider} variant="middle" />
-
-    <div className={classes.flex}>
-      <div className={classes.left}>
-        <p style={{ fontWeight: 'bold' }}>Username</p>
+  return (
+    <div>
+      <div style={{ flex: 'true' }}>
+        <HeaderCustom title="Edit Profile" />
       </div>
-      <div className={classes.right}>
-        <p style={{ color: 'grey' }}>{user.username}</p>
+      <div className={classes.banner}>
+        <img
+          className={classes.bannerImg}
+          src={user.profilePic ?? 'https://i.imgur.com/PcEvuMw.png'}
+          alt="Banner"
+        />
+        <Button
+          className={classes.edit}
+          variant="contained"
+          endIcon={<EditIcon />}
+          onClick={() => {
+            setOpenDialog(true)
+          }}
+        >
+          Change Banner Image
+        </Button>
+        <BannerSetting
+          opened={openDialog}
+          defaultBanners={mock}
+          upload={setOpenDialog}
+          currentBanner="https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg"
+          setOpen={setOpenDialog}
+        />
       </div>
-    </div>
 
-    <Divider className={classes.divider} variant="middle" />
-    <div className={classes.flex}>
-      <div className={classes.left}>
-        <p style={{ fontWeight: 'bold' }}>Handle</p>
+      <Divider className={classes.divider} variant="middle" />
+
+      <div className={classes.flex}>
+        <Avatar
+          className={classes.avatar}
+          sx={{ width: 80, height: 80 }}
+          src={user.profileBanner}
+        />
+        <Button
+          variant="outlined"
+          endIcon={<EditIcon />}
+          onClick={handleAvatarOpen}
+        >
+          Edit Avatar
+        </Button>
       </div>
-      <div className={classes.right}>
-        <p style={{ color: 'grey' }}>{user.nickname}</p>
+
+      <Divider className={classes.divider} variant="middle" />
+
+      <div className={classes.flex}>
+        <div className={classes.left}>
+          <p style={{ fontWeight: 'bold' }}>Username</p>
+        </div>
+        <div className={classes.right}>
+          <p style={{ color: 'grey' }}>{user.username}</p>
+        </div>
       </div>
-    </div>
-    <p className={classes.subtext}>Your handle will appear as:</p>
-    <p className={classes.subtext} style={{ marginBottom: '14px' }}>
-      @{user.nickname}
-    </p>
 
-    <Divider className={classes.divider} variant="middle" />
-
-    <div className={classes.flex}>
-      <div className={classes.left}>
-        <p style={{ fontWeight: 'bold' }}>Bio</p>
+      <Divider className={classes.divider} variant="middle" />
+      <div className={classes.flex}>
+        <div className={classes.left}>
+          <p style={{ fontWeight: 'bold' }}>Handle</p>
+        </div>
+        <div className={classes.right}>
+          <p style={{ color: 'grey' }}>{user.nickname}</p>
+        </div>
       </div>
-      <div className={classes.right}>
-        <Button variant="text">Edit</Button>
+      <p className={classes.subtext}>Your handle will appear as:</p>
+      <p className={classes.subtext} style={{ marginBottom: '14px' }}>
+        @{user.nickname}
+      </p>
+
+      <Divider className={classes.divider} variant="middle" />
+
+      <div className={classes.flex}>
+        <div className={classes.left}>
+          <p style={{ fontWeight: 'bold' }}>Bio</p>
+        </div>
+        <div className={classes.right}>
+          <Button variant="text">Edit</Button>
+        </div>
       </div>
-    </div>
-    <p className={classes.subtext} style={{ marginBottom: '14px' }}>
-      {user.bio}
-    </p>
+      <p className={classes.subtext} style={{ marginBottom: '14px' }}>
+        {user.bio}
+      </p>
 
-    <Divider className={classes.divider} variant="middle" />
+      <Divider className={classes.divider} variant="middle" />
 
-    <div className={classes.save}>
-      <Button type="submit" variant="contained" onClick={updateProfile}>
-        Save
-      </Button>
-    </div>
+      <div className={classes.save}>
+        <Button type="submit" variant="contained" onClick={updateProfile}>
+          Save
+        </Button>
+      </div>
 
-    <Footer />
-    {avatarOpen ? (
-      <Modal open={avatarOpen} onClose={handleAvatarClose}>
-        <div>
-          <Box className={classes.modal}>
-            <Typography id="modal-modal-title" variant="h5" component="h3">
-              Edit your Avatar
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Please upload an image.
-            </Typography>
-            <label htmlFor="contained-button-file">
-              <Input
-                className={classes.upload}
-                accept="image/*"
-                id="contained-button-file"
-                multiple
-                type="file"
-              />
-              <Button
-                variant="contained"
-                component="span"
-                className={classes.upload}
-              >
-                Upload
-              </Button>
-            </label>
-            {/* <div className={classes.avatarEditor}>
+      <Footer />
+      {avatarOpen ? (
+        <Modal open={avatarOpen} onClose={handleAvatarClose}>
+          <div>
+            <Box className={classes.modal}>
+              <Typography id="modal-modal-title" variant="h5" component="h3">
+                Edit your Avatar
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Please upload an image.
+              </Typography>
+              <label htmlFor="contained-button-file">
+                <Input
+                  className={classes.upload}
+                  accept="image/*"
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  className={classes.upload}
+                >
+                  Upload
+                </Button>
+              </label>
+              {/* <div className={classes.avatarEditor}>
                         <AvatarEditor
                             image={Logo}
                             width={150}
@@ -135,11 +157,12 @@ const ProfileSettingsView = ({
                             rotate={0}
                         />
                     </div> */}
-          </Box>
-        </div>
-      </Modal>
-    ) : null}
-  </div>
-)
+            </Box>
+          </div>
+        </Modal>
+      ) : null}
+    </div>
+  )
+}
 
 export default ProfileSettingsView
