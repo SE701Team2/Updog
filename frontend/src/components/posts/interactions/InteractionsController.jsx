@@ -1,16 +1,24 @@
+import React, { useState } from 'react'
 import InteractionsView from './InteractionsView'
+import CommentModal from './CommentModal'
 
 /**
  * Creates a posts interactions (likes, comments, shares)
  * @prop postData - any post object
  */
 const InteractionsController = ({ postData }) => {
+  const [showComponent, setShowComponent] = useState(false)
+
   const onLike = () => {
     // todo, implement like business logic
   }
 
   const onComment = () => {
-    // todo, open a reply page
+    if (!showComponent) {
+      setShowComponent(true)
+    } else {
+      setShowComponent(false)
+    }
   }
 
   const onShare = () => {
@@ -18,12 +26,15 @@ const InteractionsController = ({ postData }) => {
   }
 
   return (
-    <InteractionsView
-      postData={postData}
-      onLike={onLike}
-      onShare={onShare}
-      onComment={onComment}
-    />
+    <div>
+      <InteractionsView
+        postData={postData}
+        onLike={onLike}
+        onShare={onShare}
+        onComment={onComment}
+      />
+      {showComponent ? <CommentModal /> : null}
+    </div>
   )
 }
 
