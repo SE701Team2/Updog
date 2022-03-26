@@ -4,10 +4,20 @@ import Avatar from '@mui/material/Avatar'
 import classes from './searchuserdetails.module.scss'
 import FollowButton from './FollowButton'
 
+/**
+ * The Search User Details component is used to display the any results for users while performing a search.
+ * 
+ * Props:
+ * The username prop is the username of the appropriate user.
+ * The handle prop is the handle (@) of the appropriate user.
+ * The bio prop is the biography of the appropriate user.
+ * The profilePic prop is the link to the profile image of the appropriate user.
+ * 
+ */
 
 export default function SearchUserDetails({username, handle, profilePic, bio}) {
   return (
-  <Link to={`/user/${username}`} className ={classes.container } >
+  <Link to={`/user/${username}`} className ={classes.container} >
     <div className={classes.top}>
       <div className={classes.topLeft}>
         <Avatar
