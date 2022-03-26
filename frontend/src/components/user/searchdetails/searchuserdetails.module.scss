@@ -1,0 +1,27 @@
+@use '~/src/styles/theme';
+
+.container {
+    color: theme.$onBackground;
+    text-decoration: none;
+    display: block;
+    margin: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 0.1rem 4rem rgb(119 119 119 / 15%);
+
+    .topLeft{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .names{
+            padding: 0 1.5rem;
+        }
+    }
+    .biography{
+        display: block;
+    }
+    .followBtn {
+        color: primary;
+    }
+  }
+
