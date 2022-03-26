@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar'
 import Footer from '../../components/layout/footer/FooterController'
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
 import classes from './profilesettings.module.scss'
-import BannerSetting from '../../components/user/BannerSetting/BannerSetting'
+import BannerSettingController from '../../components/user/BannerSetting/BannerSettingController'
 
 // TODO: Remove when is ready
 const mock = [
@@ -62,7 +62,7 @@ const ProfileSettingsView = ({
         >
           Change Banner Image
         </Button>
-        <BannerSetting
+        <BannerSettingController
           opened={openDialog}
           defaultBanners={mock}
           upload={setOpenDialog}

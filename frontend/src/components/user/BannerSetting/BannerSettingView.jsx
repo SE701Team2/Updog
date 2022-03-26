@@ -26,20 +26,16 @@ export default function BannerSetting({
   upload,
   currentBanner,
   setOpen,
+  selected,
+  action,
 }) {
-  const [selected, setSelected] = useState(currentBanner)
-
-  const handleSave = () => {
-    setOpen(false)
-  }
-
   return (
     <Dialog open={opened} fullWidth maxWidth="xl" id="dialog">
       <Grid container direction="column">
         <Grid item>
           <Card>
             <DialogTitle>
-              <Grid container justifyContent="space-between">
+              <Grid container sx={{ justifyContent: 'space-between' }}>
                 <Grid item>
                   <Typography variant="h6">
                     <strong>Change Banner</strong>
@@ -60,10 +56,11 @@ export default function BannerSetting({
                 >
                   {defaultBanners.map((data) => (
                     <Grid
+                      key={data.name}
                       item
                       xs={6}
                       onClick={() => {
-                        setSelected(data.name)
+                        action.setSelected(data.name)
                       }}
                       id={data.name}
                     >
@@ -101,17 +98,24 @@ export default function BannerSetting({
           <Grid
             container
             direction="column"
-            alignItems="center"
             spacing={3}
             className={classes.container}
+            sx={{
+              alignItems: 'center',
+            }}
           >
             <Grid item>
-              <Grid container direction="column" alignItems="center">
+              <Grid
+                container
+                direction="column"
+                sx={{
+                  alignItems: 'center',
+                }}
+              >
                 <Grid item>
                   <Button
                     display="flex"
-                    alignItems="center"
-                    justifyContent="center"
+                    sx={{ justifyContent: 'center', alignItems: 'center' }}
                   >
                     <DriveFolderUploadIcon
                       sx={{ height: '40%', width: '40%' }}
@@ -131,7 +135,7 @@ export default function BannerSetting({
             <Grid item alignSelf="center">
               <Button
                 variant="contained"
-                onClick={() => handleSave()}
+                onClick={() => action.handleSave()}
                 className={classes.saveButton}
                 id="saveButton"
               >
