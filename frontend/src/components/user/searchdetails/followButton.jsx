@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '@mui/material/Button';
+import classes from './followbutton.module.scss'
 
 export default function followButton() {
     const [buttonText, setButtonText] = React.useState("Follow");
@@ -11,7 +12,7 @@ export default function followButton() {
     };
 
     return (
-        <Button  onClick= {()=> changeText()}>{buttonText}</Button>
+        <Button className={classes.followButton} onClick= {()=> changeText()}>{buttonText}</Button>
       )
    
     }

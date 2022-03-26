@@ -1,0 +1,14 @@
+.followButton{
+    background-color: #1d3557;
+    padding: 0 2rem;
+    color: #FFFF;
+    height: 3.5rem;
+    border-radius: 2rem;
+
+    &:hover{
+        background-color:#1d3557 ;
+        color: #FFFF;
+        box-shadow: '0 0 0 0.2rem rgba(0,123,255,.5)'
+    }
+    
+}
