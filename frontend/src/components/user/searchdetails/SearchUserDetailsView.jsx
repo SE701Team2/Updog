@@ -2,21 +2,21 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
 import classes from './searchuserdetails.module.scss'
-import FollowButton from '../../button/followbutton/FollowButton'
+import FollowButtonController from '../../button/followbutton/FollowButtonController'
 
 /**
- * The Search User Details component is used to display the any results for users while performing a search.
+ * The SearchUserDetailsView component is used to display the any results for users while performing a search.
  *
  * Props:
- * username : the username of the appropriate user.
- * handle : the handle (@) of the appropriate user.
- * bio : the biography of the appropriate user.
- * profilePic : the link to the profile image of the appropriate user.
+ * @username : the username of the appropriate user.
+ * @handle : the handle (@) of the appropriate user.
+ * @bio : the biography of the appropriate user.
+ * @profilePic : the link to the profile image of the appropriate user.
  *
  * The FollowButton function has two props isFollowing and OnClick which are can be change to appropriate values when needed.
  */
 
-export default function SearchUserDetails({
+export default function SearchUserDetailsView({
   username,
   handle,
   profilePic,
@@ -37,7 +37,7 @@ export default function SearchUserDetails({
             <p className={classes.handle}>@{handle}</p>
           </div>
         </div>
-        <FollowButton isFollowingProp={false} onClick={() => {}} />
+        <FollowButtonController isFollowingProp={false} onClick={() => {}} />
       </div>
       <p className={classes.biography}>{bio ?? 'Biography'}</p>
     </Link>
