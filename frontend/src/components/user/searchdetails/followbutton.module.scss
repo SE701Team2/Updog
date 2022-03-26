@@ -1,14 +1,24 @@
+@use '~/src/styles/theme';
+@import '~/src/styles/theme';
+
 .followButton{
-    background-color: #1d3557;
-    padding: 0 2rem;
-    color: #FFFF;
-    height: 3.5rem;
-    border-radius: 2rem;
+    background: $primary !important;
+    border-radius: 1.5rem !important;
+    color: $surface !important;
+    margin: 0 1rem !important;
+    padding: 0.5rem 1rem !important;
+    height: 3rem;
+    @media only screen and (max-width: 480px){
+        height: 2rem;
+    }
 
     &:hover{
-        background-color:#1d3557 ;
-        color: #FFFF;
-        box-shadow: '0 0 0 0.2rem rgba(0,123,255,.5)'
+        background:$primary;
+        box-shadow: '0 0 0 0.2rem rgba(0,123,255,.5)' !important;
     }
     
 }
+
+
+
+

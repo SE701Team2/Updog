@@ -8,13 +8,12 @@ export default function followButton() {
     const changeText = () => {
         if(buttonText === "Follow")  setButtonText("Following")
         else if (buttonText === "Following")  setButtonText("Follow")
-        
     };
 
     return (
         <Button className={classes.followButton} onClick= {()=> changeText()}>{buttonText}</Button>
-      )
-   
-    }
+        )
+
+}
    
 
