@@ -67,4 +67,19 @@ export default class Helper {
     })
     return sharedPost
   }
+
+  static async createTag(tagName) {
+    const tag = await models.tags.create({
+      tagName,
+    })
+    return tag
+  }
+
+  static async createPostTag(postId, tagId) {
+    const postTag = await models.postTag.create({
+      postId,
+      tagId,
+    })
+    return postTag
+  }
 }

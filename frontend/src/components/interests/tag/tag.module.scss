@@ -1,0 +1,18 @@
+@use '~/src/styles/theme';
+@import '~/src/styles/theme';
+
+.button {
+  font-size: 15px;
+  color: $primary;
+  border: 1px solid $primary;
+  padding: 8px 20px;
+  border-radius: 26px;
+  background: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.selected {
+  background: $primary;
+  color: white;
+}

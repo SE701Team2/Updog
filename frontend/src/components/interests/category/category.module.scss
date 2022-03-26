@@ -1,0 +1,9 @@
+@use '~/src/styles/theme';
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  column-gap: 6px;
+  row-gap: 6px;
+}
