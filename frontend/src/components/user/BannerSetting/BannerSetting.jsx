@@ -34,7 +34,7 @@ export default function BannerSetting({
   }
 
   return (
-    <Dialog open={opened} fullWidth maxWidth="xl">
+    <Dialog open={opened} fullWidth maxWidth="xl" id="dialog">
       <Grid container direction="column">
         <Grid item>
           <Card>
@@ -50,6 +50,7 @@ export default function BannerSetting({
                     onClick={() => {
                       setOpen(false)
                     }}
+                    id="closeButton"
                   />
                 </Grid>
                 <Grid
@@ -57,21 +58,22 @@ export default function BannerSetting({
                   spacing={2}
                   className={classes.defaultBannerContainer}
                 >
-                  {defaultBanners.map((url) => (
+                  {defaultBanners.map((data) => (
                     <Grid
                       item
                       xs={6}
                       onClick={() => {
-                        setSelected(url)
+                        setSelected(data.name)
                       }}
+                      id={data.name}
                     >
-                      {url !== selected ? (
+                      {data.name !== selected ? (
                         <Card>
                           <CardActionArea>
                             <CardMedia
                               component="img"
                               height="50"
-                              image={url}
+                              image={data.imageUrl}
                               title="default banner"
                             />
                           </CardActionArea>
@@ -82,7 +84,7 @@ export default function BannerSetting({
                             <CardMedia
                               component="img"
                               height="50"
-                              image={url}
+                              image={data.imageUrl}
                               title="default banner"
                             />
                           </CardActionArea>
@@ -131,6 +133,7 @@ export default function BannerSetting({
                 variant="contained"
                 onClick={() => handleSave()}
                 className={classes.saveButton}
+                id="saveButton"
               >
                 Save
               </Button>

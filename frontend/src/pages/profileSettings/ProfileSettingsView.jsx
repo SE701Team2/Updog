@@ -10,10 +10,25 @@ import BannerSetting from '../../components/user/BannerSetting/BannerSetting'
 
 // TODO: Remove when is ready
 const mock = [
-  'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
-  'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
-  'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
-  'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
+  {
+    name: 'default-banner-1',
+    imageUrl: 'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
+  },
+  {
+    name: 'default-banner-2',
+    imageUrl:
+      'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
+  },
+  {
+    name: 'default-banner-3',
+    imageUrl:
+      'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
+  },
+  {
+    name: 'default-banner-4',
+    imageUrl:
+      'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
+  },
 ]
 
 const ProfileSettingsView = ({
@@ -43,6 +58,7 @@ const ProfileSettingsView = ({
           onClick={() => {
             setOpenDialog(true)
           }}
+          id="ChangeBanner"
         >
           Change Banner Image
         </Button>
