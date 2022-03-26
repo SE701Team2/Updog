@@ -4,10 +4,20 @@ import SearchIcon from '@mui/icons-material/Search'
 
 const SearchBarView = ({ data }) => {
   console.log(data)
+  let text = ''
   return (
     <TextField
       variant="filled"
       placeholder="Search Updog"
+      autoComplete="off"
+      onChange={(e) => {
+        text = e.target.value
+      }}
+      onKeyPress={(key) => {
+        if (key.key === 'Enter') {
+          console.log(text)
+        }
+      }}
       InputProps={{
         disableUnderline: true,
         startAdornment: (
