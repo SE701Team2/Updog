@@ -6,37 +6,40 @@ import FollowButton from './FollowButton'
 
 /**
  * The Search User Details component is used to display the any results for users while performing a search.
- * 
+ *
  * Props:
  * username : the username of the appropriate user.
  * handle : the handle (@) of the appropriate user.
  * bio : the biography of the appropriate user.
  * profilePic : the link to the profile image of the appropriate user.
- * 
- * The FollowButton function has two props isFollowing and OnClick which are can be change to appropriate values when needed. 
+ *
+ * The FollowButton function has two props isFollowing and OnClick which are can be change to appropriate values when needed.
  */
 
-export default function SearchUserDetails({username, handle, profilePic, bio}) {
-  
+export default function SearchUserDetails({
+  username,
+  handle,
+  profilePic,
+  bio,
+}) {
   return (
-  <Link to={`/user/${username}`} className ={classes.container} >
-    <div className={classes.top}>
-      <div className={classes.topLeft}>
-        <Avatar
+    <Link to={`/user/${username}`} className={classes.container}>
+      <div className={classes.top}>
+        <div className={classes.topLeft}>
+          <Avatar
             className={classes.Avatar}
             alt="Profile Pic"
             src={profilePic}
             sx={{ width: 80, height: 80 }}
           />
-        <div className = {classes.names}>
-          <h2 className= {classes.username}>{username}</h2>
-          <p className={classes.handle}>@{handle}</p>
+          <div className={classes.names}>
+            <h2 className={classes.username}>{username}</h2>
+            <p className={classes.handle}>@{handle}</p>
+          </div>
         </div>
+        <FollowButton isFollowingProp={false} onClick={() => {}} />
       </div>
-      <FollowButton isFollowingProp= {false} onClick={() => {}}/> 
-    </div>
-    <p className={classes.biography}>{bio ?? 'Biography'}</p>
-  </Link>
-  
+      <p className={classes.biography}>{bio ?? 'Biography'}</p>
+    </Link>
   )
 }
