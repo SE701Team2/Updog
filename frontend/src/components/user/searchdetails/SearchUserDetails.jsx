@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from '@mui/material/Avatar'
 import classes from './searchuserdetails.module.scss'
-import FollowButton from './FollowButton'
+import FollowButton from '../../button/followbutton/FollowButton'
 
 /**
  * The Search User Details component is used to display the any results for users while performing a search.
