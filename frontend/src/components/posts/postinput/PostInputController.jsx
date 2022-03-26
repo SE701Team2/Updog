@@ -35,18 +35,18 @@ const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
           // Check for hashtags
           const tag = tags.find((t) => t.name === word.slice(1))
           if (tag) {
+            usedTags.push(tag)
             return `<span class="${classes.tag}">${exactWord}</span>`
           }
-          usedTags.push(tag)
         }
 
         if (word.startsWith('@')) {
           // Check for mentions
           const handle = handles.find((h) => h.name === word.slice(1))
           if (handle) {
+            usedHandles.push(handle)
             return `<span class="${classes.mention}">${exactWord}</span>`
           }
-          usedHandles.push(handle)
         }
         return exactWord
       })
@@ -59,6 +59,7 @@ const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
     if (setPostHandles) {
       setPostHandles(usedHandles)
     }
+    console.log(usedTags)
 
     return newText
   }
