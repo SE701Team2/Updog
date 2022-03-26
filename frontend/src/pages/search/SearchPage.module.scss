@@ -13,3 +13,16 @@
   border-top: 1px solid theme.$divider;
   border-bottom: 1px solid theme.$divider;
 }
+
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 10%;
+}
+
+.searchbar {
+  display: flex;
+  align-self: stretch;
+  height: 500%;
+}

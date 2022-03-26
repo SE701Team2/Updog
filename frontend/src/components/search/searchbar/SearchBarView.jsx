@@ -1,8 +1,3 @@
-// import { Link } from 'react-router-dom'
-// import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
-// // eslint-disable-next-line import/no-cycle
-// import Post from './SearchBarController'
-// import classes from './searchbar.module.scss'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
@@ -11,15 +6,25 @@ const SearchBarView = ({ data }) => {
   console.log(data)
   return (
     <TextField
-      fullWidth
       variant="filled"
       placeholder="Search Updog"
       InputProps={{
+        disableUnderline: true,
         startAdornment: (
           <InputAdornment position="start">
             <SearchIcon />
           </InputAdornment>
         ),
+      }}
+      sx={{
+        height: '2em',
+        width: '100%',
+        '& .MuiFilledInput-root': {
+          borderRadius: '3em',
+          height: '100%',
+          width: '100%',
+          paddingBottom: '1em',
+        },
       }}
     />
   )
