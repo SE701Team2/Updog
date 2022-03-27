@@ -13,6 +13,7 @@ const PostComposerView = ({
   setPostTags,
   setPostHandles,
   setPostText,
+  setNewTags,
 }) => (
   <div className={classes.container}>
     <HeaderCustom title="New Post" />
@@ -25,6 +26,7 @@ const PostComposerView = ({
       setPostTags={setPostTags}
       setPostHandles={setPostHandles}
       setPostText={setPostText}
+      setNewTags={setNewTags}
     />
 
     <div className={classes.buttonContainer}>
