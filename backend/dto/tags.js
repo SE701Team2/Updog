@@ -1,5 +1,5 @@
 export default class TagDTO {
-  static async converToDTO(tag) {
+  static async convertToDTO(tag) {
     return {
       id: tag.id,
       tagName: tag.tagName,

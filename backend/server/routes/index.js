@@ -52,7 +52,7 @@ router.route('/posts/:id/interactions').get(posts.getInteractedUsers)
 /*
 TAGS
 */
-router.route('/tags').post(tags.createTag)
+router.route('/tags').post(tags.createTag).get(tags.getTags)
 
 /*
 SEARCH
