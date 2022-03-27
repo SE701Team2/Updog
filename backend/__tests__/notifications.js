@@ -161,4 +161,194 @@ describe('Notifications', () => {
       expect(notifications).toEqual(expectedOutput)
     })
   })
+
+  describe('retrieveAllFollows', () => {
+    it('should return it in the correct format', async () => {
+      // GIVEN two users
+      const password = 'PASSWORD'
+      const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
+      const email1 = `test@${randomUsername1}.com`
+
+      const user1 = await models.users.create({
+        username: randomUsername1,
+        nickname: randomUsername1,
+        email: email1,
+        password,
+      })
+
+      const randomUsername2 = (Math.random() + 1).toString(36).substring(7)
+      const email2 = `test@${randomUsername2}.com`
+
+      const user2 = await models.users.create({
+        username: randomUsername2,
+        nickname: randomUsername2,
+        email: email2,
+        password,
+      })
+
+      // WHEN one user follows another user
+      const follow = await models.followers.create({
+        followedId: user2.id,
+        followerId: user1.id,
+        createdAt: '2022-03-28 04:56:53',
+      })
+
+      // THEN the other user should be notified
+      const expectedOutput = [
+        {
+          type: 'follow',
+          from: user1.username,
+          post: null,
+          timestamp: Date.parse(follow.createdAt),
+          content: user1.id,
+        },
+      ]
+
+      const notifications = await Notifications.retrieveAllFollows(user2)
+      expect(notifications).toEqual(expectedOutput)
+    })
+  })
+
+  describe('retrieveNotifications', () => {
+    it('should return it in the correct order and format', async () => {
+      // GIVEN two users
+      const password = 'PASSWORD'
+      const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
+      const email1 = `test@${randomUsername1}.com`
+
+      const user1 = await models.users.create({
+        username: randomUsername1,
+        nickname: randomUsername1,
+        email: email1,
+        password,
+      })
+
+      const randomUsername2 = (Math.random() + 1).toString(36).substring(7)
+      const email2 = `test@${randomUsername2}.com`
+
+      const user2 = await models.users.create({
+        username: randomUsername2,
+        nickname: randomUsername2,
+        email: email2,
+        password,
+      })
+      //Reply comes before follow
+      // WHEN one user replies to the other's post
+      const parent = await models.posts.create({
+        text_content: 'This is a post',
+        author: user2.id,
+        parent: null,
+      })
+
+      const reply = await models.posts.create({
+        text_content: 'This is a reply',
+        author: user1.id,
+        parent: parent.id,
+        createdAt: '2021-03-13 04:56:53',
+      })
+
+      // WHEN one user follows another user
+      const follow = await models.followers.create({
+        followedId: user2.id,
+        followerId: user1.id,
+        createdAt: '2022-03-28 04:56:53',
+      })
+
+      // THEN the other user should be notified
+      const expectedOutput = [
+        {
+          type: 'follow',
+          from: user1.username,
+          post: null,
+          timestamp: Date.parse(follow.createdAt),
+          content: user1.id,
+        },
+        {
+          type: 'reply',
+          timestamp: Date.parse(reply.createdAt),
+          from: user1.username,
+          post: reply.id,
+          content: reply.text_content,
+        },
+      ]
+
+      const notifications = await Notifications.retrieveNotifications(user2.id)
+      expect(notifications).toEqual(expectedOutput)
+    })
+  })
+
+  describe('retrieveUnreadNotifications', () => {
+    it('should return it in the correct order and format', async () => {
+      // GIVEN two users
+      const password = 'PASSWORD'
+      const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
+      const email1 = `test@${randomUsername1}.com`
+
+      const user1 = await models.users.create({
+        username: randomUsername1,
+        nickname: randomUsername1,
+        email: email1,
+        password,
+      })
+
+      const randomUsername2 = (Math.random() + 1).toString(36).substring(7)
+      const email2 = `test@${randomUsername2}.com`
+
+      const user2 = await models.users.create({
+        username: randomUsername2,
+        nickname: randomUsername2,
+        email: email2,
+        password,
+      })
+      //Reply comes before follow
+      // WHEN one user replies to the other's post
+      const parent = await models.posts.create({
+        text_content: 'This is a post',
+        author: user2.id,
+        parent: null,
+      })
+
+      const reply = await models.posts.create({
+        text_content: 'This is a reply',
+        author: user1.id,
+        parent: parent.id,
+        createdAt: '2022-03-13 04:56:53',
+      })
+
+      const share = await models.sharedPost.create({
+        userId: user1.id,
+        postId: parent.id,
+        createdAt: '2022-03-11 04:56:53',
+      })
+
+      // Will not notify if marked as read by recipient
+      const follow = await models.followers.create({
+        followedId: user2.id,
+        followerId: user1.id,
+        createdAt: '2022-03-28 04:56:53',
+        read: true,
+      })
+
+      // THEN the other user should be notified
+      const expectedOutput = [
+        {
+          type: 'reply',
+          timestamp: Date.parse(reply.createdAt),
+          from: user1.username,
+          post: reply.id,
+          content: reply.text_content,
+        },
+        {
+          type: 'share',
+          timestamp: Date.parse(share.createdAt),
+          from: user1.username,
+          post: share.postId,
+          content: null,
+        },
+      ]
+
+      const notifications = await Notifications.retrieveNotifications(user2.id)
+      expect(notifications).toEqual(expectedOutput)
+    })
+  })
 })
