@@ -3,6 +3,8 @@ import classes from './app.module.scss'
 import palette from './styles/theme.scss'
 import Router from './Router'
 import AuthProvider from './contexts/AuthProvider'
+import TagProvider from './contexts/TagProvider'
+import HandleProvider from './contexts/HandleProvider'
 
 const theme = createTheme({
   palette: {
@@ -41,11 +43,15 @@ const theme = createTheme({
 
 const App = () => (
   <AuthProvider>
-    <ThemeProvider theme={theme}>
-      <div className={classes.container}>
-        <Router />
-      </div>
-    </ThemeProvider>
+    <TagProvider>
+      <HandleProvider>
+        <ThemeProvider theme={theme}>
+          <div className={classes.container}>
+            <Router />
+          </div>
+        </ThemeProvider>
+      </HandleProvider>
+    </TagProvider>
   </AuthProvider>
 )
 
