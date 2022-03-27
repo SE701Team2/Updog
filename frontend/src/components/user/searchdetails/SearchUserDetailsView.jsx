@@ -13,7 +13,7 @@ import FollowButtonController from '../../button/followbutton/FollowButtonContro
  * @bio : the biography of the appropriate user.
  * @profilePic : the link to the profile image of the appropriate user.
  *
- * The FollowButton function has two props isFollowing and OnClick which are can be change to appropriate values when needed.
+ * The FollowButton function has two props isFollowing and OnClick which can be changed to appropriate values when needed.
  */
 
 export default function SearchUserDetailsView({
