@@ -1,0 +1,44 @@
+@use '~/src/styles/theme';
+@import '~/src/styles/theme';
+
+.container {
+  color: theme.$onBackground;
+  text-decoration: none;
+  display: block;
+  margin: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0 0.1rem 4rem rgb(119 119 119 / 20%);
+
+  .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .topLeft {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .names {
+        padding: 0 1.5rem;
+
+        .handle {
+          margin: 0;
+          color: grey;
+        }
+
+        .username {
+          margin: 0.5rem 0;
+        }
+
+        @media only screen and (max-width: 480px) {
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+  .biography {
+    display: block;
+  }
+}
