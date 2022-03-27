@@ -1,4 +1,7 @@
+import request from 'supertest'
+import server from '../server/index'
 import models from '../database/models'
+import Authentication from '../middlewares/authentication'
 import Helper from './helper/helper'
 
 const assert = require('assert')
@@ -43,6 +46,45 @@ describe('Tags', () => {
 
       assert.equal(dbTag.postId, postId)
       assert.equal(dbTag.tagId, tagId)
+    })
+  })
+
+  describe('When a user requests to create a new tag', () => {
+    it('should return with a 201 Created code', async () => {
+      const user1 = await Helper.createUser()
+
+      const authToken = Authentication.generateAuthToken(user1)
+
+      const createTagResponse = await request(server)
+        .post('/api/tags')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          tagName: 'Dogs',
+        })
+      expect(createTagResponse.statusCode).toBe(201)
+      expect(createTagResponse.body.tagName).toBe('Dogs')
+    })
+  })
+
+  describe('When a user requests to create an existing tag', () => {
+    it('should return with a 200 Ok code', async () => {
+      const user1 = await Helper.createUser()
+
+      const authToken = Authentication.generateAuthToken(user1)
+
+      const dogTag = await models.tags.create({
+        tagName: 'Dogs',
+      })
+
+      const createTagResponse = await request(server)
+        .post('/api/tags')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send({
+          tagName: 'Dogs',
+        })
+      expect(createTagResponse.statusCode).toBe(200)
+      expect(createTagResponse.body.id).toBe(dogTag.id)
+      expect(createTagResponse.body.tagName).toBe(dogTag.tagName)
     })
   })
 })

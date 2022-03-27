@@ -658,6 +658,33 @@ paths:
           description: Access token invalid
         '500':
           description: Internal Server Error
+  '/tags':
+    post:
+      tags:
+        - Tags
+      summary: Create tag
+      description: Creates a new Tag
+      operationId: createTag
+      requestBody:
+        description: Create a new Tag
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tagName:
+                  type: string
+                  example: Dogs
+      responses:
+        '201':
+          description: successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Posts'
+      security:
+        - bearerAuth: []
 components:
   schemas:
     Posts:

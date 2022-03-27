@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PostComposerView from './PostComposerView'
+import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
 
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
+  const [postTags, setPostTags] = useState([])
+  const [postHandles, setPostHandles] = useState([])
   const [loading, setLoading] = useState(false)
+  const username = localStorage.getItem('username')
+  const { data, loading: userLoading, err } = useApi(`users/${username}`)
 
   const navigate = useNavigate()
 
@@ -13,6 +18,11 @@ const PostComposerController = () => {
     if (postText) {
       try {
         setLoading(true)
+
+        // TODO: add postTags and postHandles to request (wait for backend)
+        console.log('postTags', postTags)
+        console.log('postHandles', postHandles)
+
         const response = await request('posts', 'POST', {
           text_content: postText,
         })
@@ -27,12 +37,23 @@ const PostComposerController = () => {
     }
   }
 
+  if (userLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (err) {
+    return <div>Error: {err.message}</div>
+  }
+
   return (
     <PostComposerView
+      user={data}
       postText={postText}
       setPostText={setPostText}
-      loading={loading}
+      loading={loading || userLoading}
       submitForm={submitForm}
+      setPostTags={setPostTags}
+      setPostHandles={setPostHandles}
     />
   )
 }
