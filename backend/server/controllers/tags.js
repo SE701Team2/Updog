@@ -7,6 +7,7 @@ import Authentication from '../../middlewares/authentication'
 //Response codes:
 //200 OK - Tag already exists, returns the id of existing tag
 //201 Created - Tag has been created and return id of new tag
+//401 Unauthorized - if auth token is not provided or invalid
 //500 INTERNAL SERVER ERROR for everything else
 
 export const createTag = async (req, res) => {
@@ -47,6 +48,7 @@ export const createTag = async (req, res) => {
 //Requires Authentication
 //Response codes:
 //200 OK - successful and returns with a list of tagDTO of all tags in the database
+//401 Unauthorized - if auth token is not provided or invalid
 //500 INTERNAL SERVER ERROR for everything else
 
 export const getTags = async (req, res) => {
