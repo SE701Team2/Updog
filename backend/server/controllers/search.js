@@ -14,6 +14,7 @@ type - the type of data to search for: top/latest/people
         People returns any users who match the search
 Response Codes:
 200 OK when the data has been successfully found.
+400 BAD REQUEST when one of the query parameters is missing
 500 INTERNAL SERVER ERROR for everything else.
 */
 export const search = async (req, res) => {
