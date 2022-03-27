@@ -19,6 +19,12 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
+router.route('/interests').get(user.getInterests)
+
+router.route('/interests').post(user.addInterests)
+
+router.route('/interests').delete(user.deleteInterests)
+
 router
   .route('/users/:username/follow')
   .post(user.followUser)
