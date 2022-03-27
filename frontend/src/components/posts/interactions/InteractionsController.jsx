@@ -33,7 +33,7 @@ const InteractionsController = ({ postData }) => {
         onShare={onShare}
         onComment={onComment}
       />
-      {showComponent ? <CommentModal /> : null}
+      {showComponent ? <CommentModal postData={postData} /> : null}
     </div>
   )
 }
