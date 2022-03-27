@@ -8,6 +8,7 @@ import Dashboard from './pages/dashboard/DashboardPageController'
 import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
+import Loading from './pages/loading/LoadingController'
 import User from './pages/user/UserPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
 import { AuthContext } from './contexts/AuthProvider'
@@ -43,6 +44,7 @@ const Router = () => {
         <Route path="/signUp" element={<Registration />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path ="/loading" element = {<Loading />}/>
       </Routes>
     )
   }
