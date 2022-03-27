@@ -58,7 +58,7 @@ export default function BasicModal({
                 handleStyle: styles.handleStyle,
               }),
             }}
-            style={{ marginTop: 5, marginLeft: 70 }}
+            style={{ marginTop: 10, marginLeft: 70 }}
           />
           <div
             dangerouslySetInnerHTML={{
@@ -70,9 +70,9 @@ export default function BasicModal({
                 handleStyle: styles.handleStyle,
               }),
             }}
-            style={{ marginTop: 15 }}
+            style={{ marginTop: 25 }}
           />
-          <div style={{ marginTop: 20, width: '330px', marginLeft: -15 }}>
+          <div style={{ marginTop: 25, width: '330px', marginLeft: -15 }}>
             <PostInput
               setPostTags={setPostTags}
               setPostHandles={setPostHandles}
