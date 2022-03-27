@@ -17,9 +17,15 @@
   }
 
   .buttonContainer {
+    margin-top: 25px;
     width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .profileContainer {
+    width: 90%;
+    margin-top: 50px;
   }
 }
