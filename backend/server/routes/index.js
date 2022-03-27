@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { user, posts, test, tags } from '../controllers'
+import { user, posts, test, tags, search } from '../controllers'
 
 const router = Router()
 
@@ -53,6 +53,11 @@ router.route('/posts/:id/interactions').get(posts.getInteractedUsers)
 TAGS
 */
 router.route('/tags').post(tags.createTag)
+
+/*
+SEARCH
+*/
+router.route('/search').get(search.search)
 
 /*
 TESTING
