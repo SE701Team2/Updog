@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import InteractionsView from './InteractionsView'
-import Comment from './CommentController'
+import Comment from '../comment/CommentController'
 
 /**
  * Creates a posts interactions (likes, comments, shares)

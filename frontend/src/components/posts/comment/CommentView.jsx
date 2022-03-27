@@ -1,14 +1,12 @@
+/* eslint-disable react/no-danger */
 import * as React from 'react'
-import { Link } from 'react-router-dom'
 import Box from '@mui/material/Box'
-
-import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import LoadingButton from '@mui/lab/LoadingButton'
-
 import styles from './comment.module.scss'
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
 import PostInput from '../postinput/PostInputController'
+import processMentions from '../../../functions/mentions'
 
 const style = {
   position: 'absolute',
@@ -17,7 +15,6 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 300,
   bgcolor: 'background.paper',
-
   boxShadow: 24,
   p: 4,
 }
@@ -29,6 +26,9 @@ export default function BasicModal({
   setPostText,
   loading,
   submitForm,
+  setNewTags,
+  tags,
+  handles,
 }) {
   const [open, setOpen] = React.useState(true)
 
@@ -48,30 +48,39 @@ export default function BasicModal({
             user={postData.author}
             time={postData.timestamp}
           />
-          <Typography id="modal-modal-description" sx={{ mt: 1, ml: 9 }}>
-            {postData.content}
-          </Typography>
-          <Typography
-            id="modal-modal-description"
-            sx={{ mt: 2, ml: 0.5 }}
-            className={styles.reply}
-          >
-            Replying to{' '}
-            <Link
-              to={`/user/${postData.author.username}`}
-              style={{ textDecoration: 'none', color: '#0053ee' }}
-            >
-              @{postData.author.nickname}
-            </Link>
-          </Typography>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: processMentions({
+                content: postData.content ?? '',
+                tags,
+                handles,
+                tagStyle: styles.tagStyle,
+                handleStyle: styles.handleStyle,
+              }),
+            }}
+            style={{ marginTop: 5, marginLeft: 70 }}
+          />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: processMentions({
+                content: `Replying to @${postData.author.username} ` ?? '',
+                tags,
+                handles,
+                tagStyle: styles.tagStyle,
+                handleStyle: styles.handleStyle,
+              }),
+            }}
+            style={{ marginTop: 15 }}
+          />
           <div style={{ marginTop: 20, width: '330px', marginLeft: -15 }}>
             <PostInput
               setPostTags={setPostTags}
               setPostHandles={setPostHandles}
               setPostText={setPostText}
+              setNewTags={setNewTags}
             />
           </div>
-          <div className={styles.button}>
+          <div className={styles.buttonDiv}>
             <LoadingButton
               loading={loading}
               variant="contained"
