@@ -323,7 +323,7 @@ describe('Notifications', () => {
       })
 
       // Will not notify if marked as read by recipient
-      const follow = await models.followers.create({
+      await models.followers.create({
         followedId: user2.id,
         followerId: user1.id,
         createdAt: '2022-03-28 04:56:53',
