@@ -17,6 +17,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
       },
+      read: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
     })
   },
 
