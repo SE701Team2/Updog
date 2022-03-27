@@ -8,6 +8,7 @@ import Dashboard from './pages/dashboard/DashboardPageController'
 import ProfileSettings from './pages/profileSettings/ProfileSettingsController'
 import Registration from './pages/registration/RegistrationPagesController'
 import Notifications from './pages/notifications/NotificationsPageController'
+import Search from './pages/search/SearchPageController'
 import User from './pages/user/UserPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
 import { AuthContext } from './contexts/AuthProvider'
@@ -31,6 +32,7 @@ const Router = () => {
         <Route path="/user/:username" element={<User />} />
         <Route path="/user/:username/follows" element={<Follows />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/settings" element={<ProfileSettings />} />
         <Route path="/new-post" element={<PostComposer />} />
       </Routes>
