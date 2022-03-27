@@ -1,50 +1,35 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
+
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
-import { styled } from '@mui/material/styles'
-import Button from '@mui/material/Button'
-import styles from './CommentModal.module.scss'
+import LoadingButton from '@mui/lab/LoadingButton'
+
+import styles from './comment.module.scss'
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
+import PostInput from '../postinput/PostInputController'
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 500,
+  width: 300,
   bgcolor: 'background.paper',
 
   boxShadow: 24,
   p: 4,
 }
 
-// searchbox styling
-const CommentField = styled(TextField)(() => ({
-  width: '100%',
-  marginTop: '20px',
-  //   '& fieldset': {
-  //     borderRadius: '25px',
-  //     backgroundColor: '#FAFAFC',
-  //     zIndex: -1,
-  //   },
-  //   '& .MuiInputBase-input': {
-  //     width: '100%',
-  //     color: 'black',
-  //   },
-  //   '& .MuiOutlinedInput-root': {
-  //     '&:hover fieldset': {
-  //       borderColor: '#BFBFBF',
-  //     },
-  //     '&.Mui-focused fieldset': {
-  //       borderColor: '#BFBFBF',
-  //     },
-  //   },
-}))
-
-export default function BasicModal({ postData }) {
+export default function BasicModal({
+  postData,
+  setPostTags,
+  setPostHandles,
+  setPostText,
+  loading,
+  submitForm,
+}) {
   const [open, setOpen] = React.useState(true)
 
   const handleClose = () => setOpen(false)
@@ -63,13 +48,12 @@ export default function BasicModal({ postData }) {
             user={postData.author}
             time={postData.timestamp}
           />
-
-          <Typography id="modal-modal-description" sx={{ mt: 0, ml: 9 }}>
+          <Typography id="modal-modal-description" sx={{ mt: 1, ml: 9 }}>
             {postData.content}
           </Typography>
           <Typography
             id="modal-modal-description"
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, ml: 0.5 }}
             className={styles.reply}
           >
             Replying to{' '}
@@ -80,15 +64,24 @@ export default function BasicModal({ postData }) {
               @{postData.author.nickname}
             </Link>
           </Typography>
-          <CommentField
-            id="outlined-textarea"
-            placeholder="Reply..."
-            minRows={4}
-            multiline
-          />
-          <Button variant="contained" className={styles.btn}>
-            Reply
-          </Button>
+          <div style={{ marginTop: 20, width: '330px', marginLeft: -15 }}>
+            <PostInput
+              setPostTags={setPostTags}
+              setPostHandles={setPostHandles}
+              setPostText={setPostText}
+            />
+          </div>
+          <div className={styles.button}>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              fullWidth
+              onClick={submitForm}
+              style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
+            >
+              Reply
+            </LoadingButton>
+          </div>
         </Box>
       </Modal>
     </div>

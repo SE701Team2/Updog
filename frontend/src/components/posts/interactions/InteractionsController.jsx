@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import InteractionsView from './InteractionsView'
-import CommentModal from './CommentModal'
+import Comment from './CommentController'
 
 /**
  * Creates a posts interactions (likes, comments, shares)
@@ -33,7 +33,7 @@ const InteractionsController = ({ postData }) => {
         onShare={onShare}
         onComment={onComment}
       />
-      {showComponent ? <CommentModal postData={postData} /> : null}
+      {showComponent ? <Comment postData={postData} /> : null}
     </div>
   )
 }
