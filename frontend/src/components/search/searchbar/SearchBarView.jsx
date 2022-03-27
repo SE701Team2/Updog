@@ -1,17 +1,23 @@
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/Search'
+import React, { useState } from 'react'
 
-const SearchBarView = ({ data }) => {
-  console.log(data)
-  let text = ''
+/**
+ * This is the search bar component
+ * When 'Enter' key is pressed, the text entered by user is recieved.
+ * TO DO: Send the recieved text to backend and retrieve results.
+ */
+
+const SearchBarView = ({ initialText }) => {
+  const [text, setText] = useState(initialText)
   return (
     <TextField
       variant="filled"
       placeholder="Search Updog"
       autoComplete="off"
       onChange={(e) => {
-        text = e.target.value
+        setText(e.target.value)
       }}
       onKeyPress={(key) => {
         if (key.key === 'Enter') {
