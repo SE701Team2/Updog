@@ -232,7 +232,7 @@ describe('Notifications', () => {
         email: email2,
         password,
       })
-      //Reply comes before follow
+
       // WHEN one user replies to the other's post
       const parent = await models.posts.create({
         text_content: 'This is a post',
@@ -240,6 +240,7 @@ describe('Notifications', () => {
         parent: null,
       })
 
+      // "Reply" notification comes before "Follow"
       const reply = await models.posts.create({
         text_content: 'This is a reply',
         author: user1.id,
@@ -300,7 +301,7 @@ describe('Notifications', () => {
         email: email2,
         password,
       })
-      //Reply comes before follow
+
       // WHEN one user replies to the other's post
       const parent = await models.posts.create({
         text_content: 'This is a post',

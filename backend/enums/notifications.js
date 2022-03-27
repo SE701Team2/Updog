@@ -163,9 +163,9 @@ export default class Notifications {
     })
 
     await Promise.all(
-      followers.map(async (l) =>
+      followers.map(async (follower) =>
         allFollows.push(
-          await this.convertToNotifications(Notifications.follow, l)
+          await this.convertToNotifications(Notifications.follow, follower)
         )
       )
     )
