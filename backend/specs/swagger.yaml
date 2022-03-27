@@ -658,7 +658,7 @@ paths:
           description: Access token invalid
         '500':
           description: Internal Server Error
-  '/tags':
+  /tags:
     post:
       tags:
         - Tags
@@ -683,6 +683,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Posts'
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - Tags
+      summary: Gets all tags
+      description: Gets all Tags in the database
+      operationId: getTags
+      responses:
+        '200':
+          description: successfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
       security:
         - bearerAuth: []
   /search:
@@ -852,6 +867,13 @@ components:
         userId:
           type: integer
       type: object
+    Tags:
+      x-swagger-router-model: io.swagger.updog.model.tags
+      properties:
+        tagId:
+          type: integer
+        tagName:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http

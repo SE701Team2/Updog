@@ -1,10 +1,17 @@
 import request from 'supertest'
 import server from '../server/index'
 import Helper from './helper/helper'
+import models from '../database/models'
 
 const assert = require('assert')
 
 describe('Search', () => {
+  beforeEach(async () => {
+    await models.users.destroy({
+      where: {},
+    })
+  })
+
   describe('GET /search', () => {
     describe('When searching for an existing user', () => {
       it('Should return a 200 status response', async () => {

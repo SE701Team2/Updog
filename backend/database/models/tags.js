@@ -30,5 +30,12 @@ module.exports = (sequelize, DataTypes) => {
 
     return tag
   }
+  tags.getAllTags = async () => {
+    const tagList = await tags.findAll({
+      raw: true,
+    })
+
+    return tagList
+  }
   return tags
 }
