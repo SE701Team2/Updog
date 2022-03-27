@@ -1,11 +1,20 @@
+/* eslint-disable react/no-danger */
 import { Link } from 'react-router-dom'
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
 import Interactions from '../interactions/InteractionsController'
 // eslint-disable-next-line import/no-cycle
 import Post from './PostController'
+import processMentions from '../../../functions/mentions'
 import classes from './post.module.scss'
 
-const PostView = ({ activity, postData, condensed, showReplies }) => {
+const PostView = ({
+  activity,
+  postData,
+  condensed,
+  showReplies,
+  tags,
+  handles,
+}) => {
   if (condensed) {
     return (
       <div className={classes.condensed}>
@@ -20,7 +29,17 @@ const PostView = ({ activity, postData, condensed, showReplies }) => {
           time={postData.timestamp}
         />
         <Link className={classes.link} to={`/post/${postData.id}`}>
-          {postData.content}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: processMentions({
+                content: postData.content ?? '',
+                tags,
+                handles,
+                tagStyle: classes.tagStyle,
+                handleStyle: classes.handleStyle,
+              }),
+            }}
+          />
         </Link>
         <div className={classes.condensedInteractions}>
           <Interactions postData={postData} />
@@ -34,7 +53,17 @@ const PostView = ({ activity, postData, condensed, showReplies }) => {
       <SimpleUserDetails user={postData.author} />
       <div className={classes.content}>
         <span>{new Date(postData.timestamp).toLocaleTimeString()}:</span>
-        <span>{postData.content}</span>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: processMentions({
+              content: postData.content ?? '',
+              tags,
+              handles,
+              tagStyle: classes.tagStyle,
+              handleStyle: classes.handleStyle,
+            }),
+          }}
+        />
       </div>
       <div className={classes.interactions}>
         <Interactions postData={postData} />
