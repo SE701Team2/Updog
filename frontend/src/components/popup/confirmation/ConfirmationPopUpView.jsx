@@ -1,10 +1,10 @@
 import { Button, Dialog, Typography } from '@mui/material'
 import classes from './confirmationPopUp.module.scss'
 
-const ConfirmationPopUpView = ({ query, method, open, onDecline }) => (
+const ConfirmationPopUpView = ({ question, open, onAccept, onDecline }) => (
   <Dialog open={open}>
     <div className={classes.title}>
-      <Typography variant="h6">{query}</Typography>
+      <Typography variant="h6">{question}</Typography>
     </div>
     <div className={classes.button}>
       <Button
@@ -20,7 +20,7 @@ const ConfirmationPopUpView = ({ query, method, open, onDecline }) => (
         No
       </Button>
       <Button
-        onClick={method}
+        onClick={onAccept}
         variant="contained"
         sx={{
           maxWidth: '120px',
