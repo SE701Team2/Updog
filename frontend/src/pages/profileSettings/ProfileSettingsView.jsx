@@ -122,14 +122,15 @@ const ProfileSettingsView = ({
           <p style={{ fontWeight: 'bold' }}>Bio</p>
         </div>
         <div className={classes.right}>
-          <Button variant="text"          
-          onClick={() => {
-            setOpenBioEdit(true)
-          }}>Edit</Button>
-          <BioEditController
-            opened={openBioEdit}
-            setOpen={setOpenBioEdit}
-        />
+          <Button
+            variant="text"
+            onClick={() => {
+              setOpenBioEdit(true)
+            }}
+          >
+            Edit
+          </Button>
+          <BioEditController opened={openBioEdit} setOpen={setOpenBioEdit} />
         </div>
       </div>
       <p className={classes.subtext} style={{ marginBottom: '14px' }}>
