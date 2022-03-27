@@ -8,6 +8,7 @@ const PostComposerController = () => {
   const [postText, setPostText] = useState('')
   const [postTags, setPostTags] = useState([])
   const [postHandles, setPostHandles] = useState([])
+  const [newTags, setNewTags] = useState([])
   const [loading, setLoading] = useState(false)
   const username = localStorage.getItem('username')
   const { data, loading: userLoading, err } = useApi(`users/${username}`)
@@ -22,9 +23,10 @@ const PostComposerController = () => {
         // TODO: add postTags and postHandles to request (wait for backend)
         console.log('postTags', postTags)
         console.log('postHandles', postHandles)
+        console.log('newTags', newTags)
 
         const response = await request('posts', 'POST', {
-          text_content: postText,
+          text_content: postText.replaceAll(/<.*?>/g, ''),
         })
 
         // navigate to the newly made post
@@ -54,6 +56,7 @@ const PostComposerController = () => {
       submitForm={submitForm}
       setPostTags={setPostTags}
       setPostHandles={setPostHandles}
+      setNewTags={setNewTags}
     />
   )
 }
