@@ -1,6 +1,9 @@
+import { useContext } from 'react'
 // eslint-disable-next-line import/no-cycle
 import PostView from './PostView'
 import useApi from '../../../hooks/useApi'
+import { TagContext } from '../../../contexts/TagProvider'
+import { HandleContext } from '../../../contexts/HandleProvider'
 
 /**
  * Creates a post. One of either id or data must be provided
@@ -17,6 +20,8 @@ const PostController = ({
   condensed = false,
   showReplies = false,
 }) => {
+  const { tags } = useContext(TagContext)
+  const { handles } = useContext(HandleContext)
   let postData = data
   if (id) {
     const { data: resData, loading, err } = useApi(`posts/${id}`)
@@ -41,6 +46,8 @@ const PostController = ({
       condensed={condensed}
       postData={postData}
       showReplies={showReplies}
+      tags={tags}
+      handles={handles}
     />
   )
 }

@@ -1,0 +1,50 @@
+@use '~/src/styles/theme';
+
+.input {
+  margin: 5% auto;
+  width: 90%;
+  position: relative;
+  flex-direction: column;
+}
+
+.textarea {
+  flex: 1;
+  font-family: Poppins;
+  border-radius: 5px;
+  outline: none;
+  resize: none;
+  padding: 15px 32px 15px 32px;
+  margin: auto;
+  background-color: #f1f1f1;
+  min-height: 25px;
+}
+
+.charLength {
+  position: absolute;
+  right: 0;
+  font-size: theme.$text-sm;
+}
+
+.charLengthRed {
+  position: absolute;
+  right: 0;
+  color: #bc2525;
+  font-size: theme.$text-sm;
+}
+
+.mention {
+  color: #3281c9;
+}
+
+.tag {
+  color: #3281c9;
+}
+
+[placeholder]:empty::before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+[placeholder]:empty:focus::before {
+  content: '';
+}
