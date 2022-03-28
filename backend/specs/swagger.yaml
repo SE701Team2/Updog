@@ -729,6 +729,80 @@ paths:
                 $ref: '#/components/schemas/User'
         '500':
           description: Internal Server Error
+  /interests:
+    get:
+      tags:
+        - Interests
+      summary: Returns an array of tags that the user is interested in
+      description: ''
+      operationId: intereests
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interests:
+                    type: array
+                    items:
+                      type: string
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - Interests
+      summary: Add tags to the user's interests
+      description: ''
+      security:
+        - bearerAuth: []
+      operationId: addInterest
+      requestBody:
+        description: Add tags to the user's interests
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interests:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: successful operation
+        '500':
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Interests
+      summary: Remove tags from the user's interests
+      description: ''
+      security:
+        - bearerAuth: []
+      operationId: removeInterest
+      requestBody:
+        description: Remove tags from the user's interests
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interests:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: successful operation
+        '500':
+          description: Internal Server Error
 components:
   schemas:
     Posts:
@@ -874,6 +948,8 @@ components:
           type: integer
         tagName:
           type: string
+    Interests:
+      type: string
   securitySchemes:
     bearerAuth:
       type: http
