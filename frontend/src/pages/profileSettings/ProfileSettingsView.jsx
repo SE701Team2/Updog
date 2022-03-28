@@ -7,6 +7,7 @@ import Footer from '../../components/layout/footer/FooterController'
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
 import classes from './profilesettings.module.scss'
 import BannerSettingController from '../../components/user/BannerSetting/BannerSettingController'
+import BioEditController from '../../components/user/BioSetting/BioEditController'
 
 // TODO: Remove when is ready
 const mock = [
@@ -39,6 +40,7 @@ const ProfileSettingsView = ({
   handleAvatarClose,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
+  const [openBioEdit, setOpenBioEdit] = useState(false)
 
   return (
     <div>
@@ -120,7 +122,15 @@ const ProfileSettingsView = ({
           <p style={{ fontWeight: 'bold' }}>Bio</p>
         </div>
         <div className={classes.right}>
-          <Button variant="text">Edit</Button>
+          <Button
+            variant="text"
+            onClick={() => {
+              setOpenBioEdit(true)
+            }}
+          >
+            Edit
+          </Button>
+          <BioEditController opened={openBioEdit} setOpen={setOpenBioEdit} />
         </div>
       </div>
       <p className={classes.subtext} style={{ marginBottom: '14px' }}>
