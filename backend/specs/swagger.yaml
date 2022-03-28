@@ -315,7 +315,12 @@ paths:
                   usernames:
                     type: array
                     items:
-                      type: string
+                      type: object
+                      properties:
+                        userId:
+                          type: integer
+                        username:
+                          type: string
         '400':
           description: Auth token not provided
         '401':

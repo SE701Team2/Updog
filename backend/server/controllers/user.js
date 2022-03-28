@@ -3,6 +3,7 @@ import Authentication from '../../middlewares/authentication'
 import UserDTO from '../../dto/users'
 import Activity from '../../enums/activity'
 import Notifications from '../../enums/notifications'
+import UserHandleDTO from '../../dto/userHandle'
 
 export const addUser = async (req, res) => {
   try {
@@ -73,7 +74,7 @@ export const getUserHandles = async (req, res) => {
         },
       })
 
-      const usernames = users.map((user) => user.username)
+      const usernames = users.map((user) => UserHandleDTO.convertToDto(user))
 
       res.status(200).send({
         usernames,

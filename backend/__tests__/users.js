@@ -948,8 +948,8 @@ describe('Users', () => {
 
       assert.equal(response.statusCode, 200)
       assert.equal(response.body.usernames.length, 2)
-      assert.equal(response.body.usernames.includes(user2.username), true)
-      assert.equal(response.body.usernames.includes(user3.username), true)
+      assert.equal(response.body.usernames[0].username, user2.username)
+      assert.equal(response.body.usernames[1].username, user3.username)
     })
   })
 
