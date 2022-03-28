@@ -296,6 +296,32 @@ paths:
       security:
         - bearerAuth: []
   /users:
+    get:
+      tags:
+        - User
+      summary: Get all user handles
+      description: ''
+      operationId: getAllUserHandles
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usernames:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Auth token not provided
+        '401':
+          description: Auth token invalid
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - User
