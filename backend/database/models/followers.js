@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       followedId: DataTypes.INTEGER,
       followerId: DataTypes.INTEGER,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
+      read: DataTypes.BOOLEAN,
     },
     {
       sequelize,
