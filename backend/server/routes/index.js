@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { user, posts, test } from '../controllers'
+import { user, posts, interests, test } from '../controllers'
 
 const router = Router()
 
@@ -19,11 +19,11 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
-router.route('/interests').get(user.getInterests)
+router.route('/interests').get(interests.getInterests)
 
-router.route('/interests').post(user.addInterests)
+router.route('/interests').post(interests.addInterests)
 
-router.route('/interests').delete(user.deleteInterests)
+router.route('/interests').delete(interests.deleteInterests)
 
 router
   .route('/users/:username/follow')
