@@ -19,12 +19,6 @@ router.route('/users/authenticate').post(user.authenticateUser)
 
 router.route('/users/:username/activity').get(user.getUserActivity)
 
-router.route('/interests').get(interests.getInterests)
-
-router.route('/interests').post(interests.addInterests)
-
-router.route('/interests').delete(interests.deleteInterests)
-
 router
   .route('/users/:username/follow')
   .post(user.followUser)
@@ -34,6 +28,15 @@ router
 router.route('/feed').get(user.getFeed)
 
 router.route('/notifications').get(user.getNotifications)
+
+/*
+INTERESTS
+*/
+router
+  .route('/interests')
+  .get(interests.getInterests)
+  .post(interests.addInterests)
+  .delete(interests.deleteInterests)
 
 /*
 POSTS
