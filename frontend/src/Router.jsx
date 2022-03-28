@@ -11,6 +11,7 @@ import Notifications from './pages/notifications/NotificationsPageController'
 import Search from './pages/search/SearchPageController'
 import User from './pages/user/UserPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
+import Loading from './pages/loading/LoadingController'
 import { AuthContext } from './contexts/AuthProvider'
 
 const Router = () => {
@@ -42,6 +43,7 @@ const Router = () => {
     routes = (
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/loading" element={<Loading />} />
         <Route path="/signUp" element={<Registration />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="*" element={<Navigate to="/" />} />
