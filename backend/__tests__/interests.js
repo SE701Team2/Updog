@@ -24,7 +24,7 @@ describe('Interests', () => {
   })
 
   describe('POST /interests', () => {
-    it('Should return a 200 status response and the interests should be added to the database', async () => {
+    it('Should return a 201 status response and the interests should be added to the database', async () => {
       const user = await Helper.createUser('testUser', 'test')
 
       const tag = await Helper.createTag('testTag')
@@ -38,7 +38,7 @@ describe('Interests', () => {
           interests: ['testTag'],
         })
 
-      assert.equal(response.statusCode, 200)
+      assert.equal(response.statusCode, 201)
 
       const dbInterests = await models.userInterests.findAll({
         where: {
