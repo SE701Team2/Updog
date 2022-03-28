@@ -2,6 +2,7 @@
 import bucket from '../../config/cloudstorage'
 import models from '../../database/models'
 import PostDTO from '../../dto/posts'
+import { checkAndCreateTag } from './tags'
 import Authentication from '../../middlewares/authentication'
 import Interactions from '../../enums/interactions'
 
@@ -74,7 +75,6 @@ export const createPost = async (req, res) => {
       if (!decodedUser.id) {
         res.status(401).send({ 'Error message': 'Auth token invalid' })
       }
-
       // Check whether the parent post exists.
       const parent = await models.posts.findByPk(body.parent)
 
@@ -86,6 +86,18 @@ export const createPost = async (req, res) => {
           parent: body.parent,
         })
         const postDTO = await PostDTO.convertToDto(post)
+
+        if (!body.tagIds) {
+          body.tagIds = []
+        }
+        //Create any new tags and populate the postTag database with new records
+        if (body.tagIds || body.newTags) {
+          const newTagIds = await createNewTags(body.newTags)
+          if (newTagIds != null) {
+            body.tagIds = [...body.tagIds, ...newTagIds]
+          }
+          await createPostTags(body.tagIds, post.id)
+        }
 
         if (req.files) {
           const file = req.files.attachments
@@ -105,6 +117,7 @@ export const createPost = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log(error)
     res.status(500).send(error)
   }
 }
@@ -449,4 +462,29 @@ export const getInteractedUsers = async (req, res) => {
   } catch (error) {
     res.status(500).send(error)
   }
+}
+
+const createNewTags = (newTags) => {
+  // Creates new tags for the list of tagNames given, and returns the ids
+  if (newTags == null) {
+    return []
+  }
+  return Promise.all(
+    newTags.map(async (tagName) => (await checkAndCreateTag(tagName)).id)
+  )
+}
+
+const createPostTags = (tagIds, postId) => {
+  // Creates new postTag records for the database
+  if (tagIds == null) {
+    return []
+  }
+  return Promise.all(
+    tagIds.map((tag) => {
+      return models.postTag.create({
+        postId: postId,
+        tagId: tag,
+      })
+    })
+  )
 }
