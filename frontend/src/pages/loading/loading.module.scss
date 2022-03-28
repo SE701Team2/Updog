@@ -1,0 +1,20 @@
+@use '../../styles/theme.scss';
+
+.container {
+  margin: 0% 15%;
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 35vh;
+
+    > img {
+      height: 160px;
+      width: 160px;
+    }
+  }
+
+  .progressBar {
+    margin-top: 10%;
+  }
+}

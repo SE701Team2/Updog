@@ -20,5 +20,22 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'tags',
     }
   )
+  tags.getTagByName = async (tagname) => {
+    const tag = await tags.findOne({
+      raw: true,
+      where: {
+        tagName: tagname,
+      },
+    })
+
+    return tag
+  }
+  tags.getAllTags = async () => {
+    const tagList = await tags.findAll({
+      raw: true,
+    })
+
+    return tagList
+  }
   return tags
 }

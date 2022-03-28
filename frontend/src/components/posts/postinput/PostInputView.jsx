@@ -30,6 +30,10 @@ const PostInputView = ({
     let currNode = el.childNodes[nodeIndex]
     let offset = location
 
+    if (currNode === undefined) {
+      return
+    }
+
     while (currNode.textContent.length < offset) {
       offset -= currNode.textContent.length
       nodeIndex += 1

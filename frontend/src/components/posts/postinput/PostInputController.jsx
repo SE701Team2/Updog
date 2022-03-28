@@ -9,7 +9,12 @@ import classes from './postinput.module.scss'
  * @prop setPostText - set the text of the post as string
  * @prop setPostTags - set the tags of the post as array of tags
  */
-const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
+const PostInputController = ({
+  setPostText,
+  setPostTags,
+  setNewTags,
+  setPostHandles,
+}) => {
   const maxCharLength = 250
   const { tags } = useContext(TagContext)
   const { handles } = useContext(HandleContext)
@@ -24,6 +29,7 @@ const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
    */
   const convert = (text) => {
     const usedTags = []
+    const newTags = []
     const usedHandles = []
     const newText = text
       .replaceAll(/<.*?>/g, '') // Replace HTML tags
@@ -38,6 +44,10 @@ const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
             usedTags.push(tag)
             return `<span class="${classes.tag}">${exactWord}</span>`
           }
+
+          // tag doesn't exist
+          newTags.push(word.replace(/[,.;]\s*$/, '').slice(1))
+          return `<span class="${classes.tag}">${exactWord}</span>`
         }
 
         if (word.startsWith('@')) {
@@ -59,7 +69,10 @@ const PostInputController = ({ setPostText, setPostTags, setPostHandles }) => {
     if (setPostHandles) {
       setPostHandles(usedHandles)
     }
-    console.log(usedTags)
+
+    if (setNewTags) {
+      setNewTags(newTags)
+    }
 
     return newText
   }

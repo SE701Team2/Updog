@@ -34,7 +34,7 @@ export const addInterests = async (req, res) => {
         }))
       )
 
-      res.status(200).send({
+      res.status(201).send({
         Message: 'Interests added successfully',
       })
     }
