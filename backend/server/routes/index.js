@@ -1,6 +1,6 @@
 import { Router } from 'express'
+import { user, posts, test, interests, tags, search } from '../controllers'
 
-import { user, posts, test, tags, search } from '../controllers'
 const router = Router()
 
 /*
@@ -28,6 +28,15 @@ router
 router.route('/feed').get(user.getFeed)
 
 router.route('/notifications').get(user.getNotifications)
+
+/*
+INTERESTS
+*/
+router
+  .route('/interests')
+  .get(interests.getInterests)
+  .post(interests.addInterests)
+  .delete(interests.deleteInterests)
 
 /*
 POSTS
