@@ -1,23 +1,12 @@
 /* eslint-disable react/no-danger */
 import * as React from 'react'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
+import { Dialog, Card, DialogTitle, Grid } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import LoadingButton from '@mui/lab/LoadingButton'
 import styles from './comment.module.scss'
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
 import PostInput from '../postinput/PostInputController'
 import processMentions from '../../../functions/mentions'
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
-}
 
 export default function BasicModal({
   postData,
@@ -35,64 +24,65 @@ export default function BasicModal({
   const handleClose = () => setOpen(false)
 
   return (
-    <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <SimpleUserDetails
-            condensed
-            user={postData.author}
-            time={postData.timestamp}
-          />
-          <div
-            dangerouslySetInnerHTML={{
-              __html: processMentions({
-                content: postData.content ?? '',
-                tags,
-                handles,
-                tagStyle: styles.tagStyle,
-                handleStyle: styles.handleStyle,
-              }),
-            }}
-            style={{ marginTop: 10, marginLeft: 70 }}
-          />
-          <div
-            dangerouslySetInnerHTML={{
-              __html: processMentions({
-                content: `Replying to @${postData.author.username} ` ?? '',
-                tags,
-                handles,
-                tagStyle: styles.tagStyle,
-                handleStyle: styles.handleStyle,
-              }),
-            }}
-            style={{ marginTop: 25 }}
-          />
-          <div style={{ marginTop: 25, width: '330px', marginLeft: -15 }}>
-            <PostInput
-              setPostTags={setPostTags}
-              setPostHandles={setPostHandles}
-              setPostText={setPostText}
-              setNewTags={setNewTags}
-            />
-          </div>
-          <div className={styles.buttonDiv}>
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              fullWidth
-              onClick={submitForm}
-              style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
+      <Card sx={{ p: 2 }}>
+        <DialogTitle sx={{ p: 0 }}>
+          <Grid container sx={{ justifyContent: 'flex-end' }}>
+            <Grid item>
+              <CloseIcon onClick={handleClose} id="closeButton" />
+            </Grid>
+          </Grid>
+        </DialogTitle>
+
+        <SimpleUserDetails
+          condensed
+          user={postData.author}
+          time={postData.timestamp}
+        />
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{
+            __html: processMentions({
+              content: postData.content ?? '',
+              tags,
+              handles,
+              tagStyle: styles.tagStyle,
+              handleStyle: styles.handleStyle,
+            }),
+          }}
+        />
+        <div className={styles.reply}>
+          <p>
+            Replying to{' '}
+            <a
+              href={`/user/${postData.author.username}`}
+              className={styles.link}
             >
-              Reply
-            </LoadingButton>
-          </div>
-        </Box>
-      </Modal>
-    </div>
+              @{postData.author.username}
+            </a>
+          </p>
+        </div>
+
+        <div className={styles.postInput}>
+          <PostInput
+            setPostTags={setPostTags}
+            setPostHandles={setPostHandles}
+            setPostText={setPostText}
+            setNewTags={setNewTags}
+          />
+        </div>
+        <div className={styles.buttonDiv}>
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            fullWidth
+            onClick={submitForm}
+            className={styles.loadingButton}
+          >
+            Reply
+          </LoadingButton>
+        </div>
+      </Card>
+    </Dialog>
   )
 }

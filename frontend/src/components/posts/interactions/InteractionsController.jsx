@@ -14,11 +14,7 @@ const InteractionsController = ({ postData }) => {
   }
 
   const onComment = () => {
-    if (!showComponent) {
-      setShowComponent(true)
-    } else {
-      setShowComponent(false)
-    }
+    setShowComponent(!showComponent)
   }
 
   const onShare = () => {
