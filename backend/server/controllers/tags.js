@@ -5,8 +5,7 @@ import Authentication from '../../middlewares/authentication'
 //Requires Authentication
 //Path parameter: tagName - the string of the tag to be created
 //Response codes:
-//200 OK - Tag already exists, returns the id of existing tag
-//201 Created - Tag has been created and return id of new tag
+//200 OK - Tag created or already exists & returns the id of existing tag
 //401 Unauthorized - if auth token is not provided or invalid
 //500 INTERNAL SERVER ERROR for everything else
 
@@ -25,20 +24,8 @@ export const createTag = async (req, res) => {
       if (!decodedUser.id) {
         res.status(401).send({ 'Error message': 'Auth token invalid' })
       }
-
-      const existingTag = await models.tags.getTagByName(tagName)
-      //Check if a tag already exists with that name
-      if (existingTag !== null) {
-        const tagDTO = await TagDTO.convertToDTO(existingTag)
-        res.status(200).send(tagDTO)
-      } else {
-        //Create a new tag and return the id
-        const newTag = await models.tags.create({
-          tagName: tagName,
-        })
-        const tagDTO = await TagDTO.convertToDTO(newTag)
-        res.status(201).send(tagDTO)
-      }
+      const tag = await checkAndCreateTag(tagName)
+      res.status(200).send(TagDTO.convertToDTO(tag))
     }
   } catch (error) {
     res.status(500).send(error)
@@ -76,4 +63,17 @@ export const getTags = async (req, res) => {
   } catch (error) {
     res.status(500).send(error)
   }
+}
+
+export const checkAndCreateTag = async (tagName) => {
+  const existingTag = await models.tags.getTagByName(tagName)
+  //Check if a tag already exists with that name
+  if (existingTag !== null) {
+    return existingTag
+  }
+  //Create a new tag and return the id
+  const newTag = await models.tags.create({
+    tagName: tagName,
+  })
+  return newTag
 }

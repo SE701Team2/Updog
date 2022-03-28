@@ -41,6 +41,12 @@ paths:
                 parent:
                   type: integer
                   example: null
+                newTags:
+                  required: false
+                  type: array
+                  items:
+                    type: string
+                  example: ['dogs', 'cats']
       responses:
         '201':
           description: successfully created
@@ -677,7 +683,7 @@ paths:
                   type: string
                   example: Dogs
       responses:
-        '201':
+        '200':
           description: successfully created
           content:
             application/json:
