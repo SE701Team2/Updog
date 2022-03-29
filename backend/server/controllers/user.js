@@ -3,6 +3,7 @@ import Authentication from '../../middlewares/authentication'
 import UserDTO from '../../dto/users'
 import Activity from '../../enums/activity'
 import Notifications from '../../enums/notifications'
+import UserHandleDTO from '../../dto/userHandle'
 
 export const addUser = async (req, res) => {
   try {
@@ -42,6 +43,43 @@ export const addUser = async (req, res) => {
       authToken,
       username: createUser.username,
     })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
+export const getUserHandles = async (req, res) => {
+  try {
+    const authToken = req.get('Authorization')
+
+    if (!authToken) {
+      res.status(400).send({
+        'Error message': 'Auth token not provided',
+      })
+    }
+
+    const decodedUser = Authentication.extractUser(authToken)
+
+    if (!decodedUser.id) {
+      res.status(401).send({
+        'Error message': 'Auth token invalid',
+      })
+    } else {
+      // Find all users which are not equal to userId
+      const users = await models.users.findAll({
+        where: {
+          id: {
+            [models.Sequelize.Op.ne]: decodedUser.id,
+          },
+        },
+      })
+
+      const usernames = users.map((user) => UserHandleDTO.convertToDto(user))
+
+      res.status(200).send({
+        usernames,
+      })
+    }
   } catch (error) {
     res.status(500).send(error)
   }
@@ -335,7 +373,7 @@ export const unfollowUser = async (req, res) => {
 
 /*
 Require authentication. (only you can see list of follower and followings)
-Path paramter: username - the username of the account we want 
+Path paramter: username - the username of the account we want
     to get following and followers for.
 Response Codes:
 200 OK when the followers and following has been successfully found.
