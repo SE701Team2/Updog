@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       postId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
+      read: DataTypes.BOOLEAN,
     },
     {
       sequelize,

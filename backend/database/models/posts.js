@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       parent: DataTypes.INTEGER,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
+      read: DataTypes.BOOLEAN,
     },
     {}
   )
@@ -28,6 +29,17 @@ module.exports = (sequelize, DataTypes) => {
     const replies = await posts.findAll({
       where: {
         parent: id,
+      },
+    })
+
+    return replies
+  }
+
+  posts.prototype.getUnreadReplies = async (id) => {
+    const replies = await posts.findAll({
+      where: {
+        parent: id,
+        read: false,
       },
     })
 

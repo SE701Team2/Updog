@@ -1,6 +1,13 @@
 import { Router } from 'express'
-
-import { user, posts, image, test } from '../controllers'
+import {
+  user,
+  posts,
+  test,
+  image,
+  interests,
+  tags,
+  search,
+} from '../controllers'
 
 const router = Router()
 
@@ -9,6 +16,7 @@ USERS
 */
 router
   .route('/users')
+  .get(user.getUserHandles)
   .post(user.addUser)
   .put(user.modifyUser)
   .delete(user.deleteUser)
@@ -28,6 +36,15 @@ router
 router.route('/feed').get(user.getFeed)
 
 router.route('/notifications').get(user.getNotifications)
+
+/*
+INTERESTS
+*/
+router
+  .route('/interests')
+  .get(interests.getInterests)
+  .post(interests.addInterests)
+  .delete(interests.deleteInterests)
 
 /*
 POSTS
@@ -55,6 +72,16 @@ IMAGES
 
 router.route('/images').post(image.uploadImage)
 router.route('/images/:filename').get(image.getImage)
+
+/*
+TAGS
+*/
+router.route('/tags').post(tags.createTag).get(tags.getTags)
+
+/*
+SEARCH
+*/
+router.route('/search').get(search.search)
 
 /*
 TESTING

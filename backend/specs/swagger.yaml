@@ -41,6 +41,12 @@ paths:
                 parent:
                   type: integer
                   example: null
+                newTags:
+                  required: false
+                  type: array
+                  items:
+                    type: string
+                  example: ['dogs', 'cats']
       responses:
         '201':
           description: successfully created
@@ -296,6 +302,37 @@ paths:
       security:
         - bearerAuth: []
   /users:
+    get:
+      tags:
+        - User
+      summary: Get all user handles
+      description: ''
+      operationId: getAllUserHandles
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usernames:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userId:
+                          type: integer
+                        username:
+                          type: string
+        '400':
+          description: Auth token not provided
+        '401':
+          description: Auth token invalid
+        '500':
+          description: Internal Server Error
     post:
       tags:
         - User
@@ -658,6 +695,151 @@ paths:
           description: Access token invalid
         '500':
           description: Internal Server Error
+  /tags:
+    post:
+      tags:
+        - Tags
+      summary: Create tag
+      description: Creates a new Tag
+      operationId: createTag
+      requestBody:
+        description: Create a new Tag
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tagName:
+                  type: string
+                  example: Dogs
+      responses:
+        '200':
+          description: successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Posts'
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - Tags
+      summary: Gets all tags
+      description: Gets all Tags in the database
+      operationId: getTags
+      responses:
+        '200':
+          description: successfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+      security:
+        - bearerAuth: []
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Searches for posts, topics, and users
+      description: ''
+      operationId: search
+      parameters:
+        - in: query
+          name: query
+          description: 'The search query.'
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: type
+          description: 'The type of data to search for: top/latest/people.'
+          required: true
+          schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+  /interests:
+    get:
+      tags:
+        - Interests
+      summary: Returns an array of tags that the user is interested in
+      description: ''
+      operationId: intereests
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  interests:
+                    type: array
+                    items:
+                      type: string
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+        - Interests
+      summary: Add tags to the user's interests
+      description: ''
+      security:
+        - bearerAuth: []
+      operationId: addInterest
+      requestBody:
+        description: Add tags to the user's interests
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interests:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: successful operation
+        '500':
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Interests
+      summary: Remove tags from the user's interests
+      description: ''
+      security:
+        - bearerAuth: []
+      operationId: removeInterest
+      requestBody:
+        description: Remove tags from the user's interests
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                interests:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: successful operation
+        '500':
+          description: Internal Server Error
 components:
   schemas:
     Posts:
@@ -796,6 +978,15 @@ components:
         userId:
           type: integer
       type: object
+    Tags:
+      x-swagger-router-model: io.swagger.updog.model.tags
+      properties:
+        tagId:
+          type: integer
+        tagName:
+          type: string
+    Interests:
+      type: string
   securitySchemes:
     bearerAuth:
       type: http

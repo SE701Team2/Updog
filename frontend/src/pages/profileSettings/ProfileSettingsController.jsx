@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+// eslint-disable-next-line import/no-unresolved
 import ProfileSettingsView from './ProfileSettingsView'
 import useApi from '../../hooks/useApi'
 import { request, uploadImage } from '../../functions'
@@ -53,7 +54,6 @@ const ProfileSettingsController = () => {
 
   const handleProfilePic = (e) => {
     const image = e.target.files[0]
-    console.log(image)
     setSelectedPicture(image)
   }
 

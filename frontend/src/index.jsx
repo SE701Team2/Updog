@@ -3,7 +3,8 @@ import { BrowserRouter } from 'react-router-dom'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import App from './App'
-import '@fontsource/roboto'
+// eslint-disable-next-line import/no-unresolved
+import '@fontsource/poppins'
 
 TimeAgo.addDefaultLocale(en)
 

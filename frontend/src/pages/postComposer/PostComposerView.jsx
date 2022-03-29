@@ -1,32 +1,33 @@
 import React from 'react'
-import { TextareaAutosize } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import classes from './postComposer.module.scss'
 import Footer from '../../components/layout/footer/FooterController'
 import HeaderCustom from '../../components/layout/headercustom/HeaderCustomController'
+import PostInput from '../../components/posts/postinput/PostInputController'
+import SimpleUserDetailsView from '../../components/user/simpledetails/SimpleUserDetailsView'
 
-const PostComposerView = ({ loading, submitForm, setPostText, postText }) => (
+const PostComposerView = ({
+  user,
+  loading,
+  submitForm,
+  setPostTags,
+  setPostHandles,
+  setPostText,
+  setNewTags,
+}) => (
   <div className={classes.container}>
     <HeaderCustom title="New Post" />
 
-    <div className={classes.input}>
-      <TextareaAutosize
-        minRows={10}
-        placeholder="What's Updog?"
-        value={postText}
-        onChange={(e) => setPostText(e.target.value)}
-        style={{
-          width: '100%',
-          fontFamily: 'Roboto',
-          border: '1px solid rgba(0,0,0,0.3)',
-          borderRadius: 5,
-          outline: 'none',
-          resize: 'none',
-          padding: 7,
-          margin: 'auto',
-        }}
-      />
+    <div className={classes.profileContainer}>
+      <SimpleUserDetailsView user={user} condensed time={0} />
     </div>
+
+    <PostInput
+      setPostTags={setPostTags}
+      setPostHandles={setPostHandles}
+      setPostText={setPostText}
+      setNewTags={setNewTags}
+    />
 
     <div className={classes.buttonContainer}>
       <LoadingButton
@@ -34,7 +35,7 @@ const PostComposerView = ({ loading, submitForm, setPostText, postText }) => (
         variant="contained"
         fullWidth
         onClick={submitForm}
-        style={{ borderRadius: 100, padding: 10 }}
+        style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
       >
         Post
       </LoadingButton>

@@ -7,6 +7,8 @@ export default class Notifications {
 
   static share = new Notifications('share')
 
+  static follow = new Notifications('follow')
+
   constructor(type) {
     this.type = type
   }
@@ -22,7 +24,14 @@ export default class Notifications {
     const likes = await this.retrieveAllLikes(userPosts)
     const shares = await this.retrieveAllShares(userPosts)
 
-    const notifications = [...replies, ...likes, ...shares]
+    const user = await models.users.findOne({
+      where: {
+        id: userId,
+      },
+    })
+    const follows = await this.retrieveAllFollows(user)
+
+    const notifications = [...replies, ...likes, ...shares, ...follows]
     notifications.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
     return notifications
   }
@@ -41,6 +50,21 @@ export default class Notifications {
         post: details.id,
         timestamp: Date.parse(details.createdAt),
         content: details.text_content,
+      }
+    }
+    if (notificationType === Notifications.follow) {
+      const user = await models.users.findOne({
+        where: {
+          id: details.followerId,
+        },
+      })
+
+      return {
+        type: notificationType.type,
+        from: user.username,
+        post: null,
+        timestamp: Date.parse(details.createdAt),
+        content: user.id,
       }
     }
     const user = await models.users.findOne({
@@ -63,7 +87,7 @@ export default class Notifications {
 
     await Promise.all(
       userPosts.map(async (post) => {
-        const replies = await post.getReplies(post.id)
+        const replies = await post.getUnreadReplies(post.id)
 
         await Promise.all(
           replies.map(async (r) =>
@@ -86,6 +110,7 @@ export default class Notifications {
         const likes = await models.likedPost.findAll({
           where: {
             postId: post.id,
+            read: false,
           },
         })
 
@@ -110,6 +135,7 @@ export default class Notifications {
         const shares = await models.sharedPost.findAll({
           where: {
             postId: post.id,
+            read: false,
           },
         })
 
@@ -124,5 +150,26 @@ export default class Notifications {
     )
 
     return allShares
+  }
+
+  static async retrieveAllFollows(user) {
+    const allFollows = []
+
+    const followers = await models.followers.findAll({
+      where: {
+        followedId: user.id,
+        read: false,
+      },
+    })
+
+    await Promise.all(
+      followers.map(async (follower) =>
+        allFollows.push(
+          await this.convertToNotifications(Notifications.follow, follower)
+        )
+      )
+    )
+
+    return allFollows
   }
 }

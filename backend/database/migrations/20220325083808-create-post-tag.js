@@ -10,10 +10,12 @@ module.exports = {
       },
       postId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         unique: 'postTag',
       },
       tagId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         unique: 'postTag',
       },
       createdAt: {

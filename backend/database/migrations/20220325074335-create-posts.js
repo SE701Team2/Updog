@@ -25,6 +25,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      read: {
+        //Read by parent author
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
     }),
   down: (queryInterface) => queryInterface.dropTable('posts'),
 }

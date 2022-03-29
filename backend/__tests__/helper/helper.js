@@ -82,4 +82,12 @@ export default class Helper {
     })
     return postTag
   }
+
+  static async createUserInterest(userId, tagId) {
+    const userInterest = await models.userInterests.create({
+      userId,
+      tagId,
+    })
+    return userInterest
+  }
 }
