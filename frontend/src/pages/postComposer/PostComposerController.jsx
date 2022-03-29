@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PostComposerView from './PostComposerView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
+import LoadingView from '../loading/LoadingView'
 
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
@@ -40,7 +41,7 @@ const PostComposerController = () => {
   }
 
   if (userLoading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

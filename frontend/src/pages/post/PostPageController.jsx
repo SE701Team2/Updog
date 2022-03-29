@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import PostPageView from './PostPageView'
 import useApi from '../../hooks/useApi'
+import LoadingView from '../loading/LoadingView'
 
 /**
  * This page renders a single post and its replies. It also contains
@@ -12,7 +13,7 @@ const PostPageController = () => {
   const { data, loading, err } = useApi(`posts/${id}`)
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

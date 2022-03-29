@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ProfileSettingsView from './ProfileSettingsView'
 import useApi from '../../hooks/useApi'
+import LoadingView from '../loading/LoadingView'
 
 /**
  * This page is where users can edit their profile
@@ -12,7 +13,7 @@ const ProfileSettingsController = () => {
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {
