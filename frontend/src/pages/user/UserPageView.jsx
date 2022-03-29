@@ -32,7 +32,7 @@ const UserPageView = ({
       </Button>
 
       <ProfileUserDetails user={userData} />
-      
+
       <div className={classes.activity}>
         <h2>Activity</h2>
       </div>
