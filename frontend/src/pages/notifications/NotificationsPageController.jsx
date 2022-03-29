@@ -1,12 +1,12 @@
 import { List, ListItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import NotificationsPageView from './NotificationsPageView'
 import classes from './notificationspage.module.scss'
 import LikedNotification from '../../components/notifications/liked/LikedNotificationController'
+import NotificationsPageView from './NotificationsPageView'
+import LoadingView from '../loading/LoadingView'
 import SharedNotification from '../../components/notifications/shared/SharedNotificationController'
 import RepliedNotification from '../../components/notifications/replied/RepliedNotificationController'
 import useApi from '../../hooks/useApi'
-import LoadingView from '../loading/LoadingView'
 
 /**
  * This page renders a list of notifications for the user.
