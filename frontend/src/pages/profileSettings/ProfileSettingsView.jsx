@@ -51,7 +51,7 @@ const ProfileSettingsView = ({
       <div className={classes.banner}>
         <img
           className={classes.bannerImg}
-          src={user.profilePic ?? 'https://i.imgur.com/PcEvuMw.png'}
+          src={user.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
           alt="Banner"
         />
         <Button
@@ -80,7 +80,7 @@ const ProfileSettingsView = ({
         <Avatar
           className={classes.avatar}
           sx={{ width: 80, height: 80 }}
-          src={user.profileBanner}
+          src={user.profilePic}
         />
         <Button
           variant="outlined"
