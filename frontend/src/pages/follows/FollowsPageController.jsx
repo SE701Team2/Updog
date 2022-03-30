@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FollowsPageView from './FollowsPageView'
 import useApi from '../../hooks/useApi'
+import LoadingView from '../loading/LoadingView'
 
 /**
  * This page renders a user's followers. It also contains
@@ -21,7 +22,7 @@ const FollowsPageController = () => {
   }, [data])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (error) {
