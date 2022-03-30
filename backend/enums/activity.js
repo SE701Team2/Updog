@@ -1,116 +1,110 @@
 import PostDTO from '../dto/posts'
 import models from '../database/models'
 
-export default class Activity {
-  static POSTED = new Activity('POSTED')
-
-  static LIKED = new Activity('LIKED')
-
-  static SHARED = new Activity('SHARED')
+// enum of Activity types
+export class ActivityType {
+  static POSTED = new ActivityType('POSTED')
+  static LIKED = new ActivityType('LIKED')
+  static SHARED = new ActivityType('SHARED')
 
   constructor(type) {
     this.type = type
   }
+}
 
-  static async retrieveActivities(following) {
-    const postsActivity = []
-    const likedPostsActivity = []
-    const sharedPostsActivity = []
-
-    await Promise.all(
-      following.map(async (user) => {
-        const unconvertedActivity = await this.getUnconvertedActivity(
-          user.followedId
-        )
-
-        await Promise.all(
-          unconvertedActivity[0].map(async (activity) => {
-            const act = await this.convertToFeedActivity(
-              this.POSTED,
-              activity.id,
-              activity.author,
-              activity.createdAt
-            )
-            postsActivity.push(act)
-          })
-        )
-
-        await Promise.all(
-          unconvertedActivity[1].map(async (activity) => {
-            const act = await this.convertToFeedActivity(
-              this.LIKED,
-              activity.postId,
-              activity.userId,
-              activity.createdAt
-            )
-            likedPostsActivity.push(act)
-          })
-        )
-
-        await Promise.all(
-          unconvertedActivity[2].map(async (activity) => {
-            const act = await this.convertToFeedActivity(
-              this.SHARED,
-              activity.postId,
-              activity.userId,
-              activity.createdAt
-            )
-            sharedPostsActivity.push(act)
-          })
-        )
-      })
-    )
-
-    const activity = [
-      ...postsActivity,
-      ...likedPostsActivity,
-      ...sharedPostsActivity,
-    ]
-    activity.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
-
-    return activity
+export default class Activity {
+  constructor(postDto, interactingUser, activityType, activityTime) {
+    // Fields named for compatability with old usage
+    this.postId = postDto.id
+    this.post = postDto
+    this.userId = interactingUser
+    this.activity = activityType
+    this.timestamp = activityTime
   }
 
-  static convertToUserActivity(activity, postId, postTime) {
-    return {
-      postID: postId,
-      timestamp: Date.parse(postTime),
-      activity: activity.type,
-    }
-  }
-
-  static async convertToFeedActivity(activity, postId, authorId, postTime) {
-    const post = await models.posts.findByPk(postId)
-    const postDto = await PostDTO.convertToDto(post)
-    return {
-      post: postDto,
-      timestamp: Date.parse(postTime),
-      activity: activity.type,
-      userId: authorId,
-    }
-  }
-
-  static async getUnconvertedActivity(userId) {
-    // Retrieve user's posts, including the shared and liked posts
-    const postsDB = await models.posts.findAll({
+  // Create a list of activities by a user in order of post creation time
+  // TODO: Use time at which post was liked or shared by the user rather
+  // than post creation time
+  static async getUserActivities(userId) {
+    const activities = []
+    let ownPosts = await models.posts.findAll({
       where: {
         author: userId,
       },
     })
+    // async forEach didn't seem to await properly
+    for (const post of ownPosts) {
+      activities.push(
+        new Activity(
+          await PostDTO.convertToDto(post),
+          userId,
+          ActivityType.POSTED,
+          post.dataValues.createdAt
+        )
+      )
+    }
 
-    const sharedPosts = await models.sharedPost.findAll({
+    let sharedPosts = await models.sharedPost.findAll({
       where: {
         userID: userId,
       },
     })
+    for (const sharedPost of sharedPosts) {
+      // Get each real post DTO by querying individually
+      let post = await models.posts.findOne({
+        where: {
+          id: sharedPost.postId,
+        },
+      })
+      activities.push(
+        new Activity(
+          await PostDTO.convertToDto(post),
+          userId,
+          ActivityType.SHARED,
+          post.dataValues.createdAt
+        )
+      )
+    }
 
-    const likedPosts = await models.likedPost.findAll({
+    let likedPosts = await models.likedPost.findAll({
       where: {
         userID: userId,
       },
     })
+    for (const likedPost of likedPosts) {
+      let post = await models.posts.findOne({
+        where: {
+          id: likedPost.postId,
+        },
+      })
+      activities.push(
+        new Activity(
+          await PostDTO.convertToDto(post),
+          userId,
+          ActivityType.LIKED,
+          post.dataValues.createdAt
+        )
+      )
+    }
 
-    // Merge the posts together into one array
-    return [postsDB, likedPosts, sharedPosts]
+    activities.sort((a, b) => {
+      a.activityTime > b.activityTime ? 1 : -1
+    })
+
+    return activities
+  }
+
+  // Create a list of activities in order of post creation time
+  // from a list of follower objects
+  static async retrieveActivityFeed(following) {
+    const feed = []
+    for (const id of following.map((f) => f.dataValues.followedId)) {
+      let activities = await Activity.getUserActivities(id)
+      feed.push(...activities)
+    }
+    feed.sort((a, b) => {
+      a.activityTime > b.activityTime ? 1 : -1
+    })
+    return feed
   }
 }
