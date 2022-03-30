@@ -51,7 +51,7 @@ describe('Tags', () => {
   })
 
   describe('When a user requests to create a new tag', () => {
-    it('should return with a 201 Created code', async () => {
+    it('should return with a 200 Created code', async () => {
       const user1 = await Helper.createUser()
 
       const authToken = Authentication.generateAuthToken(user1)
@@ -62,7 +62,7 @@ describe('Tags', () => {
         .send({
           tagName: 'Dogs',
         })
-      expect(createTagResponse.statusCode).toBe(201)
+      expect(createTagResponse.statusCode).toBe(200)
       expect(createTagResponse.body.tagName).toBe('Dogs')
     })
   })

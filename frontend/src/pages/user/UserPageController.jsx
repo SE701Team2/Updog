@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import LoadingView from '../loading/LoadingView'
 import UserPageView from './UserPageView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
@@ -35,7 +36,7 @@ const UserPageController = () => {
   }, [followData])
 
   if (activityLoading || userLoading || followLoading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

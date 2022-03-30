@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LoadingView from '../loading/LoadingView'
 import PostComposerView from './PostComposerView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
@@ -40,7 +41,7 @@ const PostComposerController = () => {
   }
 
   if (userLoading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

@@ -72,7 +72,7 @@ describe('Interests', () => {
   describe('DELETE /interests', () => {
     it('Should return a 200 status response and the interests should be removed from the database', async () => {
       const user = await Helper.createUser('testUser', 'test')
-      const tag1 = await Helper.createTag('testTag')
+      const tag1 = await Helper.createTag('testTag1')
       const tag2 = await Helper.createTag('testTag2')
       await Helper.createUserInterest(user.id, tag1.id)
       await Helper.createUserInterest(user.id, tag2.id)
@@ -83,7 +83,7 @@ describe('Interests', () => {
         .delete('/api/interests')
         .set('Authorization', `Bearer ${token}`)
         .send({
-          interests: ['testTag'],
+          interests: ['testTag1'],
         })
 
       assert.equal(response.statusCode, 200)

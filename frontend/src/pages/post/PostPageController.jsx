@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import PostPageView from './PostPageView'
+import LoadingView from '../loading/LoadingView'
 import useApi from '../../hooks/useApi'
 
 /**
@@ -12,7 +13,7 @@ const PostPageController = () => {
   const { data, loading, err } = useApi(`posts/${id}`)
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

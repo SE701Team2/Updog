@@ -6,6 +6,14 @@ import UserDTO from '../dto/users'
 import Helper from './helper/helper'
 
 describe('Posts', () => {
+  beforeEach(async () => {
+    await models.tags.destroy({
+      where: {},
+    })
+    await models.postTag.destroy({
+      where: {},
+    })
+  })
   describe('POST /posts', () => {
     describe('when not authenticated', () => {
       it('should return response code of 400', async () => {
@@ -110,6 +118,101 @@ describe('Posts', () => {
             parent: invalidId,
           })
         expect(response.statusCode).toBe(404)
+      })
+    })
+    describe('when creating a valid post with tags', () => {
+      it('should return a code of 200', async () => {
+        const user1 = await Helper.createUser()
+        const authToken = Authentication.generateAuthToken(user1)
+
+        const newTag = await Helper.createTag('test')
+
+        const response = await request(server)
+          .post('/api/posts')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            text_content: 'some random text 3',
+            parent: null,
+            tagIds: [newTag.id],
+          })
+
+        expect(response.statusCode).toBe(201)
+        const newPostTag = await models.postTag.findOne({
+          raw: true,
+          where: {
+            tagId: newTag.id,
+          },
+        })
+        expect(newPostTag).toBeTruthy()
+      })
+    })
+    describe('when creating a valid post with new tags', () => {
+      it('should return a code of 200', async () => {
+        const user1 = await Helper.createUser()
+        const authToken = Authentication.generateAuthToken(user1)
+
+        const response = await request(server)
+          .post('/api/posts')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            text_content: 'some random text 3',
+            parent: null,
+            newTags: ['Cats'],
+          })
+        expect(response.statusCode).toBe(201)
+        const newTagCreated = await models.tags.findOne({
+          raw: true,
+          where: {
+            tagName: 'Cats',
+          },
+        })
+        expect(newTagCreated).toBeTruthy()
+        const newPostTag = await models.postTag.findOne({
+          raw: true,
+          where: {
+            tagId: newTagCreated.id,
+          },
+        })
+        expect(newPostTag).toBeTruthy()
+      })
+    })
+    describe('when creating a valid post with new tags and tags', () => {
+      it('should return a code of 200', async () => {
+        const user1 = await Helper.createUser()
+        const authToken = Authentication.generateAuthToken(user1)
+
+        const tag1 = await Helper.createTag('test1')
+        const tag2 = await Helper.createTag('test2')
+
+        const response = await request(server)
+          .post('/api/posts')
+          .set('Authorization', `Bearer ${authToken}`)
+          .send({
+            text_content: 'some random text 3',
+            parent: null,
+            tagIds: [tag1.id, tag2.id],
+            newTags: ['Cats', 'Dogs'],
+          })
+        expect(response.statusCode).toBe(201)
+        const newTagCreated = await models.tags.findOne({
+          raw: true,
+          where: {
+            tagName: 'Cats',
+          },
+        })
+        expect(newTagCreated).toBeTruthy()
+        const newTagCreated2 = await models.tags.findOne({
+          raw: true,
+          where: {
+            tagName: 'Dogs',
+          },
+        })
+        expect(newTagCreated2).toBeTruthy()
+
+        const newPostTag = await models.postTag.findAll({
+          raw: true,
+        })
+        expect(newPostTag.length).toBe(4)
       })
     })
   })
