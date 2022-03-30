@@ -142,7 +142,7 @@ const ProfileSettingsView = ({
       <Divider className={classes.divider} variant="middle" />
 
       <div className={classes.save}>
-        <Button type="submit" variant="contained" onClick={logout}>
+        <Button type="submit" variant="contained" onClick={logout} id="logout">
           Log out
         </Button>
       </div>

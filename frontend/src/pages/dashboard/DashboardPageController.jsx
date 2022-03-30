@@ -17,7 +17,7 @@ const DashboardPageController = () => {
     return <div>Error: {err}</div>
   }
 
-  return <DashboardPageView feedData={data} />
+  return <DashboardPageView feedData={data ?? []} />
 }
 
 export default DashboardPageController

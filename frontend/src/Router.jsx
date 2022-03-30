@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Landing from './pages/landing/LandingController'
 import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
@@ -19,9 +19,10 @@ const Router = () => {
 
   let routes
   const { isAuthenticated } = useContext(AuthContext)
-  const token = localStorage.getItem('token')
-
-  useEffect(() => {}, [isAuthenticated]) // enables rerendering when token is updated
+  const [token, setToken] = useState()
+  useEffect(() => {
+    setToken(localStorage.getItem('token'))
+  }, [isAuthenticated]) // enables rerendering when token is updated
 
   if (token) {
     // Auth routes
