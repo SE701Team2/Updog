@@ -934,6 +934,25 @@ describe('Users', () => {
     })
   })
 
+  describe('GET /users', () => {
+    it('should return response code of 200 with an array of all the user handles', async () => {
+      const user1 = await Helper.createUser('testUser1', 'password')
+      const user2 = await Helper.createUser('testUser2', 'password')
+      const user3 = await Helper.createUser('testUser3', 'password')
+
+      const token = Authentication.generateAuthToken(user1)
+
+      const response = await request(server)
+        .get('/api/users')
+        .set('Authorization', `Bearer ${token}`)
+
+      assert.equal(response.statusCode, 200)
+      assert.equal(response.body.usernames.length, 2)
+      assert.equal(response.body.usernames[0].username, user2.username)
+      assert.equal(response.body.usernames[1].username, user3.username)
+    })
+  })
+
   afterAll(() => {
     models.sequelize.close()
   })

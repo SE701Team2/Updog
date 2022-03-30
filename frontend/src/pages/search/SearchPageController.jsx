@@ -1,5 +1,6 @@
 import SearchPageView from './SearchPageView'
 import useApi from '../../hooks/useApi'
+import LoadingView from '../loading/LoadingView'
 
 /**
  * This page renders the search UI.
@@ -12,7 +13,7 @@ const SearchPageController = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

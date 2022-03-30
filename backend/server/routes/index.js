@@ -1,5 +1,4 @@
 import { Router } from 'express'
-
 import { user, posts, test, interests, tags, search } from '../controllers'
 
 const router = Router()
@@ -9,6 +8,7 @@ USERS
 */
 router
   .route('/users')
+  .get(user.getUserHandles)
   .post(user.addUser)
   .put(user.modifyUser)
   .delete(user.deleteUser)
