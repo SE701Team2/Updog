@@ -50,36 +50,22 @@ export const addUser = async (req, res) => {
 
 export const getUserHandles = async (req, res) => {
   try {
-    const authToken = req.get('Authorization')
+    const decodedUser = res.locals.decodedUser
 
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const decodedUser = Authentication.extractUser(authToken)
-
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-    } else {
-      // Find all users which are not equal to userId
-      const users = await models.users.findAll({
-        where: {
-          id: {
-            [models.Sequelize.Op.ne]: decodedUser.id,
-          },
+    // Find all users which are not equal to userId
+    const users = await models.users.findAll({
+      where: {
+        id: {
+          [models.Sequelize.Op.ne]: decodedUser.id,
         },
-      })
+      },
+    })
 
-      const usernames = users.map((user) => UserHandleDTO.convertToDto(user))
+    const usernames = users.map((user) => UserHandleDTO.convertToDto(user))
 
-      res.status(200).send({
-        usernames,
-      })
-    }
+    res.status(200).send({
+      usernames,
+    })
   } catch (error) {
     res.status(500).send(error)
   }
@@ -100,24 +86,8 @@ export const getUsersByUsername = async (req, res) => {
       return
     }
 
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const decodedUser = Authentication.extractUser(authToken)
-
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-    } else {
-      const userDTO = await UserDTO.convertToDto(user)
-      res.status(200).send(userDTO)
-    }
+    const userDTO = await UserDTO.convertToDto(user)
+    res.status(200).send(userDTO)
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
   }
@@ -164,23 +134,6 @@ export const getUserActivity = async (req, res) => {
       return
     }
 
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
-    }
-
     const unconvertedActivity = await Activity.getUnconvertedActivity(
       userOfInterest.id
     )
@@ -209,22 +162,7 @@ export const getUserActivity = async (req, res) => {
 
 export const getFeed = async (req, res) => {
   try {
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
-    }
+    const loggedInUser = res.locals.decodedUser
 
     const following = await models.followers.findAll({
       where: {
@@ -242,23 +180,7 @@ export const getFeed = async (req, res) => {
 
 export const getNotifications = async (req, res) => {
   try {
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
-    }
-
+    const loggedInUser = res.locals.decodedUser
     const notifications = await Notifications.retrieveNotifications(
       loggedInUser.id
     )
@@ -282,24 +204,7 @@ export const followUser = async (req, res) => {
       })
       return
     }
-
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-      return
-    }
-
-    const decodedUser = Authentication.extractUser(authToken)
-
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
-    }
+    const decodedUser = res.locals.decodedUser
 
     const alreadyFollow = await models.followers.findOne({
       where: {
@@ -335,24 +240,7 @@ export const unfollowUser = async (req, res) => {
       })
       return
     }
-
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-      return
-    }
-
-    const decodedUser = Authentication.extractUser(authToken)
-
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
-    }
+    const decodedUser = res.locals.decodedUser
 
     const alreadyFollow = await models.followers.findOne({
       where: {
@@ -384,16 +272,8 @@ Returns : List of followers and followings.
 export const getFollow = async (req, res) => {
   try {
     const { params } = req
-    const authToken = req.get('Authorization')
 
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-      return
-    }
-
-    const decodedUser = Authentication.extractUser(authToken)
+    const decodedUser = res.locals.decodedUser
     const user = await models.users.findOne({
       where: { username: params.username },
     })
@@ -458,41 +338,24 @@ export const getFollow = async (req, res) => {
 
 export const modifyUser = async (req, res) => {
   try {
-    const authToken = req.get('Authorization')
+    const loggedInUser = res.locals.decodedUser
+    const { body } = req
 
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-      return
-    }
+    const updatedUser = await models.users.update(
+      {
+        username: body.username,
+        nickname: body.nickname,
+        bio: body.bio,
+        profilePic: body.profilePic,
+        profileBanner: body.profileBanner,
+      },
+      { returning: true, where: { id: loggedInUser.id } }
+    )
 
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
+    if (updatedUser) {
+      res.status(200).send({ message: 'The profile has been updated.' })
     } else {
-      const { body } = req
-
-      const updatedUser = await models.users.update(
-        {
-          username: body.username,
-          nickname: body.nickname,
-          bio: body.bio,
-          profilePic: body.profilePic,
-          profileBanner: body.profileBanner,
-        },
-        { returning: true, where: { id: loggedInUser.id } }
-      )
-
-      if (updatedUser) {
-        res.status(200).send({ message: 'The profile has been updated.' })
-      } else {
-        res.status(500).send({ error: 'Failed to update the profile.' })
-      }
+      res.status(500).send({ error: 'Failed to update the profile.' })
     }
   } catch (error) {
     res.status(500).send(error)
@@ -501,32 +364,16 @@ export const modifyUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const authToken = req.get('Authorization')
+    const loggedInUser = res.locals.decodedUser
 
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-      return
-    }
+    const deleteUser = await models.users.destroy({
+      where: { id: loggedInUser.id },
+    })
 
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-      return
+    if (deleteUser !== 0) {
+      res.status(200).send({ message: 'The user has been deleted.' })
     } else {
-      const deleteUser = await models.users.destroy({
-        where: { id: loggedInUser.id },
-      })
-
-      if (deleteUser !== 0) {
-        res.status(200).send({ message: 'The user has been deleted.' })
-      } else {
-        res.status(500).send({ error: 'Failed to destroy the user.' })
-      }
+      res.status(500).send({ error: 'Failed to destroy the user.' })
     }
   } catch (error) {
     res.status(500).send(error)
