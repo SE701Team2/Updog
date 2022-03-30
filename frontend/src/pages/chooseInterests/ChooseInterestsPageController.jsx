@@ -1,10 +1,6 @@
-import { useContext } from 'react'
-import { InterestsContext } from '../../contexts/InterestsProvider'
 import ChooseInterestsPageView from './ChooseInterestsPageView'
 
 export default function ChooseInterestsPageController() {
-  const { selectedTags } = useContext(InterestsContext)
-
   const mockData = [
     {
       name: 'Trending',
@@ -31,7 +27,10 @@ export default function ChooseInterestsPageController() {
   ]
 
   const onSubmit = () => {
-    console.log(selectedTags)
+    /*
+    A backend request needs to be made here to submit the user interest preferences, and then the
+    user would be routed to their dashboard.
+    */
   }
 
   return <ChooseInterestsPageView data={mockData} onSubmit={onSubmit} />
