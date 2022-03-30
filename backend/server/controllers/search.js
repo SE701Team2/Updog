@@ -52,6 +52,7 @@ const getUsersByQuery = async (query) => {
         { nickname: { [Sequelize.Op.like]: '%' + query + '%' } },
       ],
     },
+    order: [['createdAt', 'DESC']],
     raw: true,
   })
 }
