@@ -1,6 +1,15 @@
 import { Router } from 'express'
-import { user, posts, test, interests, tags, search } from '../controllers'
+import {
+  user,
+  posts,
+  test,
+  image,
+  interests,
+  tags,
+  search,
+} from '../controllers'
 const auth = require('../../middlewares/auth')
+
 const router = Router()
 
 /*
@@ -60,6 +69,13 @@ router
   .delete(auth, posts.unsharePostById)
 
 router.route('/posts/:id/interactions').get(auth, posts.getInteractedUsers)
+
+/*
+IMAGES
+*/
+
+router.route('/images').post(image.uploadImage)
+router.route('/images/:filename').get(image.getImage)
 
 /*
 TAGS
