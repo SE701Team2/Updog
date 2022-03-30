@@ -32,7 +32,6 @@ export const request = async (url, method = 'GET', data = {}, jwt = null) => {
       error = err.response.data['Error message']
       tokenExpired(error)
     })
-  console.log(error)
 
   return { data: response?.data ?? null, err: error }
 }

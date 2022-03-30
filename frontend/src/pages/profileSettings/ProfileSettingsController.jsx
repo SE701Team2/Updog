@@ -11,12 +11,14 @@ import { AuthContext } from '../../contexts/AuthProvider'
  * This page is where users can edit their profile
  */
 const ProfileSettingsController = () => {
-  const username = localStorage.getItem('username')
+  const {
+    user: { username },
+    logout,
+  } = useContext(AuthContext)
   const { data, loading, err } = useApi(`users/${username}`)
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [selectedPicture, setSelectedPicture] = useState(null)
   const navigate = useNavigate()
-  const authContext = useContext(AuthContext)
 
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
 
@@ -49,9 +51,7 @@ const ProfileSettingsController = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('username')
-    authContext.logout()
+    logout()
     navigate('/')
   }
 

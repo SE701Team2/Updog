@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import LoadingView from '../loading/LoadingView'
 import UserPageView from './UserPageView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
+import { AuthContext } from '../../contexts/AuthProvider'
 
 const follows = (followsData, username) => {
   const data = followsData?.followers ?? []
@@ -15,7 +16,9 @@ const follows = (followsData, username) => {
  */
 const UserPageController = () => {
   const { username } = useParams()
-  const loggedInUsername = localStorage.getItem('username')
+  const {
+    user: { username: loggedInUsername },
+  } = useContext(AuthContext)
   const loggedIn = username === loggedInUsername
   const navigate = useNavigate()
   const { data: userData, loading: userLoading } = useApi(`users/${username}`)
