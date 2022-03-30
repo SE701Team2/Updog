@@ -58,12 +58,8 @@ const getUsersByQuery = async (query) => {
 }
 
 const generateUserDtos = async (users) => {
-  const userDtos = []
-  await Promise.all(
-    users.map(async (user) => {
-      const userDto = await UserDTO.convertToDto(user)
-      userDtos.push(userDto)
-    })
+  const userDtos = await Promise.all(
+    users.map((user) => UserDTO.convertToDto(user))
   )
   return userDtos
 }
