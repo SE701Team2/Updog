@@ -15,18 +15,16 @@ export class ActivityType {
 export default class Activity {
   constructor(postDto, interactingUser, activityType, activityTime) {
     // Fields named for compatability with old usage
-    this.postId = postDto.id
+    this.postID = postDto.id
     this.post = postDto
     this.userId = interactingUser
     this.activity = activityType
     this.timestamp = activityTime
   }
 
-  // Create a list of activities by a user in order of post creation time
-  // TODO: Use time at which post was liked or shared by the user rather
-  // than post creation time
+  // Create a list of activities by a user in chronological order
   static async getUserActivities(userId) {
-    const activities = []
+    let activities = []
     let ownPosts = await models.posts.findAll({
       where: {
         author: userId,
@@ -38,8 +36,8 @@ export default class Activity {
         new Activity(
           await PostDTO.convertToDto(post),
           userId,
-          ActivityType.POSTED,
-          post.dataValues.createdAt
+          ActivityType.POSTED.type,
+          Date.parse(post.createdAt)
         )
       )
     }
@@ -60,8 +58,8 @@ export default class Activity {
         new Activity(
           await PostDTO.convertToDto(post),
           userId,
-          ActivityType.SHARED,
-          post.dataValues.createdAt
+          ActivityType.SHARED.type,
+          Date.parse(sharedPost.createdAt)
         )
       )
     }
@@ -81,16 +79,15 @@ export default class Activity {
         new Activity(
           await PostDTO.convertToDto(post),
           userId,
-          ActivityType.LIKED,
-          post.dataValues.createdAt
+          ActivityType.LIKED.type,
+          Date.parse(likedPost.createdAt)
         )
       )
     }
 
     activities.sort((a, b) => {
-      a.activityTime > b.activityTime ? 1 : -1
+      return a.timestamp < b.timestamp ? 1 : -1
     })
-
     return activities
   }
 
@@ -103,7 +100,7 @@ export default class Activity {
       feed.push(...activities)
     }
     feed.sort((a, b) => {
-      a.activityTime > b.activityTime ? 1 : -1
+      return a.timestamp < b.timestamp ? 1 : -1
     })
     return feed
   }

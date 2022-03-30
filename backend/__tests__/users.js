@@ -343,9 +343,16 @@ describe('Users', () => {
           activity: 'POSTED',
         },
       ]
+      let filteredResponse = response.body.map((a) => {
+        return {
+          postID: a.postID,
+          timestamp: a.timestamp,
+          activity: a.activity,
+        }
+      })
 
       expect(response.statusCode).toEqual(200)
-      expect(response.body).toEqual(expectedOutput)
+      expect(filteredResponse).toEqual(expectedOutput)
     })
   })
 
@@ -407,8 +414,17 @@ describe('Users', () => {
         },
       ]
 
+      let filteredResponse = response.body.map((a) => {
+        return {
+          post: a.post,
+          timestamp: a.timestamp,
+          activity: a.activity,
+          userId: a.userId,
+        }
+      })
+
       expect(response.statusCode).toEqual(200)
-      expect(response.body).toEqual(expectedOutput)
+      expect(filteredResponse).toEqual(expectedOutput)
     })
   })
 
