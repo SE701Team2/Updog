@@ -5,6 +5,7 @@ import ProfileSettingsView from './ProfileSettingsView'
 import useApi from '../../hooks/useApi'
 import { request, uploadImage } from '../../functions'
 import SERVER_URL from '../../config'
+import LoadingView from '../loading/LoadingView'
 
 /**
  * This page is where users can edit their profile
@@ -17,7 +18,7 @@ const ProfileSettingsController = () => {
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {

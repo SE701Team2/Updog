@@ -1,8 +1,9 @@
 import { List, ListItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import NotificationsPageView from './NotificationsPageView'
 import classes from './notificationspage.module.scss'
 import LikedNotification from '../../components/notifications/liked/LikedNotificationController'
+import NotificationsPageView from './NotificationsPageView'
+import LoadingView from '../loading/LoadingView'
 import SharedNotification from '../../components/notifications/shared/SharedNotificationController'
 import RepliedNotification from '../../components/notifications/replied/RepliedNotificationController'
 import useApi from '../../hooks/useApi'
@@ -58,7 +59,7 @@ const NotificationsPageController = () => {
   }, [data])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingView />
   }
 
   if (err) {
