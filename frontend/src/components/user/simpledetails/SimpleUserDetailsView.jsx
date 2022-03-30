@@ -11,16 +11,17 @@ const SimpleUserDetailsView = ({ user, condensed, time }) => {
       to={`/user/${user.username}`}
       className={condensed ? classes.condensedContainer : classes.container}
     >
-      <div>
+      <div className={classes.timestampContainer}>
         <div className={classes.timestamp}>
-          <span>{user.nickname}</span>
+          <span className={classes.nickname}>{user.nickname}</span>
+          <div className={classes.spacer} />
           {time !== 0 && (
-            <div>
+            <div className={classes.timestampText}>
               • <ReactTimeAgo date={time} timeStyle="twitter" />
             </div>
           )}
         </div>
-        <span>@{user.username}</span>
+        <span className={classes.username}>@{user.username}</span>
       </div>
       <Avatar
         sx={{ width: size, height: size }}

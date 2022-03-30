@@ -11,11 +11,11 @@ import classes from './dashboardpage.module.scss'
  * Card container for each feed post
  */
 const FeedCard = styled(Card)({
-  width: '90%',
+  width: '85%',
   margin: 'auto',
-  marginTop: '10px',
+  marginTop: '20px',
   marginBottom: '10px',
-  padding: '10px',
+  padding: '20px',
 })
 
 const FloatingAddButton = styled(Fab)({
