@@ -8,7 +8,7 @@ import {
   tags,
   search,
 } from '../controllers'
-const auth = require('../../middlewares/auth')
+import { auth } from '../../middlewares/auth'
 
 const router = Router()
 

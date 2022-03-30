@@ -1,6 +1,6 @@
 import Authentication from './authentication'
 
-module.exports = (req, res, next) => {
+export const auth = (req, res, next) => {
   try {
     const authToken = req.get('Authorization')
     if (!authToken) {
@@ -15,10 +15,9 @@ module.exports = (req, res, next) => {
           error: new Error('Invalid auth token'),
         })
         return
-      } else {
-        res.locals.decodedUser = decodedUser
-        next()
       }
+      res.locals.decodedUser = decodedUser
+      next()
     }
   } catch {
     res.status(401).json({
