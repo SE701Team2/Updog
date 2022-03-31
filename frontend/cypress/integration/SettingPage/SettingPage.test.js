@@ -41,4 +41,25 @@ describe('Banner setting test', () => {
     cy.visit('/settingpage')
     cy.contains('hi')
   })
+
+  it('change default banner', () => {
+    cy.visit('/settings')
+    cy.contains('Change Banner Image').click()
+    cy.get('img').eq(2).click()
+    cy.contains('Save').click()
+
+    cy.visit('/settings')
+    cy.contains('Change Banner Image').click()
+    cy.get('img').eq(1).click()
+    cy.contains('Save').click()
+
+    cy.visit('/user/settingpage')
+    cy.contains('Activity')
+    console.log(cy.get('img'))
+    cy.get('img').should(
+      'have.attr',
+      'src',
+      'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg'
+    )
+  })
 })

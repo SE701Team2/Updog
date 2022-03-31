@@ -22,13 +22,4 @@ describe('Banner setting test', () => {
     cy.get('#closeButton').click()
     cy.get('#dialog').should('not.exist')
   })
-
-  it('render save banner setting', () => {
-    cy.visit('/settings')
-    cy.get('#ChangeBanner').click()
-
-    cy.get('#dialog').should('exist')
-    cy.get('#saveButton').click()
-    cy.get('#dialog').should('not.exist')
-  })
 })
