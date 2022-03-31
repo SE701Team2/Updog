@@ -37,7 +37,7 @@ const DashboardPageView = ({ feedData }) => (
     {/* Will need to link AddButton to post composer when completed */}
     <Link to="/new-post">
       <FloatingAddButton color="primary">
-        <AddIcon />
+        <AddIcon id="icon" />
       </FloatingAddButton>
     </Link>
     <Footer />

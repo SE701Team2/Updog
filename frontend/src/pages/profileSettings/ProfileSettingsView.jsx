@@ -39,6 +39,7 @@ const ProfileSettingsView = ({
   handleAvatarOpen,
   handleAvatarClose,
   handleProfilePic,
+  logout,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
@@ -141,8 +142,8 @@ const ProfileSettingsView = ({
       <Divider className={classes.divider} variant="middle" />
 
       <div className={classes.save}>
-        <Button type="submit" variant="contained" onClick={updateProfile}>
-          Save
+        <Button type="submit" variant="contained" onClick={logout} id="logout">
+          Log out
         </Button>
       </div>
 

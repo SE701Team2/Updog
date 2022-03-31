@@ -21,6 +21,7 @@ const LandingView = () => (
                 variant="outlined"
                 fullWidth
                 style={{ borderRadius: 100, padding: 10 }}
+                id="SignIn"
               >
                 Sign in
               </Button>

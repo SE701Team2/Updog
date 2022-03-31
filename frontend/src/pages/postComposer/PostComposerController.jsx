@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import LoadingView from '../loading/LoadingView'
 import PostComposerView from './PostComposerView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
+import { AuthContext } from '../../contexts/AuthProvider'
 
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
@@ -11,7 +12,9 @@ const PostComposerController = () => {
   const [postHandles, setPostHandles] = useState([])
   const [newTags, setNewTags] = useState([])
   const [loading, setLoading] = useState(false)
-  const username = localStorage.getItem('username')
+  const {
+    user: { username },
+  } = useContext(AuthContext)
   const { data, loading: userLoading, err } = useApi(`users/${username}`)
 
   const navigate = useNavigate()

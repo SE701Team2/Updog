@@ -1,20 +1,25 @@
-import { useState } from 'react'
-
-// eslint-disable-next-line import/no-unresolved
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router'
 import ProfileSettingsView from './ProfileSettingsView'
 import useApi from '../../hooks/useApi'
 import { request, uploadImage } from '../../functions'
 import SERVER_URL from '../../config'
 import LoadingView from '../loading/LoadingView'
+import { AuthContext } from '../../contexts/AuthProvider'
 
 /**
  * This page is where users can edit their profile
  */
 const ProfileSettingsController = () => {
-  const username = localStorage.getItem('username')
+  const {
+    user: { username },
+    logout,
+  } = useContext(AuthContext)
   const { data, loading, err } = useApi(`users/${username}`)
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [selectedPicture, setSelectedPicture] = useState(null)
+  const navigate = useNavigate()
+
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
 
   if (loading) {
@@ -45,6 +50,11 @@ const ProfileSettingsController = () => {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
+
   const handleAvatarOpen = () => {
     setAvatarModalOpen(true)
   }
@@ -67,6 +77,7 @@ const ProfileSettingsController = () => {
       handleAvatarClose={handleAvatarClose}
       profilePicture={selectedPicture}
       handleProfilePic={handleProfilePic}
+      logout={handleLogout}
     />
   )
 }
