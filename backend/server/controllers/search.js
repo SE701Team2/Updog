@@ -49,21 +49,21 @@ const getUsersByQuery = async (query) => {
       [Sequelize.Op.or]: [
         {
           username: Sequelize.where(
-            Sequelize.fn('LOWER', sequelize.col('username')),
+            Sequelize.fn('LOWER', Sequelize.col('username')),
             'LIKE',
             '%' + query.toLowerCase() + '%'
           ),
         },
         {
           email: Sequelize.where(
-            Sequelize.fn('LOWER', sequelize.col('email')),
+            Sequelize.fn('LOWER', Sequelize.col('email')),
             'LIKE',
             '%' + query.toLowerCase() + '%'
           ),
         },
         {
           nickname: Sequelize.where(
-            Sequelize.fn('LOWER', sequelize.col('nickname')),
+            Sequelize.fn('LOWER', Sequelize.col('nickname')),
             'LIKE',
             '%' + query.toLowerCase() + '%'
           ),
@@ -86,7 +86,7 @@ const getPostsByQuery = async (query) => {
   return await models.posts.findAll({
     where: {
       text_content: Sequelize.where(
-        Sequelize.fn('LOWER', sequelize.col('text_content')),
+        Sequelize.fn('LOWER', Sequelize.col('text_content')),
         'LIKE',
         '%' + query.toLowerCase() + '%'
       ),
