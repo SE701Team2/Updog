@@ -152,6 +152,9 @@ export const getUserActivity = async (req, res) => {
     }
 
     let activities = await Activity.getUserActivities(userOfInterest.id)
+    activities.sort((a, b) => {
+      return a.timestamp < b.timestamp ? 1 : -1
+    })
 
     res.status(200).send(activities)
   } catch (error) {

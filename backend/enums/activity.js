@@ -22,86 +22,84 @@ export default class Activity {
     this.timestamp = activityTime
   }
 
-  // Create a list of activities by a user in chronological order
   static async getUserActivities(userId) {
-    let activities = []
-    let ownPosts = await models.posts.findAll({
+    const ownPosts = await models.posts.findAll({
       where: {
         author: userId,
       },
     })
-    // async forEach didn't seem to await properly
-    for (const post of ownPosts) {
-      activities.push(
-        new Activity(
-          await PostDTO.convertToDto(post),
-          userId,
-          ActivityType.POSTED.type,
-          Date.parse(post.createdAt)
-        )
-      )
-    }
 
-    let sharedPosts = await models.sharedPost.findAll({
+    const postActivities = await Promise.all(
+      ownPosts.map(
+        async (post) =>
+          new Activity(
+            await PostDTO.convertToDto(post),
+            userId,
+            ActivityType.POSTED.type,
+            Date.parse(post.createdAt)
+          )
+      )
+    )
+
+    const sharedPosts = await models.sharedPost.findAll({
       where: {
         userID: userId,
       },
     })
-    for (const sharedPost of sharedPosts) {
-      // Get each real post DTO by querying individually
-      let post = await models.posts.findOne({
-        where: {
-          id: sharedPost.postId,
-        },
-      })
-      activities.push(
-        new Activity(
-          await PostDTO.convertToDto(post),
+
+    const sharedActivities = await Promise.all(
+      sharedPosts.map(async (sharedPost) => {
+        const sharedPostData = await models.posts.findOne({
+          where: {
+            id: sharedPost.postId,
+          },
+        })
+        return new Activity(
+          await PostDTO.convertToDto(sharedPostData),
           userId,
           ActivityType.SHARED.type,
           Date.parse(sharedPost.createdAt)
         )
-      )
-    }
+      })
+    )
 
-    let likedPosts = await models.likedPost.findAll({
+    const likedPosts = await models.likedPost.findAll({
       where: {
         userID: userId,
       },
     })
-    for (const likedPost of likedPosts) {
-      let post = await models.posts.findOne({
-        where: {
-          id: likedPost.postId,
-        },
-      })
-      activities.push(
-        new Activity(
-          await PostDTO.convertToDto(post),
+
+    const likedActivities = await Promise.all(
+      likedPosts.map(async (likedPost) => {
+        const likedPostData = await models.posts.findOne({
+          where: {
+            id: likedPost.postId,
+          },
+        })
+        return new Activity(
+          await PostDTO.convertToDto(likedPostData),
           userId,
           ActivityType.LIKED.type,
           Date.parse(likedPost.createdAt)
         )
-      )
-    }
+      })
+    )
 
-    activities.sort((a, b) => {
-      return a.timestamp < b.timestamp ? 1 : -1
-    })
-    return activities
+    return [...postActivities, ...sharedActivities, ...likedActivities]
   }
 
   // Create a list of activities in order of post creation time
   // from a list of follower objects
   static async retrieveActivityFeed(following) {
-    const feed = []
-    for (const id of following.map((f) => f.dataValues.followedId)) {
-      let activities = await Activity.getUserActivities(id)
-      feed.push(...activities)
-    }
-    feed.sort((a, b) => {
-      return a.timestamp < b.timestamp ? 1 : -1
-    })
-    return feed
+    const userActivities = await Promise.all(
+      following.map((followee) =>
+        Activity.getUserActivities(followee.followedId)
+      )
+    )
+    const feeds = userActivities.reduce(
+      (feed, activities) => [...feed, ...activities],
+      []
+    )
+    return feeds.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
   }
 }

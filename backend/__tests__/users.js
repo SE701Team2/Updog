@@ -343,7 +343,7 @@ describe('Users', () => {
           activity: 'POSTED',
         },
       ]
-      let filteredResponse = response.body.map((a) => {
+      const filteredResponse = response.body.map((a) => {
         return {
           postID: a.postID,
           timestamp: a.timestamp,
@@ -414,7 +414,7 @@ describe('Users', () => {
         },
       ]
 
-      let filteredResponse = response.body.map((a) => {
+      const filteredResponse = response.body.map((a) => {
         return {
           post: a.post,
           timestamp: a.timestamp,
