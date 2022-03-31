@@ -29,4 +29,16 @@ describe('Banner setting test', () => {
 
     cy.url().should('contain', '/signIn')
   })
+
+  it('change bio', () => {
+    cy.visit('/')
+    cy.visit('/settings')
+
+    cy.contains(/^Edit$/).click()
+    cy.get('#filled-multiline-static').type('hi')
+
+    cy.contains('Save').click()
+    cy.visit('/settingpage')
+    cy.contains('hi')
+  })
 })

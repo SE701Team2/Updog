@@ -53,7 +53,6 @@ const ProfileSettingsController = () => {
 
   const updateBio = async (bio) => {
     const { nickname, profileBanner, profilePic } = data
-    console.log(bio)
 
     await request('users', 'PUT', {
       username,
