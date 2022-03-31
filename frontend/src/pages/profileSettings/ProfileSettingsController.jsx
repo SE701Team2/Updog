@@ -18,6 +18,8 @@ const ProfileSettingsController = () => {
   const { data, loading, err } = useApi(`users/${username}`)
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [selectedPicture, setSelectedPicture] = useState(null)
+  const [selectedBanner, setSelectedBanner] = useState(null)
+
   const navigate = useNavigate()
 
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
@@ -31,7 +33,6 @@ const ProfileSettingsController = () => {
   }
 
   const updateProfile = async () => {
-    console.log(data)
     const imageUpload = new FormData()
     imageUpload.append('attachments', selectedPicture)
 
@@ -48,6 +49,34 @@ const ProfileSettingsController = () => {
         profilePic: `${SERVER_URL}/images/${fileName}`,
         profileBanner,
       })
+    }
+  }
+  console.log(data)
+
+  const updateBannerUpload = async () => {
+    let fileName
+    const { nickname, bio, profilePic } = data
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const url = new URL(selectedBanner)
+
+      if (selectedBanner != null) {
+        await request('users', 'PUT', {
+          username,
+          nickname,
+          bio,
+          profilePic,
+          profileBanner: selectedBanner,
+        })
+      }
+    } catch (_) {
+      const imageUpload = new FormData()
+      imageUpload.append('attachments', selectedBanner)
+
+      await uploadImage(imageUpload)
+      fileName = selectedBanner.name
+      console.log(fileName)
     }
   }
 
@@ -90,6 +119,9 @@ const ProfileSettingsController = () => {
       profilePicture={selectedPicture}
       handleProfilePic={handleProfilePic}
       handleBioUpdate={updateBio}
+      updateBannerUpload={updateBannerUpload}
+      selectedBanner={selectedBanner}
+      setSelectedBanner={setSelectedBanner}
       logout={handleLogout}
     />
   )
