@@ -39,6 +39,7 @@ const ProfileSettingsView = ({
   handleAvatarOpen,
   handleAvatarClose,
   handleProfilePic,
+  handleBioUpdate,
   logout,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
@@ -132,7 +133,11 @@ const ProfileSettingsView = ({
           >
             Edit
           </Button>
-          <BioEditController opened={openBioEdit} setOpen={setOpenBioEdit} />
+          <BioEditController
+            opened={openBioEdit}
+            setOpen={setOpenBioEdit}
+            handleBioUpdate={handleBioUpdate}
+          />
         </div>
       </div>
       <p className={classes.subtext} style={{ marginBottom: '14px' }}>

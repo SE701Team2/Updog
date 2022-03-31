@@ -31,6 +31,7 @@ const ProfileSettingsController = () => {
   }
 
   const updateProfile = async () => {
+    console.log(data)
     const imageUpload = new FormData()
     imageUpload.append('attachments', selectedPicture)
 
@@ -50,6 +51,18 @@ const ProfileSettingsController = () => {
     }
   }
 
+  const updateBio = async (bio) => {
+    const { nickname, profileBanner, profilePic } = data
+    console.log(bio)
+
+    await request('users', 'PUT', {
+      username,
+      nickname,
+      bio,
+      profilePic,
+      profileBanner,
+    })
+  }
   const handleLogout = () => {
     logout()
     navigate('/')
@@ -77,6 +90,7 @@ const ProfileSettingsController = () => {
       handleAvatarClose={handleAvatarClose}
       profilePicture={selectedPicture}
       handleProfilePic={handleProfilePic}
+      handleBioUpdate={updateBio}
       logout={handleLogout}
     />
   )
