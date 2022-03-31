@@ -2,12 +2,21 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+  color: grey;
 
   > div {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.15rem;
     cursor: pointer;
+  }
+
+  .spacer {
+    margin: auto;
+  }
+  .like {
+    margin-right: 20px;
   }
 }

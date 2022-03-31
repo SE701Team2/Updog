@@ -33,8 +33,11 @@ const UserPageView = ({
 
       <ProfileUserDetails user={userData} />
 
-      <div className={classes.posts}>
+      <div className={classes.activity}>
         <h2>Activity</h2>
+      </div>
+
+      <div className={classes.posts}>
         <List>
           {userFeed?.map((post) => (
             <ListItem

@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "e2e": "cypress run",
+    "e2e": "cypress open",
     "pretty-quick": "pretty-quick --staged",
     "lint": "prettier --write ."
   },

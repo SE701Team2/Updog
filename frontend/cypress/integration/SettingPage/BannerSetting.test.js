@@ -1,22 +1,12 @@
 describe('Banner setting test', () => {
   beforeEach(() => {
-    cy.request({
-      url: 'http://localhost:8000/api/users/authenticate',
-      method: 'POST',
-      body: { email: 'kirstygong23@gmail.com', password: '123456789' },
-      header: null,
-    })
-      .its('body')
-      .then((res) => {
-        localStorage.setItem('token', res.authToken)
-        localStorage.setItem('username', res.username)
-      })
+    const username = 'bannersetting'
+    const email = 'bannersetting@test.com'
+    const password = '123456789'
+    cy.login(username, email, password)
   })
 
   it('render open banner setting', () => {
-    Cypress.Commands.add('clickButton', (id) => {
-      cy.get('button').contains(id).click()
-    })
     cy.visit('/settings')
     cy.get('#ChangeBanner').click()
 
@@ -25,9 +15,6 @@ describe('Banner setting test', () => {
   })
 
   it('render close banner setting', () => {
-    Cypress.Commands.add('clickButton', (id) => {
-      cy.get('button').contains(id).click()
-    })
     cy.visit('/settings')
     cy.get('#ChangeBanner').click()
 
