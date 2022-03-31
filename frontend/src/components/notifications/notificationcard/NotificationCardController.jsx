@@ -1,21 +1,20 @@
+import timeSince from '../../../Utils/TimeFormatter'
 import NotificationCardView from './NotificationCardView'
 
 /**
  * Creates a NotificationCard Component.
- * TO DO:
- * Implement any NotificationCardController logic if needed
  */
 
 const NotificationCardController = ({
-  description,
+  type,
   time,
   handle,
   username,
   image,
 }) => (
   <NotificationCardView
-    description={description}
-    time={time}
+    type={type}
+    time={timeSince(time)}
     handle={handle}
     username={username}
     image={image}
