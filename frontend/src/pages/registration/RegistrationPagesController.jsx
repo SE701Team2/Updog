@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import RegistrationFormView from './RegistrationPageView'
 import validationEmail from '../../functions/validateEmail'
-
 import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
 
@@ -12,8 +10,6 @@ const RegistrationFormController = () => {
   const [username, setUsername] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const navigate = useNavigate()
 
   const authContext = useContext(AuthContext)
 
@@ -62,7 +58,6 @@ const RegistrationFormController = () => {
         localStorage.setItem('token', authToken)
         localStorage.setItem('username', username)
         authContext.login()
-        navigate('/')
       }
     }
   }

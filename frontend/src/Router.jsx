@@ -13,6 +13,8 @@ import User from './pages/user/UserPageController'
 import PostComposer from './pages/postComposer/PostComposerController'
 import Loading from './pages/loading/LoadingController'
 import { AuthContext } from './contexts/AuthProvider'
+import { InterestsContextProvider } from './contexts/InterestsProvider'
+import ChooseInterestsPage from './pages/chooseInterests/ChooseInterestsPageController'
 
 const Router = () => {
   // fetch the token to check if the user is authenticated
@@ -28,7 +30,6 @@ const Router = () => {
     routes = (
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="*" element={<Navigate to="/" />} />
         <Route path="/post/:id" element={<Post />} />
         <Route path="/user/:username" element={<User />} />
         <Route path="/user/:username/follows" element={<Follows />} />
@@ -36,6 +37,15 @@ const Router = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/settings" element={<ProfileSettings />} />
         <Route path="/new-post" element={<PostComposer />} />
+        <Route
+          path="/signUp"
+          element={
+            <InterestsContextProvider>
+              <ChooseInterestsPage />
+            </InterestsContextProvider>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     )
   } else {
