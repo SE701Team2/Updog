@@ -1,15 +1,25 @@
 @use '~/src/styles/theme';
 
-.subHeader {
-  text-align: center;
-  padding-top: 8px;
-  padding-bottom: 8px;
+.container {
+  height: 100%;
 }
 
-.container {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  display: flex;
-  border-top: 1px solid theme.$divider;
-  border-bottom: 1px solid theme.$divider;
+.loading {
+  padding-top: calc(50vh - 200px);
+  margin: auto;
+  max-width: 400px;
+}
+
+.pageContent {
+  width: 100%;
+  height: calc(100% - 179px);
+  overflow: auto;
+  padding-bottom: 50px;
+  background-color: #fafafa;
+}
+
+.centerText {
+  right: calc(50% - 41px);
+  top: 50%;
+  position: absolute;
 }
