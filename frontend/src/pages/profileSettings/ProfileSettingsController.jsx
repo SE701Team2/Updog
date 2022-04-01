@@ -52,7 +52,6 @@ const ProfileSettingsController = () => {
       })
     }
   }
-  console.log(data)
 
   const updateBannerUpload = async () => {
     let fileName
@@ -77,7 +76,15 @@ const ProfileSettingsController = () => {
 
       await uploadImage(imageUpload)
       fileName = selectedBanner.name
-      console.log(fileName)
+      if (selectedBanner != null) {
+        await request('users', 'PUT', {
+          username,
+          nickname,
+          bio,
+          profilePic,
+          profileBanner: `${SERVER_URL}/images/${fileName}`,
+        })
+      }
     }
   }
 

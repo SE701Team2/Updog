@@ -8,6 +8,7 @@ import HeaderCustom from '../../components/layout/headercustom/HeaderCustomContr
 import classes from './profilesettings.module.scss'
 import BannerSettingController from '../../components/user/BannerSetting/BannerSettingController'
 import BioEditController from '../../components/user/BioSetting/BioEditController'
+import SERVER_URL from '../../config'
 
 // TODO: Remove when is ready
 const mock = [
@@ -38,6 +39,7 @@ const ProfileSettingsView = ({
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
   const [profileBanner, setProfileBanner] = useState(user.profileBanner)
+  console.log(profileBanner)
 
   return (
     <div>
@@ -47,7 +49,14 @@ const ProfileSettingsView = ({
       <div className={classes.banner}>
         <img
           className={classes.bannerImg}
-          src={profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
+          src={
+            // eslint-disable-next-line no-nested-ternary
+            profileBanner !== undefined
+              ? typeof profileBanner === 'string'
+                ? profileBanner
+                : `${SERVER_URL}/images/${profileBanner.name}`
+              : 'https://i.imgur.com/PcEvuMw.png'
+          }
           alt="Banner"
         />
         <Button
