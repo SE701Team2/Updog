@@ -33,6 +33,9 @@ const ProfileSettingsController = () => {
     return <div>Error: {err.message}</div>
   }
 
+  /**
+   * Update profile picture
+   */
   const updateProfile = async () => {
     const imageUpload = new FormData()
     imageUpload.append('attachments', selectedPicture)
@@ -53,6 +56,9 @@ const ProfileSettingsController = () => {
     }
   }
 
+  /**
+   * Update Banner, if its a default banner, no need to upload the image.
+   */
   const updateBannerUpload = async () => {
     let fileName
     const { nickname, bio, profilePic } = data
@@ -88,6 +94,10 @@ const ProfileSettingsController = () => {
     }
   }
 
+  /**
+   * update bio
+   * @param {string} bio
+   */
   const updateBio = async (bio) => {
     const { nickname, profileBanner, profilePic } = data
 
@@ -99,6 +109,7 @@ const ProfileSettingsController = () => {
       profileBanner,
     })
   }
+
   const handleLogout = () => {
     logout()
     navigate('/')
