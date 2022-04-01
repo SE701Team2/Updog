@@ -6,11 +6,10 @@
   background: $primary !important;
   border-radius: 1.5rem !important;
   color: $surface !important;
-  margin: 0 1rem !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0.5rem 2rem !important;
   height: 3rem;
   @media only screen and (max-width: 480px) {
-    height: 2rem;
+    height: 2.5rem;
   }
 
   &:hover {

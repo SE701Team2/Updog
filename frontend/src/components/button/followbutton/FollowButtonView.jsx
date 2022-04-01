@@ -13,7 +13,8 @@ import classes from './followbutton.module.scss'
 export default function FollowButtonView({ isFollowing, onClick }) {
   const [isFollowingState, setIsFollowingState] = React.useState(isFollowing)
 
-  const change = () => {
+  const change = (e) => {
+    e.stopPropagation()
     setIsFollowingState((boolean) => {
       onClick(!boolean)
       return !boolean
