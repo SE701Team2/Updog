@@ -31,6 +31,8 @@ const ProfileSettingsView = ({
   updateBannerUpload,
   selectedBanner,
   setSelectedBanner,
+  bioText,
+  setBioText,
   logout,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
@@ -132,12 +134,13 @@ const ProfileSettingsView = ({
           <BioEditController
             opened={openBioEdit}
             setOpen={setOpenBioEdit}
+            setBioText={setBioText}
             handleBioUpdate={handleBioUpdate}
           />
         </div>
       </div>
       <p className={classes.subtext} style={{ marginBottom: '14px' }}>
-        {user.bio}
+        {bioText === undefined ? user.bio : bioText}
       </p>
 
       <Divider className={classes.divider} variant="middle" />

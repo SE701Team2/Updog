@@ -11,7 +11,12 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import classes from './bioEdit.module.scss'
 
-export default function BioEditView({ opened, setOpen, handleBioUpdate }) {
+export default function BioEditView({
+  opened,
+  setOpen,
+  setBioText,
+  handleBioUpdate,
+}) {
   const bioText = useRef()
   return (
     <Dialog
@@ -52,6 +57,7 @@ export default function BioEditView({ opened, setOpen, handleBioUpdate }) {
           className={classes.saveButton}
           variant="contained"
           onClick={() => {
+            setBioText(bioText.current.value)
             handleBioUpdate(bioText.current.value)
             setOpen(false)
           }}

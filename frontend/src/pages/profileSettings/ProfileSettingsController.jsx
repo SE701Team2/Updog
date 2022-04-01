@@ -19,6 +19,7 @@ const ProfileSettingsController = () => {
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [selectedPicture, setSelectedPicture] = useState(null)
   const [selectedBanner, setSelectedBanner] = useState(null)
+  const [bioText, setBioText] = useState()
 
   const navigate = useNavigate()
 
@@ -119,6 +120,8 @@ const ProfileSettingsController = () => {
       profilePicture={selectedPicture}
       handleProfilePic={handleProfilePic}
       handleBioUpdate={updateBio}
+      bioText={bioText}
+      setBioText={setBioText}
       updateBannerUpload={updateBannerUpload}
       selectedBanner={selectedBanner}
       setSelectedBanner={setSelectedBanner}
