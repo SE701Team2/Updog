@@ -71,6 +71,26 @@ export default class Activity {
     return activity
   }
 
+  static async retrieveInterests(user) {
+    const interests = []
+    const unconvertedInterests = await this.getPostsForInterests(user.id)
+    await Promise.all(
+      unconvertedInterests.map(async (activity) => {
+        const post = await this.convertToFeedActivity(
+          this.SHARED,
+          activity.postId,
+          activity.userId,
+          activity.createdAt
+        )
+        interests.push(post)
+      })
+    )
+
+    interests.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+
+    return interests
+  }
+
   static convertToUserActivity(activity, postId, postTime) {
     return {
       postID: postId,
@@ -112,5 +132,35 @@ export default class Activity {
 
     // Merge the posts together into one array
     return [postsDB, likedPosts, sharedPosts]
+  }
+
+  static async getPostsForInterests(userId) {
+    const posts = []
+    // Retrieve user's interests
+    const interestsDB = await models.userInterests.findAll({
+      where: {
+        userId: userId,
+      },
+    })
+
+    const relatedPosts = []
+
+    // Retrieve post IDs relevant to the user's interests
+    for (let interest of interestsDB) {
+      relatedPosts.push(
+        ...(await models.posttag.findAll({
+          where: {
+            tagId: interest.tagId,
+          },
+        }))
+      )
+    }
+
+    // Retrieve the actual posts for the given post IDs
+    for (let postId of relatedPosts) {
+      posts.push(await models.posts.findByPk(postId))
+    }
+
+    return posts
   }
 }

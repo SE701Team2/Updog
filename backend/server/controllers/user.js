@@ -172,6 +172,14 @@ export const getFeed = async (req, res) => {
 
     const activity = await Activity.retrieveActivities(following)
 
+    // Add in extra interests-based posts if not enough posts to send back
+    if (activity.length < 10) {
+      const interests = await Activity.retrieveInterests()
+      for (let i = 0; i < 10 - activity.length; i++) {
+        activity.push(interests[i])
+      }
+    }
+
     res.status(200).send(activity)
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
