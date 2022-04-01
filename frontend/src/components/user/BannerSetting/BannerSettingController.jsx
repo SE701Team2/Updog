@@ -12,7 +12,6 @@ export default function BannerSettingController({
   updateBannerUpload,
 }) {
   const handleSave = () => {
-    console.log(selectedBanner)
     if (selectedBanner !== null) {
       updateBannerUpload()
       setProfileBanner(selectedBanner)

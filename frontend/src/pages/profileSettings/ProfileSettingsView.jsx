@@ -39,7 +39,6 @@ const ProfileSettingsView = ({
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
   const [profileBanner, setProfileBanner] = useState(user.profileBanner)
-  console.log(profileBanner)
 
   return (
     <div>

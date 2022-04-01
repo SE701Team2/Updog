@@ -55,7 +55,6 @@ describe('Banner setting test', () => {
 
     cy.visit('/user/settingpage')
     cy.contains('Activity')
-    console.log(cy.get('img'))
     cy.get('img').should(
       'have.attr',
       'src',
