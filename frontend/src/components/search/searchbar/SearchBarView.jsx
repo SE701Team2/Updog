@@ -10,20 +10,26 @@ import React, { useState } from 'react'
  *
  * Note: console.log() is temporary until implementation is added. ESLint won't allow empty method.
  */
-
-const SearchBarView = ({ initialText }) => {
+const SearchBarView = ({ initialText, handleSubmit }) => {
   const [text, setText] = useState(initialText)
+  const [placeholder, setPlaceholder] = useState('Search Updog')
   return (
     <TextField
       variant="filled"
-      placeholder="Search Updog"
+      placeholder={placeholder}
       autoComplete="off"
+      value={text}
       onChange={(e) => {
         setText(e.target.value)
       }}
       onKeyPress={(key) => {
         if (key.key === 'Enter') {
-          console.log(text)
+          handleSubmit(text)
+          setPlaceholder(text)
+          setText('')
+          if (text === '') {
+            setPlaceholder('Search Updog')
+          }
         }
       }}
       InputProps={{
