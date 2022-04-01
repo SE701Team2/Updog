@@ -1,5 +1,6 @@
 import { React } from 'react'
 import { Avatar, Paper, Grid, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 import classes from './notificationcard.module.scss'
 
 /**
@@ -16,7 +17,6 @@ import classes from './notificationcard.module.scss'
  */
 
 const avatarSize = 70
-
 
 function NotificationCardView({ type, time, handle, username, image, post }) {
   let content = ''
@@ -38,44 +38,47 @@ function NotificationCardView({ type, time, handle, username, image, post }) {
       break
   }
   return (
-
-     <Link to={`/post/${post}`}>
+    <Link to={`/post/${post}`} className={classes.link}>
       <Paper variant="outlined" className={classes.container}>
-
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        wrap="wrap"
-        className={classes.container}
-      >
-        <Grid item className={classes.userInfo}>
-          <Grid container alignItems="center" direction="column">
-            <Avatar
-              alt={username}
-              src={image}
-              sx={{ width: avatarSize, height: avatarSize }}
-            />
-            <Typography variant="subtitle1" className={classes.username}>
-              {username}
-            </Typography>
-            <Typography variant="body2" className={classes.userHandle}>
-              @{handle}
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          wrap="wrap"
+          className={classes.container}
+        >
+          <Grid item className={classes.userInfo}>
+            <Grid container alignItems="center" direction="column">
+              <Avatar
+                alt={username}
+                src={image}
+                sx={{ width: avatarSize, height: avatarSize }}
+              />
+              <Typography variant="subtitle1" className={classes.username}>
+                {username}
+              </Typography>
+              <Typography variant="body2" className={classes.userHandle}>
+                @{handle}
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            container
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Typography>{content}</Typography>
+          </Grid>
+          <Grid item xs="auto" container>
+            <Typography variant="caption" className={classes.timestamp}>
+              {time}
             </Typography>
           </Grid>
         </Grid>
-        <Grid item xs={6} container alignItems="center" justifyContent="center">
-          <Typography>{content}</Typography>
-        </Grid>
-        <Grid item xs="auto" container>
-          <Typography variant="caption" className={classes.timestamp}>
-            {time}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Paper>
-     </Link>
-
+      </Paper>
+    </Link>
   )
 }
 
