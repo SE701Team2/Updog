@@ -19,17 +19,6 @@ describe('Banner setting test', () => {
     cy.url().should('contain', '/signIn')
   })
 
-  it('render open banner setting', () => {
-    cy.visit('/')
-    cy.visit('/settings')
-
-    cy.contains('Log out').click()
-
-    cy.contains('Sign in').click()
-
-    cy.url().should('contain', '/signIn')
-  })
-
   it('change bio', () => {
     cy.visit('/')
     cy.visit('/settings')
