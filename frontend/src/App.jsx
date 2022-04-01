@@ -5,6 +5,7 @@ import Router from './Router'
 import AuthProvider from './contexts/AuthProvider'
 import TagProvider from './contexts/TagProvider'
 import HandleProvider from './contexts/HandleProvider'
+import NavigationProvider from './components/layout/navigation/contexts/NavigationProvider'
 
 const theme = createTheme({
   palette: {
@@ -45,11 +46,13 @@ const App = () => (
   <AuthProvider>
     <TagProvider>
       <HandleProvider>
-        <ThemeProvider theme={theme}>
-          <div className={classes.container}>
-            <Router />
-          </div>
-        </ThemeProvider>
+        <NavigationProvider>
+          <ThemeProvider theme={theme}>
+            <div className={classes.container}>
+              <Router />
+            </div>
+          </ThemeProvider>
+        </NavigationProvider>
       </HandleProvider>
     </TagProvider>
   </AuthProvider>
