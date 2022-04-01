@@ -1,4 +1,3 @@
-import timeSince from '../../../Utils/TimeFormatter'
 import NotificationCardView from './NotificationCardView'
 
 /**
@@ -14,7 +13,7 @@ const NotificationCardController = ({
 }) => (
   <NotificationCardView
     type={type}
-    time={timeSince(time)}
+    time={time}
     handle={handle}
     username={username}
     image={image}

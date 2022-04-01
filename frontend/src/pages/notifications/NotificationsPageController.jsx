@@ -1,11 +1,12 @@
 import { List, ListItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import classes from './notificationspage.module.scss'
+import moment from 'moment'
 import NotificationsPageView from './NotificationsPageView'
 import LoadingView from '../loading/LoadingView'
 import useApi from '../../hooks/useApi'
 import NotificationCardController from '../../components/notifications/notificationcard/NotificationCardController'
 
+import classes from './notificationspage.module.scss'
 /**
  * This page renders a list of notifications for the user.
  * TODO: CHANGE PLACEHOLDER IMAGE TO IMAGE FROM NOTIFICATION
@@ -20,11 +21,13 @@ const NotificationsPageController = () => {
     const notifItems = []
     for (let i = 0; i < data.length; i += 1) {
       const notification = data[i]
-      const { from, type, time } = notification
+      const { from, type } = notification
+      const timenew = moment([2021, 0, 29]).fromNow()
+      console.log(timenew)
       const notif = (
         <NotificationCardController
           type={type}
-          time={time}
+          time={timenew}
           handle={from}
           username={from}
           image="http://tny.im/rM7"
