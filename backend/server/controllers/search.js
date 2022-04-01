@@ -47,9 +47,27 @@ const getUsersByQuery = async (query) => {
   return await models.users.findAll({
     where: {
       [Sequelize.Op.or]: [
-        { username: { [Sequelize.Op.like]: '%' + query + '%' } },
-        { email: { [Sequelize.Op.like]: '%' + query + '%' } },
-        { nickname: { [Sequelize.Op.like]: '%' + query + '%' } },
+        {
+          username: Sequelize.where(
+            Sequelize.fn('LOWER', Sequelize.col('username')),
+            'LIKE',
+            '%' + query.toLowerCase() + '%'
+          ),
+        },
+        {
+          email: Sequelize.where(
+            Sequelize.fn('LOWER', Sequelize.col('email')),
+            'LIKE',
+            '%' + query.toLowerCase() + '%'
+          ),
+        },
+        {
+          nickname: Sequelize.where(
+            Sequelize.fn('LOWER', Sequelize.col('nickname')),
+            'LIKE',
+            '%' + query.toLowerCase() + '%'
+          ),
+        },
       ],
     },
     order: [['createdAt', 'DESC']],
@@ -67,7 +85,11 @@ const generateUserDtos = async (users) => {
 const getPostsByQuery = async (query) => {
   return await models.posts.findAll({
     where: {
-      text_content: { [Sequelize.Op.like]: '%' + query + '%' },
+      text_content: Sequelize.where(
+        Sequelize.fn('LOWER', Sequelize.col('text_content')),
+        'LIKE',
+        '%' + query.toLowerCase() + '%'
+      ),
     },
     order: [['createdAt', 'DESC']],
     raw: true,

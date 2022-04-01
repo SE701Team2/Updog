@@ -158,5 +158,48 @@ describe('Search', () => {
         assert.equal(response.statusCode, 400)
       })
     })
+
+    describe('When searching for an existing user (case insensitive)', () => {
+      it('Should return a 200 status response', async () => {
+        const user = await Helper.createUser(
+          'DOJA CAT',
+          'password',
+          'doja.cat@gmail.com'
+        )
+
+        const response = await request(server)
+          .get('/api/search/')
+          .query({ query: 'dOjA', type: 'people' })
+
+        assert.equal(response.statusCode, 200)
+        expect(response.body[0].id).toBe(user.id)
+        expect(response.body[0].username).toBe(user.username)
+      })
+    })
+
+    describe('When searching for an existing post (case insenstive)', () => {
+      it('Should return a 200 status response', async () => {
+        const user = await Helper.createUser(
+          'Draco Malfoy',
+          'password',
+          'are.u.sirius@gmail.com'
+        )
+
+        const post = await Helper.createPost(
+          'hElLo WoRld',
+          user.id,
+          null,
+          '2021-03-13 04:56:53'
+        )
+
+        const response = await request(server)
+          .get('/api/search/')
+          .query({ query: 'wOrLd', type: 'latest' })
+
+        assert.equal(response.statusCode, 200)
+        expect(response.body[0].id).toBe(post.id)
+        expect(response.body[0].content).toBe(post.text_content)
+      })
+    })
   })
 })
