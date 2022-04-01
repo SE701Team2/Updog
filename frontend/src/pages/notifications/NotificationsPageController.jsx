@@ -4,7 +4,7 @@ import classes from './notificationspage.module.scss'
 import NotificationsPageView from './NotificationsPageView'
 import LoadingView from '../loading/LoadingView'
 import useApi from '../../hooks/useApi'
-import NotificationCardView from '../../components/notifications/notificationcard/NotificationCardView'
+import NotificationCardController from '../../components/notifications/notificationcard/NotificationCardController'
 
 /**
  * This page renders a list of notifications for the user.
@@ -20,14 +20,13 @@ const NotificationsPageController = () => {
     const notifItems = []
     for (let i = 0; i < data.length; i += 1) {
       const notification = data[i]
-      const { nickname, type, time } = notification
-
+      const { from, type, time } = notification
       const notif = (
-        <NotificationCardView
+        <NotificationCardController
           type={type}
           time={time}
-          handle={nickname}
-          username={nickname}
+          handle={from}
+          username={from}
           image="http://tny.im/rM7"
         />
       )

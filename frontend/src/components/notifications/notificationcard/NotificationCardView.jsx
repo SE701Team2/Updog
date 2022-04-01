@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React } from 'react'
 import { Avatar, Paper, Grid, Typography } from '@mui/material'
 import classes from './notificationcard.module.scss'
 
@@ -18,19 +18,19 @@ import classes from './notificationcard.module.scss'
 const avatarSize = 70
 
 function NotificationCardView({ type, time, handle, username, image }) {
-  const [content, setContent] = useState('')
+  let content = ''
   switch (type) {
     case 'like':
-      setContent(`${{ username }}liked your post!`)
+      content = `${username}liked your post!`
       break
     case 'share':
-      setContent(`${{ username }}shared your post!`)
+      content = `${username}}shared your post!`
       break
     case 'reply':
-      setContent(`${{ username }}replied to your post!`)
+      content = `${username}replied to your post!`
       break
     case 'follow':
-      setContent(`${{ username }}started following you!`)
+      content = `${username} started following you!`
       break
     default:
       console.log('unexpected or no type received')
