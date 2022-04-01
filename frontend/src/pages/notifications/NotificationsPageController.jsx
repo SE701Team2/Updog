@@ -1,6 +1,5 @@
 import { List, ListItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import moment from 'moment'
 import NotificationsPageView from './NotificationsPageView'
 import LoadingView from '../loading/LoadingView'
 import useApi from '../../hooks/useApi'
@@ -21,13 +20,12 @@ const NotificationsPageController = () => {
     const notifItems = []
     for (let i = 0; i < data.length; i += 1) {
       const notification = data[i]
-      const { from, type } = notification
-      const timenew = moment([2021, 0, 29]).fromNow()
-      console.log(timenew)
+      const { from, type, time } = notification
+      // const image = notifcation.image
       const notif = (
         <NotificationCardController
           type={type}
-          time={timenew}
+          time={time}
           handle={from}
           username={from}
           image="http://tny.im/rM7"

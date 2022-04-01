@@ -33,7 +33,7 @@ function NotificationCardView({ type, time, handle, username, image }) {
       content = `${username} started following you!`
       break
     default:
-      console.log('unexpected or no type received')
+      content = 'Unexpected type'
       break
   }
   return (
