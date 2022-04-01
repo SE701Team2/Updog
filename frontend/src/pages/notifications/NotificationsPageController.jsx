@@ -22,6 +22,7 @@ const NotificationsPageController = () => {
       const notification = data[i]
       const { from, type, time } = notification
       // const image = notifcation.image
+      // const post = notifcation.post
       const notif = (
         <NotificationCardController
           type={type}
@@ -29,6 +30,7 @@ const NotificationsPageController = () => {
           handle={from}
           username={from}
           image="http://tny.im/rM7"
+          post=""
         />
       )
       notifItems.push(

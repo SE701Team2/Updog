@@ -15,6 +15,7 @@ const NotificationCardController = ({
   handle,
   username,
   image,
+  post,
 }) => (
   <NotificationCardView
     type={type}
@@ -22,6 +23,7 @@ const NotificationCardController = ({
     handle={handle}
     username={username}
     image={image}
+    post={post}
   />
 )
 

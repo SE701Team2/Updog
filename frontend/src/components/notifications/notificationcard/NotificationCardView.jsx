@@ -12,6 +12,7 @@ import classes from './notificationcard.module.scss'
  * @handle : the handle (@) of the appropriate user
  * @username : the username of the appropriate user
  * @image : the link to the users profile image
+ * @post : the link to the relevant post
  *
  * The const variable avatar size has been extracted out in case any avatar size changes need to be made
  */
