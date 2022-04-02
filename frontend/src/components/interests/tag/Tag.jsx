@@ -14,7 +14,7 @@ export default function Tag({ label }) {
       addToSelectedTags(`#${label}`)
       return
     }
-    removeFromSelectedTags(`${label}`)
+    removeFromSelectedTags(`#${label}`)
   }, [selectState])
 
   // On click handler for the tag, which toggles the select state boolean value.
