@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import {
   Button,
   TextField,
@@ -11,7 +11,13 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 import classes from './bioEdit.module.scss'
 
-export default function BioEditView({ opened, setOpen }) {
+export default function BioEditView({
+  opened,
+  setOpen,
+  setBioText,
+  handleBioUpdate,
+}) {
+  const bioText = useRef()
   return (
     <Dialog
       fullWidth
@@ -43,6 +49,7 @@ export default function BioEditView({ opened, setOpen }) {
           rows={4}
           inputProps={{ maxLength: 150 }}
           variant="filled"
+          inputRef={bioText}
         />
       </DialogContent>
       <Grid item alignSelf="center">
@@ -50,6 +57,8 @@ export default function BioEditView({ opened, setOpen }) {
           className={classes.saveButton}
           variant="contained"
           onClick={() => {
+            setBioText(bioText.current.value)
+            handleBioUpdate(bioText.current.value)
             setOpen(false)
           }}
         >

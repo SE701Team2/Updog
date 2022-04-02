@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
 import {
-  Box,
   Button,
   Card,
   CardActionArea,
@@ -8,10 +6,11 @@ import {
   Dialog,
   DialogTitle,
   Grid,
+  Input,
   styled,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload'
 import classes from './bannerSetting.module.scss'
@@ -23,8 +22,6 @@ const SelectedCard = styled(Card)(() => ({
 export default function BannerSetting({
   opened,
   defaultBanners,
-  upload,
-  currentBanner,
   setOpen,
   selected,
   action,
@@ -56,21 +53,21 @@ export default function BannerSetting({
                 >
                   {defaultBanners.map((data) => (
                     <Grid
-                      key={data.name}
+                      key={data}
                       item
                       xs={6}
                       onClick={() => {
-                        action.setSelected(data.name)
+                        action.setSelectedBanner(data)
                       }}
-                      id={data.name}
+                      id={data}
                     >
-                      {data.name !== selected ? (
+                      {data !== selected ? (
                         <Card>
                           <CardActionArea>
                             <CardMedia
                               component="img"
                               height="50"
-                              image={data.imageUrl}
+                              image={data}
                               title="default banner"
                             />
                           </CardActionArea>
@@ -81,7 +78,7 @@ export default function BannerSetting({
                             <CardMedia
                               component="img"
                               height="50"
-                              image={data.imageUrl}
+                              image={data}
                               title="default banner"
                             />
                           </CardActionArea>
@@ -114,20 +111,21 @@ export default function BannerSetting({
               >
                 <Grid item>
                   <Button
+                    component={Input}
+                    className={classes.upload}
+                    accept="image/*"
+                    id="contained-button-file"
+                    type="file"
                     display="flex"
                     sx={{ justifyContent: 'center', alignItems: 'center' }}
+                    onChange={(e) => {
+                      action.setSelectedBanner(e.target.files[0])
+                    }}
                   >
                     <DriveFolderUploadIcon
                       sx={{ height: '40%', width: '40%' }}
                     />
                   </Button>
-                </Grid>
-                <Grid item>
-                  <Grid item className={classes.typography}>
-                    <Typography>
-                      <strong>Choose image from your device</strong>
-                    </Typography>
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
@@ -135,7 +133,7 @@ export default function BannerSetting({
             <Grid item alignSelf="center">
               <Button
                 variant="contained"
-                onClick={() => action.handleSave()}
+                onClick={action.handleSave}
                 className={classes.saveButton}
                 id="saveButton"
               >
