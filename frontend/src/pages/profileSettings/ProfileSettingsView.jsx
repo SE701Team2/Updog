@@ -8,28 +8,17 @@ import HeaderCustom from '../../components/layout/headercustom/HeaderCustomContr
 import classes from './profilesettings.module.scss'
 import BannerSettingController from '../../components/user/BannerSetting/BannerSettingController'
 import BioEditController from '../../components/user/BioSetting/BioEditController'
+import SERVER_URL from '../../config'
 
 // TODO: Remove when is ready
 const mock = [
-  {
-    name: 'default-banner-1',
-    imageUrl: 'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
-  },
-  {
-    name: 'default-banner-2',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
-  },
-  {
-    name: 'default-banner-3',
-    imageUrl:
-      'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
-  },
-  {
-    name: 'default-banner-4',
-    imageUrl:
-      'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
-  },
+  'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
+
+  'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
+
+  'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
+
+  'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
 ]
 
 const ProfileSettingsView = ({
@@ -39,10 +28,17 @@ const ProfileSettingsView = ({
   handleAvatarOpen,
   handleAvatarClose,
   handleProfilePic,
+  handleBioUpdate,
+  updateBannerUpload,
+  selectedBanner,
+  setSelectedBanner,
+  bioText,
+  setBioText,
   logout,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
+  const [profileBanner, setProfileBanner] = useState(user.profileBanner)
 
   return (
     <div>
@@ -52,7 +48,14 @@ const ProfileSettingsView = ({
       <div className={classes.banner}>
         <img
           className={classes.bannerImg}
-          src={user.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
+          src={
+            // eslint-disable-next-line no-nested-ternary
+            profileBanner !== undefined
+              ? typeof profileBanner === 'string'
+                ? profileBanner
+                : `${SERVER_URL}/images/${profileBanner.name}`
+              : 'https://i.imgur.com/PcEvuMw.png'
+          }
           alt="Banner"
         />
         <Button
@@ -70,7 +73,11 @@ const ProfileSettingsView = ({
           opened={openDialog}
           defaultBanners={mock}
           upload={setOpenDialog}
-          currentBanner="https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg"
+          currentBanner={user.profileBanner}
+          updateBannerUpload={updateBannerUpload}
+          selectedBanner={selectedBanner}
+          setSelectedBanner={setSelectedBanner}
+          setProfileBanner={setProfileBanner}
           setOpen={setOpenDialog}
         />
       </div>
@@ -132,11 +139,16 @@ const ProfileSettingsView = ({
           >
             Edit
           </Button>
-          <BioEditController opened={openBioEdit} setOpen={setOpenBioEdit} />
+          <BioEditController
+            opened={openBioEdit}
+            setOpen={setOpenBioEdit}
+            setBioText={setBioText}
+            handleBioUpdate={handleBioUpdate}
+          />
         </div>
       </div>
       <p className={classes.subtext} style={{ marginBottom: '14px' }}>
-        {user.bio}
+        {bioText === undefined ? user.bio : bioText}
       </p>
 
       <Divider className={classes.divider} variant="middle" />
@@ -175,17 +187,6 @@ const ProfileSettingsView = ({
               >
                 Upload
               </Button>
-              {/* <div className={classes.avatarEditor}>
-                        <AvatarEditor
-                            image={Logo}
-                            width={150}
-                            height={150}
-                            border={50}
-                            color={[255, 255, 255, 0.8]} // RGBA
-                            scale={1.2}
-                            rotate={0}
-                        />
-                    </div> */}
             </Box>
           </div>
         </Modal>

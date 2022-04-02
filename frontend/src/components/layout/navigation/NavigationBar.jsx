@@ -55,7 +55,7 @@ export default function NavigationBar({ selections }) {
         variant="fullWidth"
       >
         {selections.map((item) => (
-          <StyledTab value={item} label={item} />
+          <StyledTab key={item} value={item} label={item} />
         ))}
       </StyledTabs>
     </div>

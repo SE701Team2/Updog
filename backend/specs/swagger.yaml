@@ -609,6 +609,10 @@ paths:
                     format: date-time
                   activity:
                     type: string
+                  post:
+                    type: object
+                  userId:
+                    type: number
         '400':
           description: Auth token not provided
         '401':
@@ -648,6 +652,10 @@ paths:
                     format: date-time
                   activity:
                     type: string
+                  post:
+                    type: object
+                  userId:
+                    type: number
         '400':
           description: Auth token not provided
         '401':

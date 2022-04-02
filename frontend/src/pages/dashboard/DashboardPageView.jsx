@@ -10,7 +10,7 @@ import classes from './dashboardpage.module.scss'
 /**
  * Card container for each feed post
  */
-const FeedCard = styled(Card)({
+export const FeedCard = styled(Card)({
   width: '85%',
   margin: 'auto',
   marginTop: '20px',
