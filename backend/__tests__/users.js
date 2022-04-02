@@ -29,6 +29,13 @@ describe('Users', () => {
     await models.sharedPost.destroy({
       where: {},
     })
+
+    await models.tags.destroy({
+      where: {},
+    })
+    await models.postTag.destroy({
+      where: {},
+    })
   })
 
   describe('Encrypting password', () => {
@@ -425,6 +432,92 @@ describe('Users', () => {
 
       expect(response.statusCode).toEqual(200)
       expect(filteredResponse).toEqual(expectedOutput)
+    })
+  })
+
+  describe('GET /feed endpoint with interested posts', () => {
+    it('Should return a 200 status response and a list of activities from latest to earliest of the followed user, and interest based posts', async () => {
+      const user1 = await Helper.createUser()
+
+      const user2 = await Helper.createUser()
+
+      const user3 = await Helper.createUser()
+
+      const newTag = await Helper.createTag('Updog')
+
+      const newPost = await Helper.createPost(
+        'Twitter was the last big thing',
+        user1.id,
+        null,
+        '2020-03-13 04:56:53'
+      )
+
+      const likedPost = await Helper.likePost(
+        newPost.id,
+        user1.id,
+        '2021-03-13 04:56:53'
+      )
+
+      const sharedPost = await Helper.sharePost(
+        newPost.id,
+        user1.id,
+        '2021-03-14 04:56:53'
+      )
+
+      const interestPost = await Helper.createPost(
+        'Twitter clone #Updog',
+        user3.id,
+        null,
+        '2020-03-15 04:56:53'
+      )
+
+      await Helper.createPostTag(interestPost.id, newTag.id)
+      await Helper.createUserInterest(user1.id, newTag.id)
+
+      // WHEN user 2 follows user 1
+      await Helper.createFollowers(user1.id, user2.id)
+
+      // WHEN the logged in user tries to view the feed
+      const authToken = Authentication.generateAuthToken(user2)
+
+      const response = await request(server)
+        .get('/api/feed')
+        .set('Authorization', `Bearer ${authToken}`)
+
+      // THEN their feed should display the activity of the user they follow
+      const dto = await PostDTO.convertToDto(newPost)
+      const dto2 = await PostDTO.convertToDto(interestPost)
+      const expectedOutput = [
+        {
+          post: dto,
+          timestamp: Date.parse(sharedPost.createdAt),
+          activity: 'SHARED',
+          userId: user1.id,
+        },
+        {
+          post: dto,
+          timestamp: Date.parse(likedPost.createdAt),
+          activity: 'LIKED',
+          userId: user1.id,
+        },
+        {
+          post: dto,
+          timestamp: Date.parse(newPost.createdAt),
+          activity: 'POSTED',
+          userId: user1.id,
+        },
+        {
+          post: dto2,
+          timestamp: Date.parse(interestPost.createdAt),
+          activity: 'POSTED',
+          userId: user3.id,
+        },
+      ]
+
+      expect(3).toEqual(response.body)
+
+      expect(response.statusCode).toEqual(200)
+      expect(response.body).toEqual(expectedOutput)
     })
   })
 

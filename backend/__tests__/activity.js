@@ -3,6 +3,15 @@ import { ActivityType } from '../enums/activity'
 import models from '../database/models'
 import Helper from './helper/helper'
 
+beforeEach(async () => {
+  await models.tags.destroy({
+    where: {},
+  })
+  await models.postTag.destroy({
+    where: {},
+  })
+})
+
 describe('Activity', () => {
   describe('getUserActivities', () => {
     it('should retrieve all user activities from newest to oldest', async () => {
@@ -44,7 +53,7 @@ describe('Activity', () => {
   })
   describe('retrieveInterests', () => {
     it('should retrieve a feed of activity based on interests', async () => {
-      /*const u1 = await Helper.createUser()
+      const u1 = await Helper.createUser()
       const u2 = await Helper.createUser()
 
       const p1 = await Helper.createPost('u2 post 1', u2.id)
@@ -58,9 +67,16 @@ describe('Activity', () => {
       await Helper.createPostTag(p2.id, newTag.id)
       await Helper.createUserInterest(u1.id, newTag.id)
 
-      const feed = await Activity.retrieveActivityFeed(u1.id)
-      expect(feed.length).toEqual(1)
-      expect(feed[0].activity).toEqual(ActivityType.INTERESTED.type)*/
+      // Tests it gets interested posts
+      const interests = await Activity.getPostsForInterests(u1.id)
+      expect(interests.length).toEqual(2)
+      expect(interests[0].id).toEqual(p1.id)
+      expect(interests[1].id).toEqual(p2.id)
+
+      // Test can get feed
+      const feed = await Activity.retrieveInterests(u1.id)
+      expect(feed.length).toEqual(2)
+      expect(feed[0].activity).toEqual(ActivityType.INTERESTED.type)
     })
   })
 })
