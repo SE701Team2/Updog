@@ -134,6 +134,8 @@ export default class Activity {
       )
     )
 
+    interests.sort((a, b) => b.timestamp - a.timestamp)
+
     return interests
   }
 
@@ -169,7 +171,6 @@ export default class Activity {
       where: {
         userID: userId,
       },
-      order: [['createdAt', 'DESC']],
     })
 
     const postsInterest = await Promise.all(
@@ -182,10 +183,10 @@ export default class Activity {
           })
       )
     )
-    const relatedPosts = postsInterest.reduce((posts, interests) => [
-      ...posts,
-      ...interests,
-    ])
+    const relatedPosts = postsInterest.reduce(
+      (posts, interests) => [...posts, ...interests],
+      []
+    )
 
     // Retrieve the actual posts for the given post IDs
     const posts = await Promise.all(
