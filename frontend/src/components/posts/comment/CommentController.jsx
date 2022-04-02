@@ -32,8 +32,9 @@ const CommentController = ({ postData }) => {
         console.log('newTags', newTags)
 
         await request('posts', 'POST', {
-          text_content: postText.replaceAll(/<.*?>/g, ''),
+          activity: 'COMMENTED',
           parent: postData.id,
+          text_content: postText.replaceAll(/<.*?>/g, ''),
         })
 
         // navigate to the newly made post comment
