@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-unresolved
 import moment from 'moment'
+import useApi from '../../../hooks/useApi'
 import NotificationCardView from './NotificationCardView'
 
 /**
@@ -9,23 +10,47 @@ import NotificationCardView from './NotificationCardView'
  * time={moment(notification.time).fromNow()}
  */
 
-const NotificationCardController = ({
-  type,
-  // eslint-disable-next-line no-unused-vars
-  time,
-  handle,
-  username,
-  image,
-  post,
-}) => (
-  <NotificationCardView
-    type={type}
-    time={moment([2022, 2, 29]).fromNow()}
-    handle={handle}
-    username={username}
-    image={image}
-    post={post}
-  />
-)
+const NotificationCardController = ({ type, time, handle, username, post }) => {
+  let content = ''
+  let link = ''
+  switch (type) {
+    case 'like':
+      content = `${username}liked your post!`
+      link = `/posts/${post}`
+      break
+    case 'share':
+      content = `${username}}shared your post!`
+      link = `/posts/${post}`
+      break
+    case 'reply':
+      content = `${username}replied to your post!`
+      link = `/posts/${post}`
+      break
+    case 'follow':
+      content = `${username} started following you!`
+      link = `/user/${username}`
+      break
+    default:
+      content = 'Unexpected type'
+      break
+  }
+
+  const { data, loading } = useApi(`users/${username}`)
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
+
+  return (
+    <NotificationCardView
+      link={link}
+      content={content}
+      time={moment(time).fromNow()}
+      handle={handle}
+      post={post}
+      user={data}
+    />
+  )
+}
 
 export default NotificationCardController
