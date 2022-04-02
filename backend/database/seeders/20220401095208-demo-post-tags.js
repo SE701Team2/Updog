@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     return queryInterface.bulkInsert('postTags', [
       {
         postId: 1,
@@ -126,7 +126,7 @@ module.exports = {
     ])
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     return queryInterface.bulkInsert('postTags', null, {})
   },
 }

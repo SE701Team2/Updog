@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     return queryInterface.bulkInsert('posts', [
       {
         id: 1,
@@ -85,7 +85,7 @@ module.exports = {
       },
       {
         id: 12,
-        text_content: "I think pears are better than #Apple 's",
+        text_content: 'I think pears are better than #Apple s',
         author: 3,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -153,7 +153,7 @@ module.exports = {
     ])
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     return queryInterface.bulkDelete('posts', null, {})
   },
 }
