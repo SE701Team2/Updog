@@ -19,7 +19,7 @@ const NotificationsPageView = ({ notifications }) => (
         </FeedCard>
       ))}
       <p className={classes.centerText}>
-        {notifications && notifications.length === 0 && <p>No Results</p>}
+        {notifications && notifications.length === 0 && <p>No Notifcations</p>}
       </p>
     </div>
     <Footer />
