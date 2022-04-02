@@ -5,11 +5,12 @@ import NotificationCardView from './NotificationCardView'
 
 /**
  * Creates a NotificationCard Component.
- * Due to the time variable not existing currently in the backend we are passing in a default time
- * When the endpoint is implemented the code can be change as below and the eslint warning can be renabled
- * time={moment(notification.time).fromNow()}
+ * @prop type - the type of notification
+ * @prop time - the time the notification was created
+ * @prop handle - the handle of the user who created the notification
+ * @prop username - the username of the user who created the notification
+ * @prop post - the post id of the post that was liked/shared/replied to
  */
-
 const NotificationCardController = ({ type, time, handle, username, post }) => {
   let content = ''
   let link = ''
