@@ -9,7 +9,6 @@ import { HandleContext } from '../../../contexts/HandleProvider'
 const CommentController = ({ postData }) => {
   const [postText, setPostText] = useState('')
   const [postTags, setPostTags] = useState([])
-  const [postHandles, setPostHandles] = useState([])
   const [newTags, setNewTags] = useState([])
   const [loading, setLoading] = useState(false)
   const { loading: userLoading, err } = useApi(
@@ -24,23 +23,18 @@ const CommentController = ({ postData }) => {
     if (postText) {
       try {
         setLoading(true)
-        console.log(postData)
-
-        // TODO: add postTags and postHandles to request (wait for backend)
-        console.log('postTags', postTags)
-        console.log('postHandles', postHandles)
-        console.log('newTags', newTags)
 
         await request('posts', 'POST', {
           activity: 'COMMENTED',
           parent: postData.id,
           text_content: postText.replaceAll(/<.*?>/g, ''),
+          tagIds: postTags,
+          newTags,
         })
 
         // navigate to the newly made post comment
         setLoading(false)
         navigate(`/post/${postData.id}`)
-        window.location.reload()
       } catch (e) {
         // this should not error happen for now
         setLoading(false)
@@ -60,7 +54,7 @@ const CommentController = ({ postData }) => {
     <CommentView
       postData={postData}
       setPostTags={setPostTags}
-      setPostHandles={setPostHandles}
+      setPostHandles={() => {}}
       setPostText={setPostText}
       postText={postText}
       loading={loading || userLoading}

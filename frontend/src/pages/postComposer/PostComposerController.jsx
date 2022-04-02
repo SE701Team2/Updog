@@ -9,7 +9,6 @@ import { AuthContext } from '../../contexts/AuthProvider'
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
   const [postTags, setPostTags] = useState([])
-  const [postHandles, setPostHandles] = useState([])
   const [newTags, setNewTags] = useState([])
   const [loading, setLoading] = useState(false)
   const {
@@ -24,13 +23,10 @@ const PostComposerController = () => {
       try {
         setLoading(true)
 
-        // TODO: add postTags and postHandles to request (wait for backend)
-        console.log('postTags', postTags)
-        console.log('postHandles', postHandles)
-        console.log('newTags', newTags)
-
         const response = await request('posts', 'POST', {
           text_content: postText.replaceAll(/<.*?>/g, ''),
+          tagIds: postTags,
+          newTags,
         })
 
         // navigate to the newly made post
@@ -59,7 +55,7 @@ const PostComposerController = () => {
       loading={loading || userLoading}
       submitForm={submitForm}
       setPostTags={setPostTags}
-      setPostHandles={setPostHandles}
+      setPostHandles={() => {}}
       setNewTags={setNewTags}
     />
   )
