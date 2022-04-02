@@ -18,7 +18,6 @@ export default class PostDTO {
       where: { postId: post.id },
       raw: true,
     })
-    console.log(usersLiked, userId)
     return {
       id: post.id,
       content: post.text_content,
