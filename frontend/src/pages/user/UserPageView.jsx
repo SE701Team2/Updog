@@ -20,6 +20,7 @@ const UserPageView = ({
       className={classes.banner}
       alt="Profile Banner"
       src={userData.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
+      style={{ 'object-fit': 'cover', width: ' 100%' }}
     />
     <div className={classes.pageContent}>
       <Button

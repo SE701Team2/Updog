@@ -18,6 +18,9 @@ const ProfileSettingsController = () => {
   const { data, loading, err } = useApi(`users/${username}`)
   const [avatarModalOpen, setAvatarModalOpen] = useState(false)
   const [selectedPicture, setSelectedPicture] = useState(null)
+  const [selectedBanner, setSelectedBanner] = useState(null)
+  const [bioText, setBioText] = useState()
+
   const navigate = useNavigate()
 
   // const [bannerModalOpen, setBannerModalOpen] = useState(false)
@@ -30,6 +33,9 @@ const ProfileSettingsController = () => {
     return <div>Error: {err.message}</div>
   }
 
+  /**
+   * Update profile picture
+   */
   const updateProfile = async () => {
     const imageUpload = new FormData()
     imageUpload.append('attachments', selectedPicture)
@@ -48,6 +54,60 @@ const ProfileSettingsController = () => {
         profileBanner,
       })
     }
+  }
+
+  /**
+   * Update Banner, if its a default banner, no need to upload the image.
+   */
+  const updateBannerUpload = async () => {
+    let fileName
+    const { nickname, bio, profilePic } = data
+
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const url = new URL(selectedBanner)
+
+      if (selectedBanner != null) {
+        await request('users', 'PUT', {
+          username,
+          nickname,
+          bio,
+          profilePic,
+          profileBanner: selectedBanner,
+        })
+      }
+    } catch (_) {
+      const imageUpload = new FormData()
+      imageUpload.append('attachments', selectedBanner)
+
+      await uploadImage(imageUpload)
+      fileName = selectedBanner.name
+      if (selectedBanner != null) {
+        await request('users', 'PUT', {
+          username,
+          nickname,
+          bio,
+          profilePic,
+          profileBanner: `${SERVER_URL}/images/${fileName}`,
+        })
+      }
+    }
+  }
+
+  /**
+   * update bio
+   * @param {string} bio
+   */
+  const updateBio = async (bio) => {
+    const { nickname, profileBanner, profilePic } = data
+
+    await request('users', 'PUT', {
+      username,
+      nickname,
+      bio,
+      profilePic,
+      profileBanner,
+    })
   }
 
   const handleLogout = () => {
@@ -77,6 +137,12 @@ const ProfileSettingsController = () => {
       handleAvatarClose={handleAvatarClose}
       profilePicture={selectedPicture}
       handleProfilePic={handleProfilePic}
+      handleBioUpdate={updateBio}
+      bioText={bioText}
+      setBioText={setBioText}
+      updateBannerUpload={updateBannerUpload}
+      selectedBanner={selectedBanner}
+      setSelectedBanner={setSelectedBanner}
       logout={handleLogout}
     />
   )
