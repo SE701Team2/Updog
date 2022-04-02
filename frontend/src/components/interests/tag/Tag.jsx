@@ -11,10 +11,10 @@ export default function Tag({ label }) {
   useEffect(() => {
     // When the internal state of the tag is changed, update the context state.
     if (selectState) {
-      addToSelectedTags(label)
+      addToSelectedTags(`#${label}`)
       return
     }
-    removeFromSelectedTags(label)
+    removeFromSelectedTags(`#${label}`)
   }, [selectState])
 
   // On click handler for the tag, which toggles the select state boolean value.
