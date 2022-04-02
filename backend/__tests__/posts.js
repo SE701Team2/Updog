@@ -220,13 +220,7 @@ describe('Posts', () => {
   describe('GET /posts', () => {
     describe('when the post id can not be found', () => {
       it('should return 404 not found response code', async () => {
-        const user1 = await models.users.create({
-          username: 'testUser',
-          nickname: 'gandalf',
-          email: 'testUser@testmail.com',
-          password: 'password',
-        })
-
+        const user1 = await Helper.createUser()
         const authToken = Authentication.generateAuthToken(user1)
 
         const createPostResponse = await request(server)
@@ -239,7 +233,10 @@ describe('Posts', () => {
 
         const invalidId = createPostResponse.body.id + 999
 
-        const response = await request(server).get(`/api/posts/${invalidId}`)
+        const response = await request(server)
+          .get(`/api/posts/${invalidId}`)
+          .set('Authorization', `Bearer ${authToken}`)
+
         expect(response.statusCode).toBe(404)
       })
     })
@@ -263,9 +260,9 @@ describe('Posts', () => {
             parent: null,
           })
 
-        const response = await request(server).get(
-          `/api/posts/${createPostResponse.body.id}`
-        )
+        const response = await request(server)
+          .get(`/api/posts/${createPostResponse.body.id}`)
+          .set('Authorization', `Bearer ${authToken}`)
         expect(response.body.id).toBeTruthy()
         expect(response.body.content).toBe('some random text 2')
         expect(response.body.author.username).toBe('testUser')

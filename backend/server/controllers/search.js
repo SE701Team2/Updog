@@ -40,6 +40,7 @@ export const search = async (req, res) => {
       res.status(200).send(postDtos)
     }
   } catch (error) {
+    console.log(error)
     res.status(500).send(error)
   }
 }
