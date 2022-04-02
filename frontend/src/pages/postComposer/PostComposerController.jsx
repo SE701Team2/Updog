@@ -35,7 +35,7 @@ const PostComposerController = () => {
 
         // navigate to the newly made post
         setLoading(false)
-        navigate(`/posts/${response.data.id}`)
+        navigate(`/post/${response.data.id}`)
       } catch (e) {
         // this should not error happen for now
         setLoading(false)
