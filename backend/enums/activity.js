@@ -8,6 +8,7 @@ export class ActivityType {
   static LIKED = new ActivityType('LIKED')
   static SHARED = new ActivityType('SHARED')
   static COMMENTED = new ActivityType('COMMENTED')
+  static INTERESTED = new ActivityType('INTERESTED')
 
   constructor(type) {
     this.type = type
@@ -119,6 +120,25 @@ export default class Activity {
     ]
   }
 
+  static async retrieveInterests(userId) {
+    const unconvertedInterests = await this.getPostsForInterests(userId)
+    const interests = await Promise.all(
+      unconvertedInterests.map(
+        async (activity) =>
+          await this.convertToFeedActivity(
+            ActivityType.INTERESTED,
+            activity.id,
+            activity.author,
+            activity.createdAt
+          )
+      )
+    )
+
+    interests.sort((a, b) => b.timestamp - a.timestamp)
+
+    return interests
+  }
+
   // Create a list of activities in order of post creation time
   // from a list of follower objects
   static async retrieveActivityFeed(following) {
@@ -132,5 +152,47 @@ export default class Activity {
       []
     )
     return feeds.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+  }
+
+  static async convertToFeedActivity(activity, postId, authorId, postTime) {
+    const post = await models.posts.findByPk(postId)
+    const postDto = await PostDTO.convertToDto(post)
+    return {
+      post: postDto,
+      timestamp: Date.parse(postTime),
+      activity: activity.type,
+      userId: authorId,
+    }
+  }
+
+  static async getPostsForInterests(userId) {
+    // Retrieve user's interests
+    const interestsDB = await models.userInterests.findAll({
+      where: {
+        userID: userId,
+      },
+    })
+
+    const postsInterest = await Promise.all(
+      interestsDB.map(
+        async (interest) =>
+          await models.postTag.findAll({
+            where: {
+              tagID: interest.tagId,
+            },
+          })
+      )
+    )
+    const relatedPosts = postsInterest.reduce(
+      (posts, interests) => [...posts, ...interests],
+      []
+    )
+
+    // Retrieve the actual posts for the given post IDs
+    const posts = await Promise.all(
+      relatedPosts.map(async (post) => await models.posts.findByPk(post.postId))
+    )
+
+    return posts
   }
 }
