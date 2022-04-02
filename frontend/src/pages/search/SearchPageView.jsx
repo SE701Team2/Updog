@@ -7,7 +7,6 @@ import NavigationBar from '../../components/layout/navigation/NavigationBar'
 import LoadingView from '../loading/LoadingView'
 import Post from '../../components/posts/post/PostController'
 import SearchUserDetails from '../../components/user/searchdetails/SearchUserDetailsController'
-// eslint-disable-next-line import/no-unresolved
 import classes from './searchpage.module.scss'
 import { FeedCard } from '../dashboard/DashboardPageView'
 
