@@ -34,7 +34,10 @@ describe('Users', () => {
     await models.tags.destroy({
       where: {},
     })
+<<<<<<< HEAD
 
+=======
+>>>>>>> f6187a3 (functional code + tests)
     await models.postTag.destroy({
       where: {},
     })
