@@ -16,15 +16,15 @@ const NotificationCardController = ({ type, time, handle, username, post }) => {
   let link = ''
   switch (type) {
     case 'like':
-      content = `${username}liked your post!`
+      content = `${username} liked your post!`
       link = `/posts/${post}`
       break
     case 'share':
-      content = `${username}}shared your post!`
+      content = `${username} shared your post!`
       link = `/posts/${post}`
       break
     case 'reply':
-      content = `${username}replied to your post!`
+      content = `${username} replied to your post!`
       link = `/posts/${post}`
       break
     case 'follow':
