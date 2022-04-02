@@ -8,7 +8,7 @@ import processMentions from '../../../functions/mentions'
 import classes from './post.module.scss'
 
 const PostView = ({
-  activity,
+  activityText,
   postData,
   condensed,
   showReplies,
@@ -18,9 +18,9 @@ const PostView = ({
   if (condensed) {
     return (
       <div className={classes.condensed}>
-        {activity !== 'POSTED' && (
+        {activityText && (
           <div className={classes.activity}>
-            <span>{activity}</span>
+            <span>{activityText}</span>
           </div>
         )}
         <SimpleUserDetails

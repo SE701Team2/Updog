@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import Landing from './pages/landing/LandingController'
 import SignIn from './pages/signIn/SignInController'
 import Post from './pages/post/PostPageController'
@@ -18,16 +18,13 @@ import ChooseInterestsPage from './pages/chooseInterests/ChooseInterestsPageCont
 
 const Router = () => {
   // fetch the token to check if the user is authenticated
-
-  let routes
-  const { isAuthenticated } = useContext(AuthContext)
-  const token = localStorage.getItem('token')
-
-  useEffect(() => {}, [isAuthenticated]) // enables rerendering when token is updated
+  const {
+    user: { token },
+  } = useContext(AuthContext)
 
   if (token) {
     // Auth routes
-    routes = (
+    return (
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/post/:id" element={<Post />} />
@@ -48,20 +45,17 @@ const Router = () => {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     )
-  } else {
-    // Unauth routes
-    routes = (
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/loading" element={<Loading />} />
-        <Route path="/signUp" element={<Registration />} />
-        <Route path="/signIn" element={<SignIn />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    )
   }
-
-  return routes
+  // Unauth routes
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/loading" element={<Loading />} />
+      <Route path="/signUp" element={<Registration />} />
+      <Route path="/signIn" element={<SignIn />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
+  )
 }
 
 export default Router

@@ -21,15 +21,16 @@ module.exports = (sequelize, DataTypes) => {
       nickname: DataTypes.STRING,
       profilePic: {
         type: DataTypes.STRING,
-        validate: {
-          isUrl: 'This image needs to be a link',
-        },
+        //TODO: Fix validation, needs custom validation
+        // validate: {
+        //   isUrl: [{ allow_underscores: true }],
+        // },
       },
       profileBanner: {
         type: DataTypes.STRING,
-        validate: {
-          isUrl: 'This image needs to be a link',
-        },
+        // validate: {
+        //   isUrl: [{ allow_underscores: true }],
+        // },
       },
       bio: DataTypes.STRING,
       joinedDate: DataTypes.INTEGER,

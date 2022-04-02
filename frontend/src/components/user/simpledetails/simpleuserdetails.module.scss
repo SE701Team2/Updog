@@ -38,6 +38,31 @@
 
 .timestamp {
   display: flex;
+  justify-self: flex-end;
+  align-self: flex-end;
   flex-direction: row;
   gap: 0.25rem;
+  width: 100%;
+}
+
+.nickname {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.timestampContainer {
+  width: 100%;
+}
+
+.spacer {
+  margin: auto;
+}
+
+.username {
+  color: grey;
+  margin-top: -5px;
+}
+
+.timestampText {
+  color: grey;
 }

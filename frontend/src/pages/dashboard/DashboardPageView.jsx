@@ -11,11 +11,11 @@ import classes from './dashboardpage.module.scss'
  * Card container for each feed post
  */
 const FeedCard = styled(Card)({
-  width: '90%',
+  width: '85%',
   margin: 'auto',
-  marginTop: '10px',
+  marginTop: '20px',
   marginBottom: '10px',
-  padding: '10px',
+  padding: '20px',
 })
 
 const FloatingAddButton = styled(Fab)({
@@ -37,7 +37,7 @@ const DashboardPageView = ({ feedData }) => (
     {/* Will need to link AddButton to post composer when completed */}
     <Link to="/new-post">
       <FloatingAddButton color="primary">
-        <AddIcon />
+        <AddIcon id="icon" />
       </FloatingAddButton>
     </Link>
     <Footer />

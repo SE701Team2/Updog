@@ -38,6 +38,8 @@ const ProfileSettingsView = ({
   avatarOpen,
   handleAvatarOpen,
   handleAvatarClose,
+  handleProfilePic,
+  logout,
 }) => {
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
@@ -50,7 +52,7 @@ const ProfileSettingsView = ({
       <div className={classes.banner}>
         <img
           className={classes.bannerImg}
-          src={user.profilePic ?? 'https://i.imgur.com/PcEvuMw.png'}
+          src={user.profileBanner ?? 'https://i.imgur.com/PcEvuMw.png'}
           alt="Banner"
         />
         <Button
@@ -79,7 +81,7 @@ const ProfileSettingsView = ({
         <Avatar
           className={classes.avatar}
           sx={{ width: 80, height: 80 }}
-          src={user.profileBanner}
+          src={user.profilePic}
         />
         <Button
           variant="outlined"
@@ -140,8 +142,8 @@ const ProfileSettingsView = ({
       <Divider className={classes.divider} variant="middle" />
 
       <div className={classes.save}>
-        <Button type="submit" variant="contained" onClick={updateProfile}>
-          Save
+        <Button type="submit" variant="contained" onClick={logout} id="logout">
+          Log out
         </Button>
       </div>
 
@@ -161,17 +163,18 @@ const ProfileSettingsView = ({
                   className={classes.upload}
                   accept="image/*"
                   id="contained-button-file"
-                  multiple
                   type="file"
+                  onChange={(e) => handleProfilePic(e)}
                 />
-                <Button
-                  variant="contained"
-                  component="span"
-                  className={classes.upload}
-                >
-                  Upload
-                </Button>
               </label>
+              <Button
+                variant="contained"
+                component="span"
+                className={classes.upload}
+                onClick={(e) => updateProfile(e)}
+              >
+                Upload
+              </Button>
               {/* <div className={classes.avatarEditor}>
                         <AvatarEditor
                             image={Logo}

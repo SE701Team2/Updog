@@ -57,7 +57,7 @@ const RegistrationFormController = () => {
       if (authToken) {
         localStorage.setItem('token', authToken)
         localStorage.setItem('username', username)
-        authContext.login()
+        authContext.login({ token: authToken, username })
       }
     }
   }

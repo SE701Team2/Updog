@@ -23,3 +23,33 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Login used to login the user using username, email, password
+Cypress.Commands.add('login', (username, email, password) => {
+  const setToken = ({ body }) => {
+    localStorage.setItem('token', body.authToken)
+    localStorage.setItem('username', body.username)
+  }
+  // Login to fake user
+  cy.request({
+    url: 'http://localhost:8000/api/users/authenticate',
+    method: 'POST',
+    body: { email, password },
+    failOnStatusCode: false,
+  }).then((result) => {
+    if (result.status !== 401) {
+      return setToken(result)
+    }
+    // User doesn't exist create one
+    cy.request({
+      url: 'http://localhost:8000/api/users',
+      method: 'POST',
+      body: {
+        nickname: username,
+        username,
+        email,
+        password,
+      },
+    }).then(setToken)
+  })
+})

@@ -247,17 +247,20 @@ describe('Users', () => {
         JSON.stringify(response.body),
         JSON.stringify(expectedResponse)
       )
-    })
+      const randomUsernameNonExistent = (Math.random() + 1)
+        .toString(36)
+        .substring(7)
 
-    it('Should return a 404 status response', async () => {
-      // random username that doesn't exist
-      const randomUsername = (Math.random() + 1).toString(36).substring(7)
+      // trying to get a non-existent user, use other user's authentication to bypass auth middleware
+      const response2 = await request(server)
+        .get(`/api/users/${randomUsernameNonExistent}`)
+        .set('Authorization', `Bearer ${auth.body.authToken}`)
 
-      // trying to get this user, don't need authentication as 404 should return first
-      const response = await request(server).get(`/api/users/${randomUsername}`)
-
-      assert.equal(response.statusCode, 404)
-      assert.equal(response.body.error, `User '${randomUsername}' not found`)
+      assert.equal(response2.statusCode, 404)
+      assert.equal(
+        response2.body.error,
+        `User '${randomUsernameNonExistent}' not found`
+      )
     })
   })
 
