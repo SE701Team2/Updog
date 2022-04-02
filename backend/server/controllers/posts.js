@@ -76,7 +76,7 @@ export const createPost = async (req, res) => {
         author: decodedUser.id,
         parent: body.parent,
       })
-      const postDTO = await PostDTO.convertToDto(post)
+      const postDTO = await PostDTO.convertToDto(post, decodedUser.id)
 
       if (!body.tagIds) {
         body.tagIds = []
@@ -125,9 +125,10 @@ export const getPostById = async (req, res) => {
     // Check whether a post with the id exists.
     const { params } = req
     const post = await models.posts.findByPk(params.id)
+    const decodedUser = res.locals?.decodedUser
     if (post != null) {
       // Returns the postDTO object if a post with the id exists.
-      const postDTO = await PostDTO.convertToDto(post)
+      const postDTO = await PostDTO.convertToDto(post, decodedUser?.id)
       res.status(200).send(postDTO)
     } else {
       res.status(404).send('ID not found.')

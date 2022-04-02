@@ -40,16 +40,16 @@ const PostController = ({
 
     switch (activity) {
       case 'POSTED':
-        activityText = `${username} posted`
+        activityText = `${resData.author.nickname} posted`
         break
       case 'SHARED':
-        activityText = `${username} reshared @${resData.username}'s post`
+        activityText = `${username} reshared @${resData.author.username}'s post`
         break
       case 'COMMENTED':
-        activityText = `${username} commented on @${resData.username}'s post`
+        activityText = `${username} commented on @${resData.author.username}'s post`
         break
       case 'LIKED':
-        activityText = `${username} liked @${resData.username}'s post`
+        activityText = `${username} liked @${resData.author.username}'s post`
         break
       default:
         activityText = null
