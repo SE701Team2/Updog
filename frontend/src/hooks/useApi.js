@@ -7,6 +7,7 @@ const useApi = (api, method, body, jwt) => {
   const [error, setError] = useState()
 
   useEffect(() => {
+    setLoading(true)
     let isCancelled = false
     request(api, method, body, jwt).then(({ data, err }) => {
       if (!isCancelled) {
@@ -18,7 +19,7 @@ const useApi = (api, method, body, jwt) => {
     return () => {
       isCancelled = true
     }
-  }, [])
+  }, [api])
 
   return { loading, data: state, error }
 }

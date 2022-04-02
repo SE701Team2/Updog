@@ -53,3 +53,15 @@ Cypress.Commands.add('login', (username, email, password) => {
     }).then(setToken)
   })
 })
+
+Cypress.Commands.add('getById', (selector, ...args) => {
+  return cy.get(`[id=${selector}]`, ...args)
+})
+
+Cypress.Commands.add('getByDataTest', (selector, ...args) => {
+  return cy.get(`[data-test=${selector}]`, ...args)
+})
+
+Cypress.Commands.add('getByDataTestId', (selector, ...args) => {
+  return cy.get(`[data-testid=${selector}]`, ...args)
+})
