@@ -12,7 +12,7 @@ const InteractionsView = ({
   usersShared,
 }) => (
   <div className={classes.container}>
-    <div className={classes.like} onClick={onLike}>
+    <div className={classes.like} onClick={onLike} data-testid="like-btn">
       <FavoriteBorderIcon />
       {usersLiked}
     </div>
@@ -21,7 +21,7 @@ const InteractionsView = ({
       {postData.children.length}
     </div>
     <div className={classes.spacer} />
-    <div onClick={onShare}>
+    <div onClick={onShare} data-testid="share-btn">
       {usersShared}
       <ShareIcon />
     </div>
