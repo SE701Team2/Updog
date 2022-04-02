@@ -34,10 +34,7 @@ describe('Users', () => {
     await models.tags.destroy({
       where: {},
     })
-<<<<<<< HEAD
 
-=======
->>>>>>> f6187a3 (functional code + tests)
     await models.postTag.destroy({
       where: {},
     })
@@ -533,8 +530,8 @@ describe('Users', () => {
       })
 
       expect(response.statusCode).toEqual(200)
-      //expect(filteredResponse.length).toEqual(4)
-      //expect(filteredResponse).toEqual(expectedOutput)
+      expect(filteredResponse.length).toEqual(4)
+      expect(filteredResponse).toEqual(expectedOutput)
     })
   })
 
