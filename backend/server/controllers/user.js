@@ -172,17 +172,18 @@ export const getFeed = async (req, res) => {
       },
     })
 
-    const activity = await Activity.retrieveActivityFeed(following)
-    let len = activity.length
+    let activities = await Activity.retrieveActivityFeed(following)
+
     // Add in extra interests-based posts if not enough posts to send back
+    let len = activities.length
     if (len < 10) {
       const interests = await Activity.retrieveInterests(loggedInUser.id)
       for (let i = 0; i < 10 - len && i < interests.length; i++) {
-        activity.push(loggedInUser.id)
+        activities.push(interests[i])
       }
     }
 
-    res.status(200).send(activity)
+    res.status(200).send(activities)
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
   }
