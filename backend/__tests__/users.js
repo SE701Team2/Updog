@@ -318,6 +318,13 @@ describe('Users', () => {
         '2021-03-14 04:56:53'
       )
 
+      const commentPost = await Helper.createPost(
+        'text',
+        newUser.id,
+        newPost.id,
+        '2021-03-13 04:56:53'
+      )
+
       // WHEN the logged in user tries to view the user activity
       const authToken = Authentication.generateAuthToken(newUser)
 
@@ -331,6 +338,11 @@ describe('Users', () => {
           postID: newPost.id,
           timestamp: Date.parse(sharedPost.createdAt),
           activity: 'SHARED',
+        },
+        {
+          postID: commentPost.id,
+          timestamp: Date.parse(commentPost.createdAt),
+          activity: 'COMMENTED',
         },
         {
           postID: newPost.id,

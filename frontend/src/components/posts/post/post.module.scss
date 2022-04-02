@@ -23,6 +23,19 @@
   }
 }
 
+.head {
+  font-weight: bold !important;
+  margin-bottom: -20px;
+  text-decoration: none;
+  color: black;
+}
+
+.date {
+  margin-top: -16px;
+  color: grey;
+  font-size: 15px;
+}
+
 .condensed {
   display: flex;
   flex-direction: column;
@@ -40,6 +53,11 @@
 .link {
   text-decoration: none;
   color: theme.$onBackground;
+}
+
+.postLink {
+  text-decoration: none;
+  color: black;
 }
 
 .tagStyle {
@@ -62,4 +80,14 @@
 
 .activity {
   font-weight: bold;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+.link {
+  text-decoration: underline !important;
+  color: #3281c9 !important;
+  font-weight: 100;
 }

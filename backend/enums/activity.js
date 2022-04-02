@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import PostDTO from '../dto/posts'
 import models from '../database/models'
 
@@ -6,6 +7,7 @@ export class ActivityType {
   static POSTED = new ActivityType('POSTED')
   static LIKED = new ActivityType('LIKED')
   static SHARED = new ActivityType('SHARED')
+  static COMMENTED = new ActivityType('COMMENTED')
 
   constructor(type) {
     this.type = type
@@ -25,6 +27,9 @@ export default class Activity {
   static async getUserActivities(userId, currentUserId) {
     const ownPosts = await models.posts.findAll({
       where: {
+        parent: {
+          [Op.eq]: null,
+        },
         author: userId,
       },
     })
@@ -85,7 +90,33 @@ export default class Activity {
       })
     )
 
-    return [...postActivities, ...sharedActivities, ...likedActivities]
+    const commentPost = await models.posts.findAll({
+      where: {
+        parent: {
+          [Op.ne]: null,
+        },
+        author: userId,
+      },
+    })
+
+    const commentActivities = await Promise.all(
+      commentPost.map(
+        async (post) =>
+          new Activity(
+            await PostDTO.convertToDto(post),
+            userId,
+            ActivityType.COMMENTED.type,
+            Date.parse(post.createdAt)
+          )
+      )
+    )
+
+    return [
+      ...postActivities,
+      ...sharedActivities,
+      ...likedActivities,
+      ...commentActivities,
+    ]
   }
 
   // Create a list of activities in order of post creation time
