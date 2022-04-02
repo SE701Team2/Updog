@@ -88,9 +88,15 @@ export default class Activity {
     await Promise.all(
       unconvertedInterests.map(async (activity) => {
         const post = await this.convertToFeedActivity(
+<<<<<<< HEAD
           ActivityType.INTERESTED,
           activity.id,
           activity.author,
+=======
+          this.SHARED,
+          activity.postId,
+          activity.userId,
+>>>>>>> 245d15c (fix conflict)
           activity.createdAt
         )
         interests.push(post)
