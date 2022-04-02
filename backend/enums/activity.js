@@ -22,7 +22,7 @@ export default class Activity {
     this.timestamp = activityTime
   }
 
-  static async getUserActivities(userId) {
+  static async getUserActivities(userId, currentUserId) {
     const ownPosts = await models.posts.findAll({
       where: {
         author: userId,
@@ -55,7 +55,7 @@ export default class Activity {
           },
         })
         return new Activity(
-          await PostDTO.convertToDto(sharedPostData),
+          await PostDTO.convertToDto(sharedPostData, currentUserId),
           userId,
           ActivityType.SHARED.type,
           Date.parse(sharedPost.createdAt)
@@ -77,7 +77,7 @@ export default class Activity {
           },
         })
         return new Activity(
-          await PostDTO.convertToDto(likedPostData),
+          await PostDTO.convertToDto(likedPostData, currentUserId),
           userId,
           ActivityType.LIKED.type,
           Date.parse(likedPost.createdAt)
@@ -86,20 +86,5 @@ export default class Activity {
     )
 
     return [...postActivities, ...sharedActivities, ...likedActivities]
-  }
-
-  // Create a list of activities in order of post creation time
-  // from a list of follower objects
-  static async retrieveActivityFeed(following) {
-    const userActivities = await Promise.all(
-      following.map((followee) =>
-        Activity.getUserActivities(followee.followedId)
-      )
-    )
-    const feeds = userActivities.reduce(
-      (feed, activities) => [...feed, ...activities],
-      []
-    )
-    return feeds.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
   }
 }

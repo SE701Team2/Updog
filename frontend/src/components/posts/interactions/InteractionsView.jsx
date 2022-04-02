@@ -3,11 +3,18 @@ import MessageOutlineIcon from '@mui/icons-material/MessageOutlined'
 import ShareIcon from '@mui/icons-material/Share'
 import classes from './interactions.module.scss'
 
-const InteractionsView = ({ postData, onLike, onComment, onShare }) => (
+const InteractionsView = ({
+  postData,
+  onLike,
+  onComment,
+  onShare,
+  usersLiked,
+  usersShared,
+}) => (
   <div className={classes.container}>
     <div className={classes.like} onClick={onLike}>
       <FavoriteBorderIcon />
-      {postData.usersLiked}
+      {usersLiked}
     </div>
     <div onClick={onComment}>
       <MessageOutlineIcon />
@@ -15,7 +22,7 @@ const InteractionsView = ({ postData, onLike, onComment, onShare }) => (
     </div>
     <div className={classes.spacer} />
     <div onClick={onShare}>
-      {postData.usersShared}
+      {usersShared}
       <ShareIcon />
     </div>
   </div>

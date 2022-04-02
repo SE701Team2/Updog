@@ -10,39 +10,39 @@ import { request } from '../../../functions'
  */
 const InteractionsController = ({ postData }) => {
   const [showComponent, setShowComponent] = useState(false)
-  const [usersLiked, setUsersLiked] = useState(0)
-  const [usersShared, setUsersShared] = useState(0)
 
+  const [usersLiked, setUsersLiked] = useState(postData.usersLiked)
+  const [usersShared, setUsersShared] = useState(postData.usersShared)
+  const [hasLiked, setHasLiked] = useState(postData.hasLiked)
+  const [hasShared, setHasShared] = useState(postData.hasShared)
+
+  // const username = localStorage.getItem('username')
+  // console.log(username)
   const onLike = async () => {
-    if (!postData.usersLiked) {
-      const response = await request(`posts/${postData.id}/like`, 'POST', {})
-      postData.usersLiked += 1
-      console.log(`response is ${JSON.stringify(response)}`)
-      setUsersLiked(usersLiked + 1)
-    } else {
-      const response = await request(`posts/${postData.id}/like`, 'DELETE', {})
-      postData.usersLiked -= 1
-      console.log(`response is ${JSON.stringify(response)}`)
-      setUsersLiked(usersLiked - 1)
+    const response = await request(
+      `posts/${postData.id}/like`,
+      hasLiked ? 'DELETE' : 'POST',
+      {}
+    )
+    if (response.data) {
+      setHasLiked(!hasLiked)
+      setUsersLiked((hasLiked ? -1 : 1) + usersLiked)
+    }
+  }
+  const onShare = async () => {
+    const response = await request(
+      `posts/${postData.id}/share`,
+      hasShared ? 'DELETE' : 'POST',
+      {}
+    )
+    if (response.data) {
+      setHasShared(!hasShared)
+      setUsersShared((hasShared ? -1 : 1) + usersShared)
     }
   }
 
   const onComment = () => {
     setShowComponent(!showComponent)
-  }
-
-  const onShare = async () => {
-    if (!postData.usersShared) {
-      const response = await request(`posts/${postData.id}/share`, 'POST', {})
-      postData.usersShared += 1
-      console.log(`response is ${JSON.stringify(response)}`)
-      setUsersShared(usersShared + 1)
-    } else {
-      const response = await request(`posts/${postData.id}/share`, 'DELETE', {})
-      postData.usersShared -= 1
-      console.log(`response is ${JSON.stringify(response)}`)
-      setUsersShared(usersShared - 1)
-    }
   }
 
   return (
@@ -52,6 +52,8 @@ const InteractionsController = ({ postData }) => {
         onLike={onLike}
         onShare={onShare}
         onComment={onComment}
+        usersShared={usersShared}
+        usersLiked={usersLiked}
       />
       {showComponent ? <Comment postData={postData} /> : null}
     </div>
