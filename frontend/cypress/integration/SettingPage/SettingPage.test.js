@@ -19,14 +19,35 @@ describe('Banner setting test', () => {
     cy.url().should('contain', '/signIn')
   })
 
-  it('render open banner setting', () => {
+  it('change bio', () => {
     cy.visit('/')
     cy.visit('/settings')
 
-    cy.contains('Log out').click()
+    cy.contains(/^Edit$/).click()
+    cy.get('#filled-multiline-static').type('hi')
 
-    cy.contains('Sign in').click()
+    cy.contains('Save').click()
+    cy.visit('/settingpage')
+    cy.contains('hi')
+  })
 
-    cy.url().should('contain', '/signIn')
+  it('change default banner', () => {
+    cy.visit('/settings')
+    cy.contains('Change Banner Image').click()
+    cy.get('img').eq(2).click()
+    cy.contains('Save').click()
+
+    cy.visit('/settings')
+    cy.contains('Change Banner Image').click()
+    cy.get('img').eq(1).click()
+    cy.contains('Save').click()
+
+    cy.visit('/user/settingpage')
+    cy.contains('Activity')
+    cy.get('img').should(
+      'have.attr',
+      'src',
+      'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg'
+    )
   })
 })

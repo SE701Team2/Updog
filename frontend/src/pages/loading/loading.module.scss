@@ -1,12 +1,11 @@
 @use '../../styles/theme.scss';
 
 .container {
-  margin: 0% 15%;
+  margin: auto;
   .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 35vh;
 
     > img {
       height: 160px;

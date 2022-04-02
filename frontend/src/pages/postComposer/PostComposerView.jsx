@@ -31,6 +31,7 @@ const PostComposerView = ({
 
     <div className={classes.buttonContainer}>
       <LoadingButton
+        data-testid="submit-post-button"
         loading={loading}
         variant="contained"
         fullWidth

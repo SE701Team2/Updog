@@ -1,15 +1,14 @@
 import { List, ListItem } from '@mui/material'
 import { useEffect, useState } from 'react'
-import classes from './notificationspage.module.scss'
-import LikedNotification from '../../components/notifications/liked/LikedNotificationController'
 import NotificationsPageView from './NotificationsPageView'
 import LoadingView from '../loading/LoadingView'
-import SharedNotification from '../../components/notifications/shared/SharedNotificationController'
-import RepliedNotification from '../../components/notifications/replied/RepliedNotificationController'
 import useApi from '../../hooks/useApi'
+import NotificationCardController from '../../components/notifications/notificationcard/NotificationCardController'
 
+import classes from './notificationspage.module.scss'
 /**
  * This page renders a list of notifications for the user.
+ * TODO: CHANGE PLACEHOLDER IMAGE TO IMAGE FROM NOTIFICATION
  */
 const NotificationsPageController = () => {
   const { data, loading, err } = useApi(`notifications`)
@@ -21,33 +20,19 @@ const NotificationsPageController = () => {
     const notifItems = []
     for (let i = 0; i < data.length; i += 1) {
       const notification = data[i]
-      const nickname = notification.from
-
-      let notif = null
-      switch (notification.type) {
-        case 'like':
-          notif = (
-            <LikedNotification
-              liker={nickname}
-              post={notification.post}
-              noLikes={1}
-              time={notification.time}
-            />
-          )
-          break
-        case 'share':
-          notif = (
-            <SharedNotification sharer={nickname} post={notification.post} />
-          )
-          break
-        case 'reply':
-          notif = (
-            <RepliedNotification replier={nickname} post={notification.post} />
-          )
-          break
-        default:
-          break // error handling potentially could be added here
-      }
+      const { from, type, time } = notification
+      // const image = notifcation.image
+      // const post = notifcation.post
+      const notif = (
+        <NotificationCardController
+          type={type}
+          time={time}
+          handle={from}
+          username={from}
+          image="http://tny.im/rM7"
+          post=""
+        />
+      )
       notifItems.push(
         <ListItem className={classes.container} key={i}>
           {notif}

@@ -1,0 +1,25 @@
+@use '~/src/styles/theme';
+
+.container {
+  height: 100%;
+}
+
+.loading {
+  padding-top: calc(50vh - 200px);
+  margin: auto;
+  max-width: 400px;
+}
+
+.pageContent {
+  width: 100%;
+  height: calc(100% - 179px);
+  overflow: auto;
+  padding-bottom: 50px;
+  background-color: #fafafa;
+}
+
+.centerText {
+  right: calc(50% - 41px);
+  top: 50%;
+  position: absolute;
+}

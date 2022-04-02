@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import BannerSettingView from './BannerSettingView'
 
 export default function BannerSettingController({
   opened,
   defaultBanners,
   upload,
-  currentBanner,
+  selectedBanner,
+  setSelectedBanner,
   setOpen,
+  setProfileBanner,
+  updateBannerUpload,
 }) {
-  const [selected, setSelected] = useState(currentBanner)
-
   const handleSave = () => {
+    if (selectedBanner !== null) {
+      updateBannerUpload()
+      setProfileBanner(selectedBanner)
+    }
     setOpen(false)
   }
 
@@ -19,10 +24,9 @@ export default function BannerSettingController({
       opened={opened}
       defaultBanners={defaultBanners}
       upload={upload}
-      currentBanner={currentBanner}
       setOpen={setOpen}
-      selected={selected}
-      action={{ setSelected, handleSave }}
+      selected={selectedBanner}
+      action={{ handleSave, updateBannerUpload, setSelectedBanner }}
     />
   )
 }

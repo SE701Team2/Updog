@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import Avatar from '@mui/material/Avatar'
+import SimpleUserDetails from '../simpledetails/SimpleUserDetailsController'
 import classes from './searchuserdetails.module.scss'
 import FollowButtonController from '../../button/followbutton/FollowButtonController'
 
@@ -17,29 +16,25 @@ import FollowButtonController from '../../button/followbutton/FollowButtonContro
  */
 
 export default function SearchUserDetailsView({
-  username,
-  handle,
-  profilePic,
+  user,
   bio,
+  isCurrentUser,
+  isFollowing,
+  handleFollow,
+  toProfile,
 }) {
   return (
-    <Link to={`/user/${username}`} className={classes.container}>
+    <div onClick={toProfile} className={classes.container}>
       <div className={classes.top}>
-        <div className={classes.topLeft}>
-          <Avatar
-            className={classes.Avatar}
-            alt="Profile Pic"
-            src={profilePic}
-            sx={{ width: 80, height: 80 }}
+        <SimpleUserDetails user={user} condensed />
+        {!isCurrentUser && (
+          <FollowButtonController
+            isFollowing={isFollowing}
+            onClick={handleFollow}
           />
-          <div className={classes.names}>
-            <h2 className={classes.username}>{username}</h2>
-            <p className={classes.handle}>@{handle}</p>
-          </div>
-        </div>
-        <FollowButtonController isFollowingProp={false} onClick={() => {}} />
+        )}
       </div>
       <p className={classes.biography}>{bio ?? 'Biography'}</p>
-    </Link>
+    </div>
   )
 }
