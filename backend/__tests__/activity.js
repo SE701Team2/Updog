@@ -42,4 +42,25 @@ describe('Activity', () => {
       expect(feed[0].activity).toEqual(ActivityType.LIKED.type)
     })
   })
+  describe('retrieveInterests', () => {
+    it('should retrieve a feed of activity based on interests', async () => {
+      /*const u1 = await Helper.createUser()
+      const u2 = await Helper.createUser()
+
+      const p1 = await Helper.createPost('u2 post 1', u2.id)
+      const p2 = await Helper.createPost('u2 post 2', u2.id)
+
+      // Needs a long enough wait or it all happens at the same timestamp
+      await new Promise((r) => setTimeout(r, 1000))
+
+      const newTag = await Helper.createTag('Updog')
+      await Helper.createPostTag(p1.id, newTag.id)
+      await Helper.createPostTag(p2.id, newTag.id)
+      await Helper.createUserInterest(u1.id, newTag.id)
+
+      const feed = await Activity.retrieveActivityFeed(u1.id)
+      expect(feed.length).toEqual(1)
+      expect(feed[0].activity).toEqual(ActivityType.INTERESTED.type)*/
+    })
+  })
 })

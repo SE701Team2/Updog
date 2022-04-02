@@ -6,6 +6,7 @@ export class ActivityType {
   static POSTED = new ActivityType('POSTED')
   static LIKED = new ActivityType('LIKED')
   static SHARED = new ActivityType('SHARED')
+  static INTERESTED = new ActivityType('INTERESTED')
 
   constructor(type) {
     this.type = type
@@ -87,7 +88,7 @@ export default class Activity {
     await Promise.all(
       unconvertedInterests.map(async (activity) => {
         const post = await this.convertToFeedActivity(
-          this.SHARED,
+          this.INTERESTED,
           activity.postId,
           activity.userId,
           activity.createdAt
@@ -224,8 +225,8 @@ export default class Activity {
     }
 
     // Retrieve the actual posts for the given post IDs
-    for (let postId of relatedPosts) {
-      posts.push(await models.posts.findByPk(postId))
+    for (let post of relatedPosts) {
+      posts.push(await models.posts.findByPk(post.postId))
     }
 
     return posts
