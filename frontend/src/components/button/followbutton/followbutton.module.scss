@@ -13,7 +13,7 @@
   }
 
   &:hover {
-    background: $primary;
+    background: $primaryVariant !important;
     box-shadow: '0 0 0 0.2rem rgba(0,123,255,.5)' !important;
   }
 }

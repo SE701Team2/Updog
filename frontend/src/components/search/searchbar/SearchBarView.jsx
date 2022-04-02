@@ -15,6 +15,7 @@ const SearchBarView = ({ initialText, handleSubmit }) => {
   const [placeholder, setPlaceholder] = useState('Search Updog')
   return (
     <TextField
+      data-testid="search-bar-input"
       variant="filled"
       placeholder={placeholder}
       autoComplete="off"

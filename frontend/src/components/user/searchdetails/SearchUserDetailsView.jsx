@@ -18,6 +18,7 @@ import FollowButtonController from '../../button/followbutton/FollowButtonContro
 export default function SearchUserDetailsView({
   user,
   bio,
+  isCurrentUser,
   isFollowing,
   handleFollow,
   toProfile,
@@ -26,10 +27,12 @@ export default function SearchUserDetailsView({
     <div onClick={toProfile} className={classes.container}>
       <div className={classes.top}>
         <SimpleUserDetails user={user} condensed />
-        <FollowButtonController
-          isFollowing={isFollowing}
-          onClick={handleFollow}
-        />
+        {!isCurrentUser && (
+          <FollowButtonController
+            isFollowing={isFollowing}
+            onClick={handleFollow}
+          />
+        )}
       </div>
       <p className={classes.biography}>{bio ?? 'Biography'}</p>
     </div>

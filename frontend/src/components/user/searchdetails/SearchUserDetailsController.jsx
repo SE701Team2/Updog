@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import { useNavigate } from 'react-router'
+import { AuthContext } from '../../../contexts/AuthProvider'
 import SearchUserDetailsView from './SearchUserDetailsView'
 
 /**
@@ -7,6 +9,9 @@ import SearchUserDetailsView from './SearchUserDetailsView'
  */
 const SearchUserDetailsController = ({ user, isFollowing, handleFollow }) => {
   const navigate = useNavigate()
+  const {
+    user: { username },
+  } = useContext(AuthContext)
 
   const handleToProfile = () => {
     navigate(`/user/${user.username}`)
@@ -19,6 +24,7 @@ const SearchUserDetailsController = ({ user, isFollowing, handleFollow }) => {
       isFollowing={isFollowing}
       handleFollow={handleFollow}
       toProfile={handleToProfile}
+      isCurrentUser={username === user.username}
     />
   )
 }

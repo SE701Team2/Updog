@@ -48,6 +48,7 @@ const SearchPageView = ({
     )}
     <div className={classes.pageContent}>
       {!typePeople &&
+        !loading &&
         data?.map((post) =>
           post.content ? (
             <FeedCard key={post.id}>
@@ -56,6 +57,7 @@ const SearchPageView = ({
           ) : null
         )}
       {typePeople &&
+        !loading &&
         data?.map((people) => (
           <FeedCard key={people.id}>
             <SearchUserDetails
