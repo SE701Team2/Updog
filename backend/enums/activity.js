@@ -217,7 +217,7 @@ export default class Activity {
       relatedPosts.push(
         ...(await models.posttag.findAll({
           where: {
-            tagID: interest.tagID,
+            tagID: interest.tagId,
           },
         }))
       )
