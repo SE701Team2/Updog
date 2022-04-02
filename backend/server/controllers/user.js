@@ -134,27 +134,29 @@ export const getUserActivity = async (req, res) => {
       return
     }
 
-    const unconvertedActivity = await Activity.getUnconvertedActivity(
-      userOfInterest.id
-    )
+    const authToken = req.get('Authorization')
 
-    const postsActivity = unconvertedActivity[0].map((p) =>
-      Activity.convertToUserActivity(Activity.POSTED, p.id, p.createdAt)
-    )
-    const likedPostsActivity = unconvertedActivity[1].map((p) =>
-      Activity.convertToUserActivity(Activity.LIKED, p.postId, p.createdAt)
-    )
-    const sharedPostsActivity = unconvertedActivity[2].map((p) =>
-      Activity.convertToUserActivity(Activity.SHARED, p.postId, p.createdAt)
-    )
+    if (!authToken) {
+      res.status(400).send({
+        'Error message': 'Auth token not provided',
+      })
+    }
 
-    const activity = [
-      ...postsActivity,
-      ...sharedPostsActivity,
-      ...likedPostsActivity,
-    ]
-    activity.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
-    res.status(200).send(activity)
+    const loggedInUser = Authentication.extractUser(authToken)
+
+    if (!loggedInUser) {
+      res.status(401).send({
+        'Error message': 'Auth token invalid',
+      })
+      return
+    }
+
+    let activities = await Activity.getUserActivities(userOfInterest.id)
+    activities.sort((a, b) => {
+      return a.timestamp < b.timestamp ? 1 : -1
+    })
+
+    res.status(200).send(activities)
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
   }
@@ -170,7 +172,7 @@ export const getFeed = async (req, res) => {
       },
     })
 
-    const activity = await Activity.retrieveActivities(following)
+    const activity = await Activity.retrieveActivityFeed(following)
     let len = activity.length
     // Add in extra interests-based posts if not enough posts to send back
     if (len < 10) {

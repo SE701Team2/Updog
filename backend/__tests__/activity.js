@@ -1,62 +1,45 @@
 import Activity from '../enums/activity'
+import { ActivityType } from '../enums/activity'
 import models from '../database/models'
-import PostDTO from '../dto/posts'
+import Helper from './helper/helper'
 
 describe('Activity', () => {
-  describe('convertToUserActivity', () => {
-    it('should return it in the correct format', async () => {
-      const postId = 1
-      const updatedAt = '2021-03-13 04:56:53'
-
-      const expectedOutput = {
-        postID: postId,
-        timestamp: Date.parse(updatedAt),
-        activity: 'LIKED',
-      }
-
-      const actual = Activity.convertToUserActivity(
-        Activity.LIKED,
-        postId,
-        updatedAt
-      )
-      expect(actual).toEqual(expectedOutput)
+  describe('getUserActivities', () => {
+    it('should retrieve all user activities from newest to oldest', async () => {
+      const u1 = await Helper.createUser()
+      const u2 = await Helper.createUser()
+      const p1 = await Helper.createPost('u1 test post', u1.id)
+      await Helper.likePost(p1.id, u2.id)
+      await Helper.createPost('u2 test post', u2.id)
+      const activities = await Activity.getUserActivities(u2.id)
+      expect(activities.length).toEqual(2)
+      expect(activities[0].activity).toEqual(ActivityType.POSTED.type)
+      expect(activities[1].activity).toEqual(ActivityType.LIKED.type)
     })
   })
-  describe('convertToFeedActivity', () => {
-    it('should return it in the correct format', async () => {
-      const password = 'PASSWORD'
-      const randomUsername1 = (Math.random() + 1).toString(36).substring(7)
-      const email1 = `test@${randomUsername1}.com`
+  describe('retrieveActivityFeed', () => {
+    it('should retrieve a feed of activity from all followed users', async () => {
+      const u1 = await Helper.createUser()
+      const u2 = await Helper.createUser()
+      const u3 = await Helper.createUser()
+      await Helper.createFollowers(u2.id, u1.id)
+      await Helper.createFollowers(u3.id, u1.id)
 
-      const user1 = await models.users.create({
-        username: randomUsername1,
-        nickname: randomUsername1,
-        email: email1,
-        password,
+      await Helper.createPost('u2 post 1', u2.id)
+      const p2 = await Helper.createPost('u3 post 1', u3.id)
+      await Helper.createPost('u2 post 2', u2.id)
+      // Needs a long enough wait or it all happens at the same timestamp
+      await new Promise((r) => setTimeout(r, 1000))
+      await Helper.likePost(p2.id, u2.id)
+
+      const following = await models.followers.findAll({
+        where: {
+          followerId: u1.id,
+        },
       })
-
-      const newPost = await models.posts.create({
-        text_content: 'Updog is the next big thing',
-        author: user1.id,
-        parent: null,
-        createdAt: '2020-03-13 04:56:53',
-      })
-
-      const dto = await PostDTO.convertToDto(newPost)
-      const expectedOutput = {
-        post: dto,
-        timestamp: Date.parse(newPost.createdAt),
-        activity: 'LIKED',
-        userId: user1.id,
-      }
-
-      const actual = await Activity.convertToFeedActivity(
-        Activity.LIKED,
-        newPost.id,
-        user1.id,
-        newPost.createdAt
-      )
-      expect(actual).toEqual(expectedOutput)
+      const feed = await Activity.retrieveActivityFeed(following)
+      expect(feed.length).toEqual(4)
+      expect(feed[0].activity).toEqual(ActivityType.LIKED.type)
     })
   })
 })
