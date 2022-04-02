@@ -71,9 +71,9 @@ export default class Activity {
     return activity
   }
 
-  static async retrieveInterests(user) {
+  static async retrieveInterests(userId) {
     const interests = []
-    const unconvertedInterests = await this.getPostsForInterests(user.id)
+    const unconvertedInterests = await this.getPostsForInterests(userId)
     await Promise.all(
       unconvertedInterests.map(async (activity) => {
         const post = await this.convertToFeedActivity(
@@ -139,7 +139,7 @@ export default class Activity {
     // Retrieve user's interests
     const interestsDB = await models.userInterests.findAll({
       where: {
-        userId: userId,
+        userID: userId,
       },
     })
 
@@ -150,7 +150,7 @@ export default class Activity {
       relatedPosts.push(
         ...(await models.posttag.findAll({
           where: {
-            tagId: interest.tagId,
+            tagID: interest.tagID,
           },
         }))
       )
