@@ -1,4 +1,5 @@
-import React, { createContext, useState, useMemo } from 'react'
+import React, { createContext, useState, useMemo, useEffect } from 'react'
+import { request } from '../functions'
 
 export const AuthContext = createContext()
 
@@ -19,6 +20,20 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('token')
     localStorage.removeItem('username')
   }
+
+  // Check if the token and username is still valid
+  useEffect(() => {
+    request(
+      `/users/${localStorage.getItem('username')}`,
+      'GET',
+      null,
+      localStorage.getItem('token')
+    ).then(({ err }) => {
+      if (err) {
+        logout()
+      }
+    })
+  }, [])
 
   const value = useMemo(
     () => ({ isAuthenticated: user.token === undefined, user, login, logout }),

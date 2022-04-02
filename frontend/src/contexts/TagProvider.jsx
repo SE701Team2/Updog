@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo, useEffect } from 'react'
+import { request } from '../functions'
 
 export const TagContext = createContext()
 
@@ -6,17 +7,11 @@ const TagProvider = ({ children }) => {
   const [tags, setTags] = useState([])
 
   const getTags = () => {
-    const mockTags = [
-      {
-        id: 1,
-        name: 'tag1',
-      },
-      {
-        id: 2,
-        name: 'tag2',
-      },
-    ]
-    setTags(mockTags)
+    request(`/tags`, 'GET', null, localStorage.getItem('token')).then(
+      ({ data }) => {
+        setTags(data.map((tag) => ({ id: tag.id, name: tag.tagName })))
+      }
+    )
   }
 
   const appendTag = (newTag) => {
