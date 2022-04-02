@@ -26,7 +26,12 @@ export default function ChooseInterestsPageView({ data, onSubmit }) {
       <div className={classes.stickyContainer}>
         <div className={classes.gradient} />
         <div className={classes.buttonContainer}>
-          <button className={classes.button} type="button" onClick={onSubmit}>
+          <button
+            id="continue-to-dashboard"
+            className={classes.button}
+            type="button"
+            onClick={onSubmit}
+          >
             <Typography variant="button">Continue to dashboard</Typography>
           </button>
         </div>
