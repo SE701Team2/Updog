@@ -514,8 +514,6 @@ describe('Users', () => {
         },
       ]
 
-      expect(3).toEqual(response.body)
-
       expect(response.statusCode).toEqual(200)
       expect(response.body).toEqual(expectedOutput)
     })
