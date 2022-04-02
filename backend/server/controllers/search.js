@@ -21,20 +21,21 @@ export const search = async (req, res) => {
   try {
     const { query } = req
 
-    if (!query.query) {
-      res.status(400).send('Query parameter "query" required')
-      return
-    } else if (!query.type) {
+    if (!query.type) {
       res.status(400).send('Query parameter "type" required')
       return
     }
 
     if (query.type == 'people') {
-      const users = await getUsersByQuery(query.query)
+      const users = await (query.query
+        ? getUsersByQuery(query.query)
+        : getUsers())
       const userDtos = await generateUserDtos(users)
       res.status(200).send(userDtos)
     } else {
-      const posts = await getPostsByQuery(query.query)
+      const posts = await (query.query
+        ? getPostsByQuery(query.query)
+        : getPosts())
       const postDtos = await generatePostDtos(posts, query.type)
       res.status(200).send(postDtos)
     }
@@ -75,6 +76,13 @@ const getUsersByQuery = async (query) => {
   })
 }
 
+const getUsers = async () => {
+  return await models.users.findAll({
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  })
+}
+
 const generateUserDtos = async (users) => {
   const userDtos = await Promise.all(
     users.map((user) => UserDTO.convertToDto(user))
@@ -91,6 +99,13 @@ const getPostsByQuery = async (query) => {
         '%' + query.toLowerCase() + '%'
       ),
     },
+    order: [['createdAt', 'DESC']],
+    raw: true,
+  })
+}
+
+const getPosts = async () => {
+  return await models.posts.findAll({
     order: [['createdAt', 'DESC']],
     raw: true,
   })

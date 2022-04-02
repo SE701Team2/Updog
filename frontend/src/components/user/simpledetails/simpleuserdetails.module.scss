@@ -48,6 +48,9 @@
 .nickname {
   font-weight: bold;
   font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .timestampContainer {
@@ -61,8 +64,12 @@
 .username {
   color: grey;
   margin-top: -5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .timestampText {
   color: grey;
+  white-space: nowrap;
 }
