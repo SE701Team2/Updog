@@ -87,4 +87,19 @@ export default class Activity {
 
     return [...postActivities, ...sharedActivities, ...likedActivities]
   }
+
+  // Create a list of activities in order of post creation time
+  // from a list of follower objects
+  static async retrieveActivityFeed(following) {
+    const userActivities = await Promise.all(
+      following.map((followee) =>
+        Activity.getUserActivities(followee.followedId)
+      )
+    )
+    const feeds = userActivities.reduce(
+      (feed, activities) => [...feed, ...activities],
+      []
+    )
+    return feeds.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
+  }
 }

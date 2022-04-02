@@ -176,7 +176,7 @@ export const getFeed = async (req, res) => {
       },
     })
 
-    const activities = await Activity.retrieveActivities(
+    const activities = await Activity.retrieveActivityFeed(
       following,
       loggedInUser.id
     )
