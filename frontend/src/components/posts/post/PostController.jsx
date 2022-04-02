@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import {useContext, useState} from 'react'
 // eslint-disable-next-line import/no-cycle
 import PostView from './PostView'
 import useApi from '../../../hooks/useApi'
@@ -26,6 +26,8 @@ const PostController = ({
   const username = localStorage.getItem('username')
   let postData = data
   let activityText
+
+  const [url, setUrl] = useState('');
 
   if (id) {
     const { data: resData, loading, err } = useApi(`posts/${id}`)
@@ -61,6 +63,14 @@ const PostController = ({
     return <div>Error retrieving post data</div>
   }
 
+  // Regex match and extract url from post content
+  const maybeUrl = /(https?:\/\/[^\s]+)/g.exec(postData.content)
+
+  // check match, and stop React from infinite rendering loop
+  if (maybeUrl && url !== maybeUrl[0]) {
+    setUrl(maybeUrl[0]);
+  }
+
   return (
     <PostView
       activityText={activityText}
@@ -69,6 +79,7 @@ const PostController = ({
       showReplies={showReplies}
       tags={tags}
       handles={handles}
+      url={url}
     />
   )
 }
