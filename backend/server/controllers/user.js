@@ -192,6 +192,7 @@ export const getFeed = async (req, res) => {
 
     res.status(200).send(activities)
   } catch (error) {
+    console.log(error)
     res.status(500).send({ 'Error message': error.toString() })
   }
 }

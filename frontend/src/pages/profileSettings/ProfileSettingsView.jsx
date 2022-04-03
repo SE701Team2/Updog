@@ -164,7 +164,7 @@ const ProfileSettingsView = ({
       <Footer />
       {avatarOpen ? (
         <Modal open={avatarOpen} onClose={handleAvatarClose}>
-          <div>
+          <div className={classes.container}>
             <Box className={classes.modal}>
               <Typography id="modal-modal-title" variant="h5" component="h3">
                 Edit your Avatar
@@ -185,8 +185,10 @@ const ProfileSettingsView = ({
                 variant="contained"
                 component="span"
                 className={classes.upload}
-                onClick={(e) => {
-                  updateProfile(e)
+                onClick={async (e) => {
+                  await updateProfile(e)
+                  // eslint-disable-next-line no-promise-executor-return
+                  await new Promise((resolve) => setTimeout(resolve, 1000))
                   setProfilePicture(
                     `${SERVER_URL}/images/${selectedPicture.name}`
                   )

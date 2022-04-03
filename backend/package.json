@@ -20,7 +20,8 @@
     "pretty-quick": "pretty-quick --staged",
     "lint": "prettier --write .",
     "db-undo": "sequelize db:migrate:undo:all --url \"mysql://updogDev:password@localhost:3306/updog\"",
-    "db-migrate": "sequelize db:migrate --url \"mysql://updogDev:password@localhost:3306/updog\""
+    "db-migrate": "sequelize db:migrate --url \"mysql://updogDev:password@localhost:3306/updog\"",
+    "db-seed": "sequelize db:seed:all --url \"mysql://updogDev:password@localhost:3306/updog\""
   },
   "keywords": [],
   "author": "",

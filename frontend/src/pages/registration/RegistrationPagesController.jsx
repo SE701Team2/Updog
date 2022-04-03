@@ -3,6 +3,7 @@ import RegistrationFormView from './RegistrationPageView'
 import validationEmail from '../../functions/validateEmail'
 import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
+import { TagContext } from '../../contexts/TagProvider'
 
 const RegistrationFormController = () => {
   const [email, setEmail] = useState('')
@@ -12,6 +13,7 @@ const RegistrationFormController = () => {
   const [loading, setLoading] = useState(false)
 
   const authContext = useContext(AuthContext)
+  const { getTags } = useContext(TagContext)
 
   const validation = () => {
     if (!username) {
@@ -58,6 +60,7 @@ const RegistrationFormController = () => {
         localStorage.setItem('token', authToken)
         localStorage.setItem('username', username)
         authContext.login({ token: authToken, username })
+        getTags()
       }
     }
   }
