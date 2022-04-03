@@ -54,7 +54,7 @@ router.route('/posts').post(auth, posts.createPost)
 
 router
   .route('/posts/:id')
-  .get(posts.getPostById)
+  .get(auth, posts.getPostById)
   .put(auth, posts.modifyPostById)
   .delete(auth, posts.deletePostById)
 
@@ -85,7 +85,7 @@ router.route('/tags').post(auth, tags.createTag).get(auth, tags.getTags)
 /*
 SEARCH
 */
-router.route('/search').get(search.search)
+router.route('/search').get(auth, search.search)
 
 /*
 TESTING

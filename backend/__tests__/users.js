@@ -4,6 +4,7 @@ import Authentication from '../middlewares/authentication'
 import server from '../server'
 import PostDTO from '../dto/posts'
 import Helper from './helper/helper'
+import Activity from '../enums/activity'
 
 const assert = require('assert')
 const request = require('supertest')
@@ -27,6 +28,14 @@ describe('Users', () => {
     })
 
     await models.sharedPost.destroy({
+      where: {},
+    })
+
+    await models.tags.destroy({
+      where: {},
+    })
+
+    await models.postTag.destroy({
       where: {},
     })
   })
@@ -318,6 +327,13 @@ describe('Users', () => {
         '2021-03-14 04:56:53'
       )
 
+      const commentPost = await Helper.createPost(
+        'text',
+        newUser.id,
+        newPost.id,
+        '2021-03-13 04:56:53'
+      )
+
       // WHEN the logged in user tries to view the user activity
       const authToken = Authentication.generateAuthToken(newUser)
 
@@ -331,6 +347,11 @@ describe('Users', () => {
           postID: newPost.id,
           timestamp: Date.parse(sharedPost.createdAt),
           activity: 'SHARED',
+        },
+        {
+          postID: commentPost.id,
+          timestamp: Date.parse(commentPost.createdAt),
+          activity: 'COMMENTED',
         },
         {
           postID: newPost.id,
@@ -413,6 +434,77 @@ describe('Users', () => {
           userId: user1.id,
         },
       ]
+
+      const filteredResponse = response.body.map((a) => {
+        return {
+          post: a.post,
+          timestamp: a.timestamp,
+          activity: a.activity,
+          userId: a.userId,
+        }
+      })
+
+      expect(response.statusCode).toEqual(200)
+      expect(filteredResponse).toEqual(expectedOutput)
+    })
+  })
+
+  describe('GET /feed endpoint with interested posts', () => {
+    it('Should return a 200 status response and a list of interest based posts', async () => {
+      const user1 = await Helper.createUser()
+
+      const user2 = await Helper.createUser()
+
+      const user3 = await Helper.createUser()
+
+      const newTag = await Helper.createTag('Updog')
+
+      const newPost = await Helper.createPost(
+        'Twitter was the last big thing',
+        user2.id,
+        null,
+        '2020-03-13 04:56:53'
+      )
+
+      const interestPost = await Helper.createPost(
+        'Twitter clone #Updog',
+        user3.id,
+        null,
+        '2020-03-15 04:56:53'
+      )
+
+      await Helper.createPostTag(newPost.id, newTag.id)
+      await Helper.createPostTag(interestPost.id, newTag.id)
+      await Helper.createUserInterest(user1.id, newTag.id)
+
+      // WHEN the logged in user tries to view the feed
+      const authToken = Authentication.generateAuthToken(user1)
+
+      const response = await request(server)
+        .get('/api/feed')
+        .set('Authorization', `Bearer ${authToken}`)
+
+      // THEN their feed should display the activity of the user they follow
+      const dto = await PostDTO.convertToDto(newPost)
+      const dto2 = await PostDTO.convertToDto(interestPost)
+      const expectedOutput = [
+        {
+          post: dto2,
+          timestamp: Date.parse(interestPost.createdAt),
+          activity: 'INTERESTED',
+          userId: user3.id,
+        },
+        {
+          post: dto,
+          timestamp: Date.parse(newPost.createdAt),
+          activity: 'INTERESTED',
+          userId: user2.id,
+        },
+      ]
+
+      // Interests can be accessed
+      const feed = await Activity.retrieveInterests(user1.id)
+      expect(feed.length).toEqual(2)
 
       const filteredResponse = response.body.map((a) => {
         return {
