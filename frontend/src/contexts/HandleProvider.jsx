@@ -10,7 +10,10 @@ const HandleProvider = ({ children }) => {
     request(`/users`, 'GET', null, localStorage.getItem('token')).then(
       ({ data }) => {
         setHandles(
-          data.usernames.map((handle) => ({ id: handle.id, name: handle.username }))
+          data.usernames.map((handle) => ({
+            id: handle.id,
+            name: handle.username,
+          }))
         )
       }
     )
