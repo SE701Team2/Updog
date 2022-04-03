@@ -14,7 +14,6 @@ const InteractionsView = ({
   hasLiked,
 }) => (
   <div className={classes.container}>
-    {console.log(hasLiked ? 'black' : 'grey')}
     <div
       className={classes.like}
       onClick={onLike}
