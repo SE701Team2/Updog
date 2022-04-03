@@ -17,7 +17,12 @@ const DashboardPageController = () => {
     return <div>Error: {err}</div>
   }
 
-  return <DashboardPageView feedData={data ?? []} />
+  return (
+    <DashboardPageView
+      feedData={data ?? []}
+      mobile={window.innerWidth <= 600}
+    />
+  )
 }
 
 export default DashboardPageController
