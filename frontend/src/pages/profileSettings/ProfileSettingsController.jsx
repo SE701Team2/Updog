@@ -33,6 +33,11 @@ const ProfileSettingsController = () => {
     return <div>Error: {err.message}</div>
   }
 
+  const handleProfilePic = (e) => {
+    const image = e.target.files[0]
+    setSelectedPicture(image)
+  }
+
   /**
    * Update profile picture
    */
@@ -123,11 +128,6 @@ const ProfileSettingsController = () => {
     setAvatarModalOpen(false)
   }
 
-  const handleProfilePic = (e) => {
-    const image = e.target.files[0]
-    setSelectedPicture(image)
-  }
-
   return (
     <ProfileSettingsView
       user={data}
@@ -135,7 +135,7 @@ const ProfileSettingsController = () => {
       avatarOpen={avatarModalOpen}
       handleAvatarOpen={handleAvatarOpen}
       handleAvatarClose={handleAvatarClose}
-      profilePicture={selectedPicture}
+      selectedPicture={selectedPicture}
       handleProfilePic={handleProfilePic}
       handleBioUpdate={updateBio}
       bioText={bioText}

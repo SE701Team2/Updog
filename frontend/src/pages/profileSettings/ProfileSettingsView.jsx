@@ -28,6 +28,7 @@ const ProfileSettingsView = ({
   handleAvatarOpen,
   handleAvatarClose,
   handleProfilePic,
+  selectedPicture,
   handleBioUpdate,
   updateBannerUpload,
   selectedBanner,
@@ -39,6 +40,7 @@ const ProfileSettingsView = ({
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
   const [profileBanner, setProfileBanner] = useState(user.profileBanner)
+  const [profilePicture, setProfilePicture] = useState(user.profilePic)
 
   return (
     <div>
@@ -88,7 +90,7 @@ const ProfileSettingsView = ({
         <Avatar
           className={classes.avatar}
           sx={{ width: 80, height: 80 }}
-          src={user.profilePic}
+          src={profilePicture}
         />
         <Button
           variant="outlined"
@@ -183,7 +185,13 @@ const ProfileSettingsView = ({
                 variant="contained"
                 component="span"
                 className={classes.upload}
-                onClick={(e) => updateProfile(e)}
+                onClick={(e) => {
+                  updateProfile(e)
+                  setProfilePicture(
+                    `${SERVER_URL}/images/${selectedPicture.name}`
+                  )
+                  handleAvatarClose()
+                }}
               >
                 Upload
               </Button>
