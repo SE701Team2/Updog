@@ -1,5 +1,6 @@
 /* eslint-disable react/no-danger */
 import { Link } from 'react-router-dom'
+import { LinkPreview } from '@dhaiwat10/react-link-preview';
 import SimpleUserDetails from '../../user/simpledetails/SimpleUserDetailsController'
 import Interactions from '../interactions/InteractionsController'
 // eslint-disable-next-line import/no-cycle
@@ -15,6 +16,7 @@ const PostView = ({
   tags,
   handles,
   parentPost,
+  url
 }) => {
   if (condensed) {
     return (
@@ -79,6 +81,7 @@ const PostView = ({
             }),
           }}
         />
+        {url ? <LinkPreview url={url} /> : null}
       </div>
       <div className={classes.interactions}>
         <Interactions postData={postData} />
