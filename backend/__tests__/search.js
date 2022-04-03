@@ -2,7 +2,7 @@ import request from 'supertest'
 import server from '../server/index'
 import Helper from './helper/helper'
 import models from '../database/models'
-
+import Authentication from '../middlewares/authentication'
 const assert = require('assert')
 
 describe('Search', () => {
@@ -20,9 +20,11 @@ describe('Search', () => {
           'password',
           'pete@gmail.com'
         )
+        const authToken = Authentication.generateAuthToken(user)
 
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'Pete', type: 'people' })
 
         assert.equal(response.statusCode, 200)
@@ -43,9 +45,10 @@ describe('Search', () => {
           'password',
           'green.unicorn@gmail.com'
         )
-
+        const authToken = Authentication.generateAuthToken(user1)
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'Unicorn', type: 'people' })
 
         assert.equal(response.statusCode, 200)
@@ -58,8 +61,11 @@ describe('Search', () => {
 
     describe('When searching for non-existing user', () => {
       it('Should return a 200 status response', async () => {
+        const user1 = await Helper.createUser()
+        const authToken = Authentication.generateAuthToken(user1)
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'abcdefgh', type: 'people' })
 
         assert.equal(response.statusCode, 200)
@@ -74,7 +80,7 @@ describe('Search', () => {
           'password',
           'kim.kardashian@gmail.com'
         )
-
+        const authToken = Authentication.generateAuthToken(user)
         const earlyPost = await Helper.createPost(
           'Hi my name is Kim Kardashian West',
           user.id,
@@ -90,6 +96,7 @@ describe('Search', () => {
 
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'Kim', type: 'latest' })
 
         assert.equal(response.statusCode, 200)
@@ -125,11 +132,12 @@ describe('Search', () => {
           null,
           '2021-03-13 04:57:00'
         )
-
+        const authToken = Authentication.generateAuthToken(user2)
         await Helper.likePost(mostLikedPost.id, user2.id)
 
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'tired', type: 'top' })
 
         assert.equal(response.statusCode, 200)
@@ -142,8 +150,11 @@ describe('Search', () => {
 
     describe('When searching for non-existing posts', () => {
       it('Should return a 200 status response', async () => {
+        const user1 = await Helper.createUser()
+        const authToken = Authentication.generateAuthToken(user1)
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'wefhnrkevgkdsnv', type: 'top' })
 
         assert.equal(response.statusCode, 200)
@@ -166,9 +177,10 @@ describe('Search', () => {
           'password',
           'doja.cat@gmail.com'
         )
-
+        const authToken = Authentication.generateAuthToken(user)
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'dOjA', type: 'people' })
 
         assert.equal(response.statusCode, 200)
@@ -191,9 +203,10 @@ describe('Search', () => {
           null,
           '2021-03-13 04:56:53'
         )
-
+        const authToken = Authentication.generateAuthToken(user)
         const response = await request(server)
           .get('/api/search/')
+          .set('Authorization', `Bearer ${authToken}`)
           .query({ query: 'wOrLd', type: 'latest' })
 
         assert.equal(response.statusCode, 200)

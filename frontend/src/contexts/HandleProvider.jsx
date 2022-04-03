@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo, useEffect } from 'react'
+import { request } from '../functions'
 
 export const HandleContext = createContext()
 
@@ -6,17 +7,13 @@ const HandleProvider = ({ children }) => {
   const [handles, setHandles] = useState([])
 
   const getHandles = () => {
-    const mockHandles = [
-      {
-        id: 1,
-        name: 'handle1',
-      },
-      {
-        id: 2,
-        name: 'handle2',
-      },
-    ]
-    setHandles(mockHandles)
+    request(`/users`, 'GET', null, localStorage.getItem('token')).then(
+      ({ data }) => {
+        setHandles(
+          data.map((handle) => ({ id: handle.id, name: handle.username }))
+        )
+      }
+    )
   }
 
   const appendHandle = (newHandle) => {

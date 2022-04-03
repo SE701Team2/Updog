@@ -15,6 +15,7 @@ const PostView = ({
   showReplies,
   tags,
   handles,
+  parentPost,
   url
 }) => {
   if (condensed) {
@@ -22,7 +23,11 @@ const PostView = ({
       <div className={classes.condensed}>
         {activityText && (
           <div className={classes.activity}>
-            <span>{activityText}</span>
+            {postData.parent ? (
+              <a href={`/post/${postData.parent}`}>{activityText}</a>
+            ) : (
+              <span>{activityText}</span>
+            )}
           </div>
         )}
         <SimpleUserDetails
@@ -30,7 +35,7 @@ const PostView = ({
           user={postData.author}
           time={postData.timestamp}
         />
-        <Link className={classes.link} to={`/post/${postData.id}`}>
+        <Link className={classes.postLink} to={`/post/${postData.id}`}>
           <div
             dangerouslySetInnerHTML={{
               __html: processMentions({
@@ -52,9 +57,19 @@ const PostView = ({
 
   return (
     <div className={classes.container}>
+      {parentPost && (
+        <a href={`/post/${postData.parent}`} className={classes.head}>
+          commented on{' '}
+          <span className={classes.link}>
+            @{parentPost.author.username}&apos;s post
+          </span>
+        </a>
+      )}
       <SimpleUserDetails user={postData.author} />
       <div className={classes.content}>
-        <span>{new Date(postData.timestamp).toLocaleTimeString()}:</span>
+        <span className={classes.date}>
+          {new Date(postData.timestamp).toLocaleTimeString()}:
+        </span>
         <div
           dangerouslySetInnerHTML={{
             __html: processMentions({

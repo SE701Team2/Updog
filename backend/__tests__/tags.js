@@ -27,7 +27,6 @@ describe('Tags', () => {
           tagName: 'Science',
         },
       })
-      console.log(dbTag)
       assert.equal(dbTag.id, tag.id)
     })
   })

@@ -1,0 +1,40 @@
+@use '../../styles/theme.scss';
+
+.page {
+  padding: 20px;
+}
+
+.description {
+  color: #636363;
+}
+
+.stickyContainer {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+}
+
+.buttonContainer {
+  background-color: white;
+  padding: 20px;
+}
+
+.gradient {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  height: 80px;
+}
+
+.button {
+  width: 100%;
+  border: none;
+  height: 70px;
+  border-radius: 8px;
+  color: white;
+  background-color: black;
+  cursor: pointer;
+}
+
+.image {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}

@@ -4,6 +4,7 @@ import PostView from './PostView'
 import useApi from '../../../hooks/useApi'
 import { TagContext } from '../../../contexts/TagProvider'
 import { HandleContext } from '../../../contexts/HandleProvider'
+import classes from './post.module.scss'
 
 /**
  * Creates a post. One of either id or data must be provided
@@ -25,6 +26,14 @@ const PostController = ({
   const { handles } = useContext(HandleContext)
   const username = localStorage.getItem('username')
   let postData = data
+  let parentPost
+  let parentLoading
+  if (postData) {
+    const { data: resData, loading } = useApi(`posts/${postData.parent}`)
+    parentPost = resData
+    parentLoading = loading
+  }
+
   let activityText
 
   const [url, setUrl] = useState('');
@@ -32,7 +41,7 @@ const PostController = ({
   if (id) {
     const { data: resData, loading, err } = useApi(`posts/${id}`)
 
-    if (loading) {
+    if (loading || parentLoading) {
       return <div>Loading...</div>
     }
 
@@ -42,16 +51,21 @@ const PostController = ({
 
     switch (activity) {
       case 'POSTED':
-        activityText = `${username} posted`
+        activityText = `${resData.author.nickname} posted`
         break
       case 'SHARED':
-        activityText = `${username} reshared @${resData.username}'s post`
+        activityText = `${username} reshared @${resData.author.username}'s post`
         break
       case 'COMMENTED':
-        activityText = `${username} commented on @${resData.username}'s post`
+        activityText = (
+          <>
+            {resData.author.username} commented on{' '}
+            <span className={classes.link}>@{username}&apos;s post</span>
+          </>
+        )
         break
       case 'LIKED':
-        activityText = `${username} liked @${resData.username}'s post`
+        activityText = `${username} liked @${resData.author.username}'s post`
         break
       default:
         activityText = null
@@ -79,6 +93,7 @@ const PostController = ({
       showReplies={showReplies}
       tags={tags}
       handles={handles}
+      parentPost={parentPost}
       url={url}
     />
   )

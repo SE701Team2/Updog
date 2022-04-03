@@ -122,6 +122,7 @@ export const authenticateUser = async (req, res) => {
 export const getUserActivity = async (req, res) => {
   try {
     const { params } = req
+    const decodedUser = res.locals.decodedUser
     const userOfInterest = await models.users.findOne({
       where: {
         username: params.username,
@@ -151,7 +152,10 @@ export const getUserActivity = async (req, res) => {
       return
     }
 
-    let activities = await Activity.getUserActivities(userOfInterest.id)
+    let activities = await Activity.getUserActivities(
+      userOfInterest.id,
+      decodedUser.id
+    )
     activities.sort((a, b) => {
       return a.timestamp < b.timestamp ? 1 : -1
     })
@@ -172,7 +176,19 @@ export const getFeed = async (req, res) => {
       },
     })
 
-    let activities = await Activity.retrieveActivityFeed(following)
+    const activities = await Activity.retrieveActivityFeed(
+      following,
+      loggedInUser.id
+    )
+
+    // Add in extra interests-based posts if not enough posts to send back
+    let len = activities.length
+    if (len < 10) {
+      const interests = await Activity.retrieveInterests(loggedInUser.id)
+      for (let i = 0; i < 10 - len && i < interests.length; i++) {
+        activities.push(interests[i])
+      }
+    }
 
     res.status(200).send(activities)
   } catch (error) {

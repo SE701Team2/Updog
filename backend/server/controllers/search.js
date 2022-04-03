@@ -20,7 +20,7 @@ Response Codes:
 export const search = async (req, res) => {
   try {
     const { query } = req
-
+    const decodedUser = res.locals?.decodedUser
     if (!query.type) {
       res.status(400).send('Query parameter "type" required')
       return
@@ -36,10 +36,11 @@ export const search = async (req, res) => {
       const posts = await (query.query
         ? getPostsByQuery(query.query)
         : getPosts())
-      const postDtos = await generatePostDtos(posts, query.type)
+      const postDtos = await generatePostDtos(posts, query.type, decodedUser.id)
       res.status(200).send(postDtos)
     }
   } catch (error) {
+    console.log(error)
     res.status(500).send(error)
   }
 }
@@ -111,11 +112,11 @@ const getPosts = async () => {
   })
 }
 
-const generatePostDtos = async (posts, sortBy) => {
+const generatePostDtos = async (posts, sortBy, userId) => {
   const postDtos = []
   await Promise.all(
     posts.map(async (post) => {
-      const postDto = await PostDTO.convertToDto(post)
+      const postDto = await PostDTO.convertToDto(post, userId)
       postDtos.push(postDto)
     })
   )
