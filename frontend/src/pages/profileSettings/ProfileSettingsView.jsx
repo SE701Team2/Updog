@@ -12,13 +12,13 @@ import SERVER_URL from '../../config'
 
 // TODO: Remove when is ready
 const mock = [
-  'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
+  'https://i.postimg.cc/WzfSgyjw/Himalayan-chocolate-point-1.jpg',
 
   'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
 
-  'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
+  'https://i.postimg.cc/jqW8rsh8/dog-puppy-on-garden-royalty-free-image-1586966191-1.jpg',
 
-  'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
+  'https://i.postimg.cc/5yc8JMxG/sw-im-with-pigs-excursion-exuma.jpg',
 ]
 
 const ProfileSettingsView = ({

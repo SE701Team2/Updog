@@ -47,7 +47,7 @@ describe('Banner setting test', () => {
     cy.get('img').should(
       'have.attr',
       'src',
-      'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg'
+      'https://i.postimg.cc/WzfSgyjw/Himalayan-chocolate-point-1.jpg'
     )
   })
 })
