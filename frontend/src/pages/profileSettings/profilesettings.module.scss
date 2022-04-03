@@ -76,12 +76,11 @@
   justify-content: center;
   width: auto;
   height: auto;
+  margin: auto;
   background-color: white;
-  margin-top: 100%;
-  margin-left: 20px;
-  margin-right: 20px;
   padding: 8px;
   border-radius: 4px;
+  max-width: 390px;
 }
 
 .avatarEditor {
@@ -93,4 +92,9 @@
 .upload {
   margin-top: 8px;
   margin-bottom: 8px;
+}
+
+.container {
+  padding: 10px;
+  padding-top: calc(50vh - 100px);
 }

@@ -35,9 +35,11 @@ export default function ChooseInterestsPageController() {
 
   const onSubmit = async () => {
     await request('interests', 'POST', {
-      interests: selectedTags,
+      interests: selectedTags.map((tag) => tag.slice(1)),
     })
     navigate('/')
+    // eslint-disable-next-line no-restricted-globals
+    location.reload()
   }
 
   return <ChooseInterestsPageView data={mockData} onSubmit={onSubmit} />

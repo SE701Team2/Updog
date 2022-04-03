@@ -28,8 +28,8 @@ const AuthProvider = ({ children }) => {
       'GET',
       null,
       localStorage.getItem('token')
-    ).then(({ err }) => {
-      if (err) {
+    ).then(({ data }) => {
+      if (data == null) {
         logout()
       }
     })

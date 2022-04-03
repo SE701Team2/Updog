@@ -14,7 +14,7 @@ const CommentController = ({ postData }) => {
   const { loading: userLoading, err } = useApi(
     `users/${postData.author.username}`
   )
-  const { tags } = useContext(TagContext)
+  const { tags, getTags } = useContext(TagContext)
   const { handles } = useContext(HandleContext)
 
   const navigate = useNavigate()
@@ -31,6 +31,8 @@ const CommentController = ({ postData }) => {
           tagIds: postTags,
           newTags,
         })
+
+        getTags()
 
         // navigate to the newly made post comment
         setLoading(false)
