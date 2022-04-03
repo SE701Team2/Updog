@@ -30,6 +30,13 @@ describe('Posting Page test', () => {
       'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnop'
     ).should('be.visible')
   })
+  it('cannot post an empty post', () => {
+    cy.visit('/')
+    cy.getByDataTestId('AddIcon').click()
+    cy.getByDataTestId('submit-post-button').click()
+    //Wait for more testing on notifications if in future this action is prohibited along with a specific indication to users
+    cy.getByDataTestId('submit-post-button').should('be.visible')
+  })
   it('can detect a mention(@) action in the text field', () => {
     cy.visit('/')
     cy.getByDataTestId('AddIcon').click()
