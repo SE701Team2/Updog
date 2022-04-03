@@ -50,7 +50,7 @@ const ProfileSettingsView = ({
           className={classes.bannerImg}
           src={
             // eslint-disable-next-line no-nested-ternary
-            profileBanner !== null
+            profileBanner != null
               ? typeof profileBanner === 'string'
                 ? profileBanner
                 : `${SERVER_URL}/images/${profileBanner.name}`
