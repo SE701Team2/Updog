@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react'
+import { useContext, useState } from 'react'
 // eslint-disable-next-line import/no-cycle
 import PostView from './PostView'
 import useApi from '../../../hooks/useApi'
@@ -36,7 +36,7 @@ const PostController = ({
 
   let activityText
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('')
 
   if (id) {
     const { data: resData, loading, err } = useApi(`posts/${id}`)
@@ -82,7 +82,7 @@ const PostController = ({
 
   // check match, and stop React from infinite rendering loop
   if (maybeUrl && url !== maybeUrl[0]) {
-    setUrl(maybeUrl[0]);
+    setUrl(maybeUrl[0])
   }
 
   return (
