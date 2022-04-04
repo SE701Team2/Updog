@@ -14,36 +14,65 @@ const PostComposerView = ({
   setPostHandles,
   setPostText,
   setNewTags,
-}) => (
-  <div className={classes.container}>
-    <HeaderCustom title="New Post" />
+  embedded,
+}) => {
+  if (embedded) {
+    return (
+      <div className={classes.container}>
+        <PostInput
+          setPostTags={setPostTags}
+          setPostHandles={setPostHandles}
+          setPostText={setPostText}
+          setNewTags={setNewTags}
+        />
 
-    <div className={classes.profileContainer}>
-      <SimpleUserDetailsView user={user} condensed time={0} />
+        <div className={classes.buttonContainer}>
+          <LoadingButton
+            data-testid="submit-post-button"
+            loading={loading}
+            variant="contained"
+            fullWidth
+            onClick={submitForm}
+            style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
+          >
+            Post
+          </LoadingButton>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={classes.container}>
+      <HeaderCustom title="New Post" />
+
+      <div className={classes.profileContainer}>
+        <SimpleUserDetailsView user={user} condensed time={0} />
+      </div>
+
+      <PostInput
+        setPostTags={setPostTags}
+        setPostHandles={setPostHandles}
+        setPostText={setPostText}
+        setNewTags={setNewTags}
+      />
+
+      <div className={classes.buttonContainer}>
+        <LoadingButton
+          data-testid="submit-post-button"
+          loading={loading}
+          variant="contained"
+          fullWidth
+          onClick={submitForm}
+          style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
+        >
+          Post
+        </LoadingButton>
+      </div>
+
+      <Footer />
     </div>
-
-    <PostInput
-      setPostTags={setPostTags}
-      setPostHandles={setPostHandles}
-      setPostText={setPostText}
-      setNewTags={setNewTags}
-    />
-
-    <div className={classes.buttonContainer}>
-      <LoadingButton
-        data-testid="submit-post-button"
-        loading={loading}
-        variant="contained"
-        fullWidth
-        onClick={submitForm}
-        style={{ borderRadius: 10, padding: 10, textTransform: 'none' }}
-      >
-        Post
-      </LoadingButton>
-    </div>
-
-    <Footer />
-  </div>
-)
+  )
+}
 
 export default PostComposerView

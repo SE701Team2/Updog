@@ -7,7 +7,7 @@ import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
 import { TagContext } from '../../contexts/TagProvider'
 
-const PostComposerController = () => {
+const PostComposerController = ({ embedded }) => {
   const [postText, setPostText] = useState('')
   const [postTags, setPostTags] = useState([])
   const [newTags, setNewTags] = useState([])
@@ -61,6 +61,7 @@ const PostComposerController = () => {
       setPostTags={setPostTags}
       setPostHandles={() => {}}
       setNewTags={setNewTags}
+      embedded={embedded}
     />
   )
 }
