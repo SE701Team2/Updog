@@ -4,10 +4,14 @@ import ChooseInterestsPageView from './ChooseInterestsPageView'
 import { request } from '../../functions'
 import { InterestsContext } from '../../contexts/InterestsProvider'
 
+/**
+ * ChooseInterestPage handles the ChooseInterestPage where the user chooses interests after register
+ */
 export default function ChooseInterestsPageController() {
   const navigate = useNavigate()
   const { selectedTags } = useContext(InterestsContext)
 
+  // Currently the tags/categories are hard coded, since the
   const mockData = [
     {
       name: 'Trending',

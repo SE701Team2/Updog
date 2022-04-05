@@ -1,3 +1,6 @@
+/**
+ * validationEmail helper method to validate emails using regex
+ */
 const validationEmail = (email) => {
   if (!email) {
     return false

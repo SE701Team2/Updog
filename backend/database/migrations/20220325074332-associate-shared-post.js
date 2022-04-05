@@ -1,3 +1,6 @@
+/**
+ * Handles the creation/deletion of the sharedPosts table in the database
+ */
 module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.createTable('sharedPosts', {

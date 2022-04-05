@@ -1,6 +1,10 @@
 import axios from 'axios'
 import SERVER_URL from '../config'
 
+/**
+ * getHeaders for fetch requests to the backend
+ * headers includes authorization tokens
+ */
 export const getHeaders = () => {
   const token = localStorage.getItem('token')
 
@@ -10,6 +14,9 @@ export const getHeaders = () => {
   return headers
 }
 
+/**
+ * helper method to check if the token expired and reload the page
+ */
 const tokenExpired = (message) => {
   if (message === 'TokenExpiredError: jwt expired') {
     localStorage.removeItem('token')
@@ -17,6 +24,9 @@ const tokenExpired = (message) => {
   }
 }
 
+/**
+ * request helper method to handle all requests to server
+ */
 export const request = async (url, method = 'GET', data = {}, jwt = null) => {
   const headers = jwt ? { Authorization: `Bearer ${jwt}` } : getHeaders()
   let error = null
@@ -36,6 +46,9 @@ export const request = async (url, method = 'GET', data = {}, jwt = null) => {
   return { data: response?.data ?? null, err: error }
 }
 
+/**
+ * uploadImage helper method to handle all image uploads to backend
+ */
 export const uploadImage = async (formData = new FormData(), jwt = null) => {
   const headers = jwt ? { Authorization: `Bearer ${jwt}` } : getHeaders()
   let error = null

@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * Handles the creation/deletion of the tags table in the database
+ */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('tags', {

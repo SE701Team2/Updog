@@ -2,7 +2,9 @@
 import bucket from '../../config/cloudstorage'
 import { Readable } from 'stream'
 
-// Upload a file to the storage, then create attachment object to be appended into the Database.
+/**
+ * Upload a file to the storage, then create attachment object to be appended into the Database.
+ */
 async function uploadImageToBucket(buffer, filename, mimetype) {
   const stream = Readable.from(buffer)
 
@@ -22,7 +24,6 @@ async function uploadImageToBucket(buffer, filename, mimetype) {
     })
 
     pipedStreams.on('error', (err) => {
-      console.log(err)
       reject(err)
     })
   })
@@ -30,7 +31,13 @@ async function uploadImageToBucket(buffer, filename, mimetype) {
   return result
 }
 
-// Download a file from the storage
+/**
+ * Download a given file from the storage bucket when given the file name
+ *
+ * Response codes:
+ * 200 OK on success
+ * err.code of the specific error on failure
+ */
 async function downloadImageFromBucket(res, filename) {
   const image = bucket.file(`images/${filename}`)
 
@@ -46,11 +53,21 @@ async function downloadImageFromBucket(res, filename) {
   })
 }
 
-// Example method for downloading File from Cloud Storage
+/**
+ * Downloads an image File from Cloud Storage
+ */
 export const getImage = async (req, res) => {
   return downloadImageFromBucket(res, req.params.filename)
 }
 
+/**
+ * Uploads a files attachments/images to the bucket from a given request
+ *
+ * Requires authentication.
+ *
+ * Response code:
+ * 200 OK when finished
+ */
 export const uploadImage = async (req, res) => {
   if (req.files) {
     const file = req.files.attachments

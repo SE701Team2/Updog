@@ -2,7 +2,9 @@ import { Op } from 'sequelize'
 import PostDTO from '../dto/posts'
 import models from '../database/models'
 
-// enum of Activity types
+/**
+ * Enum of Activity types
+ */
 export class ActivityType {
   static POSTED = new ActivityType('POSTED')
   static LIKED = new ActivityType('LIKED')
@@ -15,6 +17,10 @@ export class ActivityType {
   }
 }
 
+/**
+ * Activity Class to store information about an activity
+ * includes a post, the user, activity type and time
+ */
 export default class Activity {
   constructor(postDto, interactingUser, activityType, activityTime) {
     // Fields named for compatability with old usage
@@ -25,6 +31,9 @@ export default class Activity {
     this.timestamp = activityTime
   }
 
+  /**
+   * GetUserActivites from a userId. Uses currentUserId to check generate PostDTO
+   */
   static async getUserActivities(userId, currentUserId) {
     const ownPosts = await models.posts.findAll({
       where: {
@@ -57,14 +66,12 @@ export default class Activity {
 
     const sharedActivities = await Promise.all(
       sharedPosts.map(async (sharedPost) => {
-        console.log(sharedPost)
         const sharedPostData = await models.posts.findOne({
           where: {
             id: sharedPost.postId,
           },
           raw: true,
         })
-        console.log(sharedPostData)
         return new Activity(
           await PostDTO.convertToDto(sharedPostData, currentUserId),
           userId,
@@ -128,6 +135,9 @@ export default class Activity {
     ]
   }
 
+  /**
+   * retrieve all post that the user has liked on
+   */
   static async retrieveInterests(userId) {
     const unconvertedInterests = await this.getPostsForInterests(userId)
     const interests = await Promise.all(
@@ -147,8 +157,10 @@ export default class Activity {
     return interests
   }
 
-  // Create a list of activities in order of post creation time
-  // from a list of follower objects
+  /**
+   * Create a list of activities in order of post creation time
+   * from a list of follower objects
+   */
   static async retrieveActivityFeed(following) {
     const userActivities = await Promise.all(
       following.map((followee) =>
@@ -162,6 +174,9 @@ export default class Activity {
     return feeds.sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
   }
 
+  /**
+   * converToFeedActivity helper to convert post to feed activity structure
+   */
   static async convertToFeedActivity(activity, postId, authorId, postTime) {
     const post = await models.posts.findByPk(postId)
     const postDto = await PostDTO.convertToDto(post)
@@ -173,6 +188,9 @@ export default class Activity {
     }
   }
 
+  /**
+   * get all posts that the user is interested in.
+   */
   static async getPostsForInterests(userId) {
     // Retrieve user's interests
     const interestsDB = await models.userInterests.findAll({

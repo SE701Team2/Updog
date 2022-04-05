@@ -1,6 +1,9 @@
 import models from '../database/models'
 import UserDTO from './users'
 
+/**
+ * A data-transfer-object representing the information of a post
+ */
 export default class PostDTO {
   static async convertToDto(post, userId = 0) {
     const author = await UserDTO.convertToDto(

@@ -5,7 +5,10 @@ import PostDTO from '../../dto/posts'
 import { checkAndCreateTag } from './tags'
 import Interactions from '../../enums/interactions'
 
-// Upload a file to the storage, then create attachment object to be appended into the Database.
+/**
+ * Upload a file to the storage, then create attachment object to be appended into the Database.
+ * @Deprecated use ./image.js/uploadImageToBucket instead
+ */
 async function uploadFileToCloud(file, postID) {
   const newFilename = `${Date.now()}-${Math.random().toString(36).slice(-5)}-${
     file.name
@@ -28,7 +31,10 @@ async function uploadFileToCloud(file, postID) {
   console.log(`uploaded file : ${newFilename}`)
 }
 
-// Download a file from the storage
+/**
+ * Downloads a given file from the cloud storage
+ * @Deprecated use ./image.js/downloadImageFromBucket instead
+ */
 async function downloadFileFromCloudStorage(filename) {
   const options = {
     destination: `images_download/${filename}`,
@@ -40,32 +46,42 @@ async function downloadFileFromCloudStorage(filename) {
   )
 }
 
-// Example method for downloading File from Cloud Storage
+/**
+ * Retrieves an image file from the cloud storage
+ *
+ * Requires authentication.
+ *
+ * Response codes:
+ * 201 CREATED when finished
+ * 500 INTERNAL SERVER ERROR otherwise
+ * @Deprecated use ./image.js/getImage instead
+ */
 export const getImage = async (req, res) => {
-  console.log('Fetching Image : received a query')
   try {
     downloadFileFromCloudStorage(req.body.attachments).catch(console.error)
     res.status(201).send()
   } catch (error) {
-    console.log(error)
     res.status(500).send(error)
   }
 }
 
-/*
-Requires authentication.
-Response codes:
-201 CREATED when the post has successfully been created.
-500 INTERNAL SERVER ERROR otherwise.
-*/
+/**
+ * Handles a request for creating a new post in the system
+ *
+ * Requires authentication.
+ *
+ * Request body: details of new post
+ *
+ * Response codes:
+ * 201 CREATED when the post has successfully been created.
+ * 404 NOT FOUND if a parent post id not found
+ * 500 INTERNAL SERVER ERROR otherwise.
+ */
 export const createPost = async (req, res) => {
   try {
     const { body } = req
     const decodedUser = res.locals.decodedUser
 
-    if (!decodedUser.id) {
-      res.status(401).send({ 'Error message': 'Auth token invalid' })
-    }
     // Check whether the parent post exists.
     const parent = await models.posts.findByPk(body.parent)
 
@@ -81,7 +97,7 @@ export const createPost = async (req, res) => {
       if (!body.tagIds) {
         body.tagIds = []
       }
-      //Create any new tags and populate the postTag database with new records
+      // Create any new tags and populate the postTag database with new records
       if (body.tagIds || body.newTags) {
         const newTagIds = await createNewTags(body.newTags)
         if (newTagIds != null) {
@@ -90,6 +106,7 @@ export const createPost = async (req, res) => {
         await createPostTags(body.tagIds, post.id)
       }
 
+      // Check for any file attachments and upload to the cloud
       if (req.files) {
         const file = req.files.attachments
         if (!!file && file.constructor === Array) {
@@ -107,19 +124,22 @@ export const createPost = async (req, res) => {
       })
     }
   } catch (error) {
-    console.log(error)
     res.status(500).send(error)
   }
 }
 
-/*
-Does not require authentication.
-Path paramter: id - the id of the post that is being retrieved.
-Response Codes:
-200 OK when the post has been successfully found.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Retrieves a specific post by its ID in the database
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that is being retrieved.
+ *
+ * Response Codes:
+ * 200 OK when the post has been successfully found.
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getPostById = async (req, res) => {
   try {
     // Check whether a post with the id exists.
@@ -138,14 +158,20 @@ export const getPostById = async (req, res) => {
   }
 }
 
-/*
-Requires authentication.
-Path paramter: id - the id of the post that is being modified.
-Response Codes:
-200 OK when the post has been successfully modified.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Modifies a post from the given ID with the updated text if it belongs to the user
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that is being modified.
+ * Request Body: new text content for post
+ *
+ * Response Codes:
+ * 200 OK when the post has been successfully modified.
+ * 403 FORBIDDEN if the user is trying to edit a post thats not theirs
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const modifyPostById = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
@@ -155,35 +181,44 @@ export const modifyPostById = async (req, res) => {
     const post = await models.posts.findByPk(params.id)
     if (!post) {
       res.status(404).send('Invalid message ID.')
-    } else if (post.author === decodedUser.id) {
-      // Update the selected row in the database.
-      const updated = await models.posts.update(
-        {
-          text_content: body.text_content,
-        },
-        { returning: true, where: { id: params.id } }
-      )
-      if (updated) {
-        res.status(200).send('The message has been updated.')
-      } else {
-        res.status(500).send('Failed to update the post.')
-      }
-    } else {
-      res.status(403).send('Invalid author ID.')
+      return
     }
+    if (post.author !== decodedUser.id) {
+      res.status(403).send('Invalid author ID.')
+      return
+    }
+    // Update the selected row in the database.
+    const updated = await models.posts.update(
+      {
+        text_content: body.text_content,
+      },
+      { returning: true, where: { id: params.id } }
+    )
+
+    if (!updated) {
+      res.status(500).send('Failed to update the post.')
+      return
+    }
+
+    res.status(200).send('The message has been updated.')
   } catch (error) {
     res.status(500).send(error)
   }
 }
 
-/*
-Requires authentication.
-Path parameter: id - the id of the post that is being deleted.
-Response Codes:
-200 OK when the post has been successfully deleted.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Deletes a post by the given id
+ *
+ * Requires authentication.
+ *
+ * Path parameter: id - the id of the post that is being deleted.
+ *
+ * Response Codes:
+ * 200 OK when the post has been successfully deleted.
+ * 403 FORBIDDEN invalid author id provided
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const deletePostById = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
@@ -193,104 +228,113 @@ export const deletePostById = async (req, res) => {
     const post = await models.posts.findByPk(params.id)
     if (!post) {
       res.status(404).send('Invalid post ID.')
-    } else if (post.author === decodedUser.id) {
-      const count = await models.posts.destroy({
-        where: { id: params.id },
-      })
-      if (count !== 0) {
-        res.status(200).send('The post has been deleted.')
-      } else {
-        res.status(500).send('Failed to destroy the post.')
-      }
-    } else {
-      res.status(403).send('Invalid author ID.')
+      return
     }
+
+    if (post.author !== decodedUser.id) {
+      res.status(403).send('Invalid author ID.')
+      return
+    }
+
+    const count = await models.posts.destroy({
+      where: { id: params.id },
+    })
+    if (count === 0) {
+      res.status(500).send('Failed to destroy the post.')
+      return
+    }
+
+    res.status(200).send('The post has been deleted.')
   } catch (error) {
     res.status(500).send(error)
   }
 }
 
-/*
-Requires authentication.
-Path paramter: id - the id of the post that user has liked.
-Response Codes:
-200 OK when the post has been successfully modified.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Handles liking of a new post
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that user has liked.
+ *
+ * Response Codes:
+ * 201 CREATED when the post has been successfully modified.
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const likePost = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
+    const { params } = req
 
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-    } else {
-      const { params } = req
-
-      // Check whether the post being updated belongs to that user.
-      const post = await models.posts.findByPk(params.id)
-      if (!post) {
-        res.status(404).send('Invalid message ID.')
-      } else {
-        const likedPost = await models.likedPost.create({
-          postId: params.id,
-          userId: decodedUser.id,
-        })
-
-        res.status(201).send(likedPost)
-      }
+    // Check whether the post being updated belongs to that user.
+    const post = await models.posts.findByPk(params.id)
+    if (!post) {
+      res.status(404).send('Invalid message ID.')
+      return
     }
+
+    const likedPost = await models.likedPost.create({
+      postId: params.id,
+      userId: decodedUser.id,
+    })
+
+    res.status(201).send(likedPost)
   } catch (error) {
-    console.log(error)
     res.status(500).send(error)
   }
 }
 
-/*
-Requires authentication.
-Path paramter: id - the id of the post that user has unliked.
-Response Codes:
-200 OK when the post has been successfully modified.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Handles when a user unlikes a post they have previously liked
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that user has unliked.
+ *
+ * Response Codes:
+ * 200 OK when the post has been successfully modified.
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const unlikePost = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
 
-    if (!decodedUser.id) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
-      })
-    } else {
-      const { params } = req
+    const { params } = req
 
-      const count = await models.likedPost.destroy({
-        where: { postId: params.id, userId: decodedUser.id },
-      })
-      if (count !== 0) {
-        res.status(200).send('The likedPost has been deleted.')
-      } else {
-        // User has not liked that post. (or the post itself does not exist)
-        res.status(404).send('Failed to destroy the likedPost.')
-      }
+    const count = await models.likedPost.destroy({
+      where: { postId: params.id, userId: decodedUser.id },
+    })
+
+    if (count === 0) {
+      // User has not liked that post. (or the post itself does not exist)
+      res.status(404).send('Failed to destroy the likedPost.')
+      return
     }
+
+    res.status(200).send('The likedPost has been deleted.')
   } catch (error) {
-    console.log(error)
     res.status(500).send(error)
   }
 }
 
+/**
+ * Allows a user to share a post by id
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that user has unshared.
+ *
+ * Response Codes:
+ * 201 CREATED when the post has been shared
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const sharePostById = async (req, res) => {
   try {
     const { params } = req
     const decodedUser = res.locals.decodedUser
-
-    if (!decodedUser.id) {
-      res.status(401).send({ 'Error message': 'Auth token invalid' })
-    }
 
     // Check whether the post id is valid.
     const targetPost = await models.posts.findByPk(params.id)
@@ -316,6 +360,18 @@ export const sharePostById = async (req, res) => {
   }
 }
 
+/**
+ * Allows a user to unshare a post by id
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that user has shared.
+ *
+ * Response Codes:
+ * 200 OK when the post has been shared
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const unsharePostById = async (req, res) => {
   try {
     const { params } = req
@@ -336,6 +392,18 @@ export const unsharePostById = async (req, res) => {
   }
 }
 
+/**
+ * Get a list of interated users (e.g users that shared and liked a post)
+ *
+ * Requires authentication.
+ *
+ * Path paramter: id - the id of the post that user has shared.
+ *
+ * Response Codes:
+ * 200 OK sends back a list of interacted users
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getInteractedUsers = async (req, res) => {
   try {
     const { params } = req
@@ -351,7 +419,7 @@ export const getInteractedUsers = async (req, res) => {
       return
     }
 
-    /** Return userDTO arrays for the likes and shares on that post */
+    // Return userDTO arrays for the likes and shares on that post
     const usersThatLiked = await Interactions.getUsersThatLiked(post.id)
     const usersThatShared = await Interactions.getUsersThatShared(post.id)
 
@@ -365,21 +433,28 @@ export const getInteractedUsers = async (req, res) => {
   }
 }
 
+/**
+ *  Handles creating new tags that the user has made
+ *  Returns a list of all the tag ids associated with a post
+ */
 const createNewTags = (newTags) => {
-  // Creates new tags for the list of tagNames given, and returns the ids
   if (newTags == null) {
     return []
   }
+  // Creates new tags for the list of tagNames given, and returns the ids
   return Promise.all(
     newTags.map(async (tagName) => (await checkAndCreateTag(tagName)).id)
   )
 }
 
+/**
+ *  Handles creating new postTag entries associating a post with a specific tag
+ */
 const createPostTags = (tagIds, postId) => {
-  // Creates new postTag records for the database
   if (tagIds == null) {
     return []
   }
+  // Creates new postTag records for the database
   return Promise.all(
     tagIds.map((tag) => {
       return models.postTag.create({

@@ -5,6 +5,18 @@ import Activity from '../../enums/activity'
 import Notifications from '../../enums/notifications'
 import UserHandleDTO from '../../dto/userHandle'
 
+/**
+ * Add a new user
+ *
+ * Does not requires Authentication
+ *
+ * Request Body: new user details
+ *
+ * Response Codes:
+ * 201 CREATED when the new user has been successfully added.
+ * 409 CONFLICT when username/email has already been taken
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const addUser = async (req, res) => {
   try {
     const { body } = req
@@ -48,6 +60,15 @@ export const addUser = async (req, res) => {
   }
 }
 
+/**
+ * Get a list of all users for user handles
+ *
+ * Requires Authentication
+ *
+ * Response Codes:
+ * 200 OK sends a list of users
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getUserHandles = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
@@ -71,6 +92,18 @@ export const getUserHandles = async (req, res) => {
   }
 }
 
+/**
+ * Get a specific user by their username
+ *
+ * Requires Authentication
+ *
+ * Path parameter: username - the username of the user
+ *
+ * Response Codes:
+ * 200 OK sends user info from username
+ * 404 NOT FOUND if no user is found
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getUsersByUsername = async (req, res) => {
   try {
     const { params } = req
@@ -93,6 +126,16 @@ export const getUsersByUsername = async (req, res) => {
   }
 }
 
+/**
+ * Handles the logging in of a user account
+ *
+ * Request Body: contains the users details
+ *
+ * Response codes:
+ * 200 OK on successful authentication, responds with auth token
+ * 401 UNAUTHORIZED if the user passes in an incorrect email or password
+ * 500 INTERNAL SERVER ERROR for anything else
+ */
 export const authenticateUser = async (req, res) => {
   try {
     const { body } = req
@@ -106,19 +149,32 @@ export const authenticateUser = async (req, res) => {
       res.status(401).send({
         error: 'Incorrect email or password',
       })
-    } else {
-      const authToken = Authentication.generateAuthToken(user)
-      res.status(200).send({
-        message: 'Authentication successful',
-        authToken,
-        username: user.username,
-      })
+      return
     }
+
+    const authToken = Authentication.generateAuthToken(user)
+    res.status(200).send({
+      message: 'Authentication successful',
+      authToken,
+      username: user.username,
+    })
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
   }
 }
 
+/**
+ * Get a specific user activity by their username
+ *
+ * Requires Authentication
+ *
+ * Path parameter: username - the username of the user
+ *
+ * Response Codes:
+ * 200 OK sends user info from username
+ * 404 NOT FOUND if no user is found
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getUserActivity = async (req, res) => {
   try {
     const { params } = req
@@ -131,23 +187,6 @@ export const getUserActivity = async (req, res) => {
     if (!userOfInterest) {
       res.status(404).send({
         error: `User '${params.username}' not found`,
-      })
-      return
-    }
-
-    const authToken = req.get('Authorization')
-
-    if (!authToken) {
-      res.status(400).send({
-        'Error message': 'Auth token not provided',
-      })
-    }
-
-    const loggedInUser = Authentication.extractUser(authToken)
-
-    if (!loggedInUser) {
-      res.status(401).send({
-        'Error message': 'Auth token invalid',
       })
       return
     }
@@ -166,6 +205,17 @@ export const getUserActivity = async (req, res) => {
   }
 }
 
+/**
+ * Handles retrieving the feed of the logged in user
+ *
+ * Requires Authentication
+ *
+ * Path parameter: username - the username of the user
+ *
+ * Response code:
+ * 200 OK with list of users feed
+ * 500 INTERNAL SERVER ERROR for anything else
+ */
 export const getFeed = async (req, res) => {
   try {
     const loggedInUser = res.locals.decodedUser
@@ -192,11 +242,19 @@ export const getFeed = async (req, res) => {
 
     res.status(200).send(activities)
   } catch (error) {
-    console.log(error)
     res.status(500).send({ 'Error message': error.toString() })
   }
 }
 
+/**
+ * Get notifications from current user
+ *
+ * Requires Authentication
+ *
+ * Response Codes:
+ * 200 OK sends notifications
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getNotifications = async (req, res) => {
   try {
     const loggedInUser = res.locals.decodedUser
@@ -209,6 +267,15 @@ export const getNotifications = async (req, res) => {
   }
 }
 
+/**
+ * Handles request for following a new user
+ *
+ * Requires Authentication
+ *
+ * Response Codes:
+ * 200 OK sends notifications
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const followUser = async (req, res) => {
   try {
     const { params } = req
@@ -245,6 +312,18 @@ export const followUser = async (req, res) => {
   }
 }
 
+/**
+ * Unfollow a specific user by username
+ *
+ * Requires Authentication
+ *
+ * Path parameter: username - the username of the user
+ *
+ * Response Codes:
+ * 200 OK when unfollows user
+ * 404 NOT FOUND when user is not following user
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const unfollowUser = async (req, res) => {
   try {
     const { params } = req
@@ -279,82 +358,84 @@ export const unfollowUser = async (req, res) => {
 }
 
 /*
-Require authentication. (only you can see list of follower and followings)
-Path paramter: username - the username of the account we want
-    to get following and followers for.
-Response Codes:
-200 OK when the followers and following has been successfully found.
-404 NOT FOUND when the post with that id can not be found.
-500 INTERNAL SERVER ERROR for everything else.
-Returns : List of followers and followings.
-*/
+ * Gets the list of followed users
+ *
+ * Require authentication
+ * Path paramter: username - the username of the account to get info on
+ *
+ * Response Codes:
+ * 200 OK when the followers and following has been successfully found.
+ * 404 NOT FOUND when the post with that id can not be found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const getFollow = async (req, res) => {
   try {
     const { params } = req
-
-    const decodedUser = res.locals.decodedUser
     const user = await models.users.findOne({
       where: { username: params.username },
     })
 
     if (!user) {
-      res.status(400).send({
+      res.status(404).send({
         'Error message':
           'Invalid param : user with given username does not exist',
       })
       return
     }
 
-    if (decodedUser.id) {
-      // retrieve id of users
-      const followersIds = await models.followers
-        .findAll({
-          where: { followedId: user.id },
-        })
-        .then((followers) => followers.map((follower) => follower.followerId))
-      const followingIds = await models.followers
-        .findAll({
-          where: { followerId: user.id },
-        })
-        .then((followings) =>
-          followings.map((following) => following.followedId)
-        )
-
-      // retrieve user object
-      const followersUsers = await models.users.findAll({
-        where: { id: followersIds },
+    // retrieve id of users
+    const followersIds = await models.followers
+      .findAll({
+        where: { followedId: user.id },
       })
-      const followingUsers = await models.users.findAll({
-        where: { id: followingIds },
+      .then((followers) => followers.map((follower) => follower.followerId))
+
+    const followingIds = await models.followers
+      .findAll({
+        where: { followerId: user.id },
       })
+      .then((followings) => followings.map((following) => following.followedId))
 
-      // Transform to DTO
-      const followersDTO = await Promise.all(
-        followersUsers.map(async (u) => {
-          const userDTO = await UserDTO.convertToDto(u)
-          return userDTO
-        })
-      )
-      const followeringDTO = await Promise.all(
-        followingUsers.map(async (u) => {
-          const userDTO = await UserDTO.convertToDto(u)
-          return userDTO
-        })
-      )
+    // retrieve user object
+    const followersUsers = await models.users.findAll({
+      where: { id: followersIds },
+    })
+    const followingUsers = await models.users.findAll({
+      where: { id: followingIds },
+    })
 
-      const follow = {
-        following: followeringDTO,
-        followers: followersDTO,
-      }
-      res.status(200).send(follow)
-    } else {
-      res.status(403).send('Invalid author ID.')
+    // Transform to DTO
+    const followersDTO = await Promise.all(
+      followersUsers.map(async (u) => {
+        const userDTO = await UserDTO.convertToDto(u)
+        return userDTO
+      })
+    )
+    const followeringDTO = await Promise.all(
+      followingUsers.map(async (u) => {
+        const userDTO = await UserDTO.convertToDto(u)
+        return userDTO
+      })
+    )
+
+    const follow = {
+      following: followeringDTO,
+      followers: followersDTO,
     }
+    res.status(200).send(follow)
   } catch (error) {
     res.status(500).send({ 'Error message': error.toString() })
   }
 }
 
+/**
+ * Require authentication
+ * Request body: the modfied user data
+ *
+ * Response Codes:
+ * 200 OK on update of user data.
+ * 500 INTERNAL SERVER ERROR for failig to update or anything else.
+ */
 export const modifyUser = async (req, res) => {
   try {
     const loggedInUser = res.locals.decodedUser
@@ -381,6 +462,17 @@ export const modifyUser = async (req, res) => {
   }
 }
 
+/**
+ * Deletes a User
+ * @Deprecated do not delete a user as it will break the database and other tables,
+ * design flaw of original database/architecture
+ *
+ * Require authentication
+ *
+ * Response Codes:
+ * 200 OK when the followers and following has been successfully found.
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const deleteUser = async (req, res) => {
   try {
     const loggedInUser = res.locals.decodedUser

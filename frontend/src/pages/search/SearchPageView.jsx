@@ -1,7 +1,7 @@
 import IconButton from '@mui/material/IconButton'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Grid from '@mui/material/Grid'
-import SearchBarView from '../../components/search/searchbar/SearchBarView'
+import SearchBar from '../../components/search/searchbar/SearchBarController'
 import Footer from '../../components/layout/footer/FooterController'
 import NavigationBar from '../../components/layout/navigation/NavigationBar'
 import LoadingView from '../loading/LoadingView'
@@ -37,7 +37,7 @@ const SearchPageView = ({
         </IconButton>
       </Grid>
       <Grid item xs={11}>
-        <SearchBarView initialText="" handleSubmit={handleSearch} />
+        <SearchBar initialText="" handleSubmit={handleSearch} />
       </Grid>
     </Grid>
     <NavigationBar selections={['Top', 'Latest', 'People']} />

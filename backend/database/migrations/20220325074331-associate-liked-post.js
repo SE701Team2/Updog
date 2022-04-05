@@ -1,3 +1,6 @@
+/**
+ * Handles the creation/deletion of the likedPosts table in the database
+ */
 module.exports = {
   async up(queryInterface, Sequelize) {
     queryInterface.createTable('likedPosts', {

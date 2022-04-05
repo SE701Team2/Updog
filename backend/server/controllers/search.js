@@ -4,27 +4,25 @@ import models from '../../database/models'
 
 const Sequelize = require('sequelize')
 
-/*
-Does not require authentication.
-Query parameters:
-query - the search query
-type - the type of data to search for: top/latest/people
-        Top returns search results sorted by their likes
-        Latest returns most recent search results
-        People returns any users who match the search
-Response Codes:
-200 OK when the data has been successfully found.
-400 BAD REQUEST when one of the query parameters is missing
-500 INTERNAL SERVER ERROR for everything else.
-*/
+/**
+ * Gets search results for top/latest/people
+ *
+ * Query parameters:
+ * query - the search query
+ * type - the type of data to search for: top/latest/people
+ *         Top returns search results sorted by their likes
+ *         Latest returns most recent search results
+ *         People returns any users who match the search
+ *
+ * Response Codes:
+ * 200 OK when the data has been successfully found.
+ * 400 BAD REQUEST when one of the query parameters is missing
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 export const search = async (req, res) => {
   try {
     const { query } = req
     const decodedUser = res.locals?.decodedUser
-    if (!query.type) {
-      res.status(400).send('Query parameter "type" required')
-      return
-    }
 
     if (query.type == 'people') {
       const users = await (query.query
@@ -40,11 +38,25 @@ export const search = async (req, res) => {
       res.status(200).send(postDtos)
     }
   } catch (error) {
-    console.log(error)
     res.status(500).send(error)
   }
 }
 
+/**
+ * Gets search results for top/latest/people
+ *
+ * Query parameters:
+ * query - the search query
+ * type - the type of data to search for: top/latest/people
+ *         Top returns search results sorted by their likes
+ *         Latest returns most recent search results
+ *         People returns any users who match the search
+ *
+ * Response Codes:
+ * 200 OK when the data has been successfully found.
+ * 400 BAD REQUEST when one of the query parameters is missing
+ * 500 INTERNAL SERVER ERROR for everything else.
+ */
 const getUsersByQuery = async (query) => {
   return await models.users.findAll({
     where: {

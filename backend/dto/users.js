@@ -1,5 +1,8 @@
 import models from '../database/models'
 
+/**
+ * A data-transfer-object representing the information of a User
+ */
 export default class UserDTO {
   static async convertToDto(user) {
     const numFollowers = await models.followers.count({

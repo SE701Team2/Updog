@@ -1,3 +1,6 @@
+/**
+ * Handles the creation/deletion of the users table in the database
+ */
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('users', {

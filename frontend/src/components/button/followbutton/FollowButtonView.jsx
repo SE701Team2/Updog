@@ -9,11 +9,11 @@ import classes from './followbutton.module.scss'
  * @isFollowing: a boolean that states if the user is currently following the user in the serach results.
  * @onClick: function that would be called when the user Click to "Follow" or "UnFollow" someone
  */
-
 export default function FollowButtonView({ isFollowing, onClick }) {
   const [isFollowingState, setIsFollowingState] = React.useState(isFollowing)
 
   const change = (e) => {
+    // Top propagation of buttion click outside of follow button
     e.stopPropagation()
     setIsFollowingState((boolean) => {
       onClick(!boolean)
