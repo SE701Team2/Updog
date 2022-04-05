@@ -5,6 +5,7 @@ import PostComposerView from './PostComposerView'
 import useApi from '../../hooks/useApi'
 import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
+import { TagContext } from '../../contexts/TagProvider'
 
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
@@ -15,6 +16,7 @@ const PostComposerController = () => {
     user: { username },
   } = useContext(AuthContext)
   const { data, loading: userLoading, err } = useApi(`users/${username}`)
+  const { getTags } = useContext(TagContext)
 
   const navigate = useNavigate()
 
@@ -28,6 +30,8 @@ const PostComposerController = () => {
           tagIds: postTags,
           newTags,
         })
+
+        getTags()
 
         // navigate to the newly made post
         setLoading(false)

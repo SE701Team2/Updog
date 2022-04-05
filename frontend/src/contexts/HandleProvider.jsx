@@ -7,13 +7,14 @@ const HandleProvider = ({ children }) => {
   const [handles, setHandles] = useState([])
 
   const getHandles = () => {
-    request(`/users`, 'GET', null, localStorage.getItem('token')).then(
-      ({ data }) => {
-        setHandles(
-          data.map((handle) => ({ id: handle.id, name: handle.username }))
-        )
-      }
-    )
+    request(`users`, 'GET').then(({ data }) => {
+      setHandles(
+        data.usernames.map((handle) => ({
+          id: handle.id,
+          name: handle.username,
+        }))
+      )
+    })
   }
 
   const appendHandle = (newHandle) => {

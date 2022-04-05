@@ -33,6 +33,7 @@ export default class Activity {
         },
         author: userId,
       },
+      raw: true,
     })
 
     const postActivities = await Promise.all(
@@ -51,15 +52,19 @@ export default class Activity {
       where: {
         userID: userId,
       },
+      raw: true,
     })
 
     const sharedActivities = await Promise.all(
       sharedPosts.map(async (sharedPost) => {
+        console.log(sharedPost)
         const sharedPostData = await models.posts.findOne({
           where: {
             id: sharedPost.postId,
           },
+          raw: true,
         })
+        console.log(sharedPostData)
         return new Activity(
           await PostDTO.convertToDto(sharedPostData, currentUserId),
           userId,
@@ -73,6 +78,7 @@ export default class Activity {
       where: {
         userID: userId,
       },
+      raw: true,
     })
 
     const likedActivities = await Promise.all(
@@ -81,6 +87,7 @@ export default class Activity {
           where: {
             id: likedPost.postId,
           },
+          raw: true,
         })
         return new Activity(
           await PostDTO.convertToDto(likedPostData, currentUserId),
@@ -98,6 +105,7 @@ export default class Activity {
         },
         author: userId,
       },
+      raw: true,
     })
 
     const commentActivities = await Promise.all(

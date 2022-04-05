@@ -7,11 +7,9 @@ const TagProvider = ({ children }) => {
   const [tags, setTags] = useState([])
 
   const getTags = () => {
-    request(`/tags`, 'GET', null, localStorage.getItem('token')).then(
-      ({ data }) => {
-        setTags(data.map((tag) => ({ id: tag.id, name: tag.tagName })))
-      }
-    )
+    request(`tags`, 'GET', null).then(({ data }) => {
+      setTags(data.map((tag) => ({ id: tag.id, name: tag.tagName })))
+    })
   }
 
   const appendTag = (newTag) => {

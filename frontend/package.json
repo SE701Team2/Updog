@@ -7,6 +7,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@dhaiwat10/react-link-preview": "^1.13.1",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@fontsource/poppins": "^4.5.5",

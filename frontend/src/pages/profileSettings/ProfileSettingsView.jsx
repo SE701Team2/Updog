@@ -12,13 +12,13 @@ import SERVER_URL from '../../config'
 
 // TODO: Remove when is ready
 const mock = [
-  'https://i.ibb.co/L0cf3y7/Himalayan-chocolate-point.jpg',
+  'https://i.postimg.cc/WzfSgyjw/Himalayan-chocolate-point-1.jpg',
 
   'https://images.unsplash.com/photo-1519861531473-9200262188bf?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80',
 
-  'https://i.ibb.co/hgbQNpX/9-BBB1-C95-49-E9-4-F86-A0-CB-57-D07-A00098-B.png',
+  'https://i.postimg.cc/jqW8rsh8/dog-puppy-on-garden-royalty-free-image-1586966191-1.jpg',
 
-  'https://i.ibb.co/p3QnfGT/dog-puppy-on-garden-royalty-free-image-1586966191.jpg',
+  'https://i.postimg.cc/5yc8JMxG/sw-im-with-pigs-excursion-exuma.jpg',
 ]
 
 const ProfileSettingsView = ({
@@ -28,6 +28,7 @@ const ProfileSettingsView = ({
   handleAvatarOpen,
   handleAvatarClose,
   handleProfilePic,
+  selectedPicture,
   handleBioUpdate,
   updateBannerUpload,
   selectedBanner,
@@ -39,6 +40,7 @@ const ProfileSettingsView = ({
   const [openDialog, setOpenDialog] = useState(false)
   const [openBioEdit, setOpenBioEdit] = useState(false)
   const [profileBanner, setProfileBanner] = useState(user.profileBanner)
+  const [profilePicture, setProfilePicture] = useState(user.profilePic)
 
   return (
     <div>
@@ -50,7 +52,7 @@ const ProfileSettingsView = ({
           className={classes.bannerImg}
           src={
             // eslint-disable-next-line no-nested-ternary
-            profileBanner !== undefined
+            profileBanner != null
               ? typeof profileBanner === 'string'
                 ? profileBanner
                 : `${SERVER_URL}/images/${profileBanner.name}`
@@ -88,7 +90,7 @@ const ProfileSettingsView = ({
         <Avatar
           className={classes.avatar}
           sx={{ width: 80, height: 80 }}
-          src={user.profilePic}
+          src={profilePicture}
         />
         <Button
           variant="outlined"
@@ -162,7 +164,7 @@ const ProfileSettingsView = ({
       <Footer />
       {avatarOpen ? (
         <Modal open={avatarOpen} onClose={handleAvatarClose}>
-          <div>
+          <div className={classes.container}>
             <Box className={classes.modal}>
               <Typography id="modal-modal-title" variant="h5" component="h3">
                 Edit your Avatar
@@ -183,7 +185,15 @@ const ProfileSettingsView = ({
                 variant="contained"
                 component="span"
                 className={classes.upload}
-                onClick={(e) => updateProfile(e)}
+                onClick={async (e) => {
+                  await updateProfile(e)
+                  // eslint-disable-next-line no-promise-executor-return
+                  await new Promise((resolve) => setTimeout(resolve, 1000))
+                  setProfilePicture(
+                    `${SERVER_URL}/images/${selectedPicture.name}`
+                  )
+                  handleAvatarClose()
+                }}
               >
                 Upload
               </Button>

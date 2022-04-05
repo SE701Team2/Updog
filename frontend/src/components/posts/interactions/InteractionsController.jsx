@@ -54,6 +54,8 @@ const InteractionsController = ({ postData }) => {
         onComment={onComment}
         usersShared={usersShared}
         usersLiked={usersLiked}
+        hasShared={hasShared}
+        hasLiked={hasLiked}
       />
       {showComponent ? <Comment postData={postData} /> : null}
     </div>

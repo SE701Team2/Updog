@@ -8,12 +8,12 @@ This guide assumes you have already cloned the repository and installed Node.js 
 
 1. [Install Docker here](https://www.docker.com/get-started/)
 2. Run `docker-compose up` in the backend folder
-3. Jump to step 2
+3. Jump to Step 2
 
 ## OR Alternative to Docker: install and setup MYSQL (Not recommended)
 
-To setup MYSQL manually, carry out the alternative instructions at the **bottom of the page** and then come back to step 2.
-This alternative is for people who's hardware may not be able to handle running Docker.
+To setup MYSQL manually, carry out the alternative instructions at the **bottom of the page** and then come back to Step 2.
+This is an alternative for people who's hardware may not be able to handle running Docker.
 
 ## 2. Create tables
 
@@ -34,15 +34,15 @@ To run all backend tests, run `npm test` from the `backend/` folder
 
 To start the project, run `npm start`
 
-To test connection, send a GET request to [http://localhost:8080/api/test](http://localhost:8080/api/test). Response should be "Hello World!"
+To test connection, send a GET request to [http://localhost:8000/api/test](http://localhost:8000/api/test). Response should be "Hello World!"
 
-Base URL: [http://localhost:8080/api](http://localhost:8080/api) (Check routes folder or [Swagger](#6-api-endpoints) for endpoints)
+Base URL: [http://localhost:8000/api](http://localhost:8000/api) (Check routes folder or [Swagger](#6-api-endpoints) for endpoints)
 
 ## 4. API endpoints
 
 Updog's API endpoints are documented using Swagger
 
-To access, first run `npm start` then go to the following URL: [http://localhost:8080/api-docs](http://localhost:8080/api-docs)
+To access, first run `npm start` then go to the following URL: [http://localhost:8000/api-docs](http://localhost:8000/api-docs)
 
 When adding new endpoints, ensure you update the documentation in the `specs/swagger.yaml` file
 
@@ -66,7 +66,7 @@ If the "Test Connection" button fails, you may need to reinstall MySQL - sometim
 
 ### a. Install and set up MySQL
 
-If you carried out step 1, then you can ignore everything below
+If you carried out Step 1, then you can ignore everything below
 
 1. [Install MySQL here](https://dev.mysql.com/downloads/installer/)
 2. In the "Choosing a Setup Type" page of the installer, select "Developer Default"
@@ -95,4 +95,4 @@ If you carried out step 1, then you can ignore everything below
 2. Click the home icon, and open the connection you just made
 3. Under "Users and Privileges"->"Administrative Roles", check that the updogDev user you created has the DBA (Database Admin) permission - if you followed the steps in the [installer section](#1-install-and-set-up-mysql) you should already have this
 4. Click the database icon on the toolbar to create a new schema with the name "updog", all settings default, and click "Apply"
-5. **You can now jump back up to step 2: Create Tables**
+5. **You can now jump back up to Step 2: Create Tables**

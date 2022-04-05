@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { AuthContext } from '../../contexts/AuthProvider'
+import { TagContext } from '../../contexts/TagProvider'
 import { request } from '../../functions'
 import validationEmail from '../../functions/validateEmail'
 import SignInView from './SignInView'
@@ -14,6 +15,7 @@ const SignInController = () => {
   const navigate = useNavigate()
 
   const authContext = useContext(AuthContext)
+  const { getTags } = useContext(TagContext)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -40,6 +42,7 @@ const SignInController = () => {
         localStorage.setItem('token', authToken)
         localStorage.setItem('username', username)
         authContext.login({ token: authToken, username })
+        getTags()
         navigate('/')
       }
     }
