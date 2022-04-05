@@ -1,5 +1,8 @@
 import models from '../database/models'
 
+/**
+ * Supports the operations for getting and creating notifications for a user
+ */
 export default class Notifications {
   static reply = new Notifications('reply')
 
@@ -13,6 +16,9 @@ export default class Notifications {
     this.type = type
   }
 
+  /**
+   *  Retrieves all the notifications associated to a specific user
+   */
   static async retrieveNotifications(userId) {
     const userPosts = await models.posts.findAll({
       where: {
@@ -36,6 +42,9 @@ export default class Notifications {
     return notifications
   }
 
+  /**
+   * Converts an event or interaction into a standard format for notifications
+   */
   static async convertToNotifications(notificationType, details) {
     if (notificationType === Notifications.reply) {
       const user = await models.users.findOne({
@@ -82,6 +91,9 @@ export default class Notifications {
     }
   }
 
+  /**
+   * Retrieves a list of all the replies to a users posts
+   */
   static async retrieveAllReplies(userPosts) {
     const allReplies = []
 
@@ -102,6 +114,9 @@ export default class Notifications {
     return allReplies
   }
 
+  /**
+   * Retrieves a list of all likes on a users posts
+   */
   static async retrieveAllLikes(userPosts) {
     const allLikes = []
 
@@ -127,6 +142,9 @@ export default class Notifications {
     return allLikes
   }
 
+  /**
+   * Retrieves a list iof all shares on a users posts
+   */
   static async retrieveAllShares(userPosts) {
     const allShares = []
 
@@ -152,6 +170,9 @@ export default class Notifications {
     return allShares
   }
 
+  /**
+   * Retrieves a list of all follow notifications for a user
+   */
   static async retrieveAllFollows(user) {
     const allFollows = []
 

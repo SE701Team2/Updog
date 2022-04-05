@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+ *  Handles the seeding of default posts into the database
+ */
 module.exports = {
   async up(queryInterface) {
     return queryInterface.bulkInsert('posts', [

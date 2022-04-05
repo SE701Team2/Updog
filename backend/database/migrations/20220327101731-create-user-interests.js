@@ -1,5 +1,7 @@
 'use strict'
-
+/**
+ * Handles the creation/deletion of the userInterests table in the database
+ */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('userInterests', {

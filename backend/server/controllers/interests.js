@@ -1,5 +1,14 @@
 import models from '../../database/models'
 
+/**
+ * Inserts an array of tags names to user interests
+ *
+ * Request Body: an array of interests
+ *
+ * Reponse Codes:
+ * 200 OK on success
+ * 500 INTERNAL SERVER ERROR on errors
+ */
 export const addInterests = async (req, res) => {
   try {
     const { body } = req
@@ -29,13 +38,18 @@ export const addInterests = async (req, res) => {
   }
 }
 
+/**
+ * Gets an array of tag names from user interests
+ *
+ * Requires authentication.
+ *
+ * Reponse Codes:
+ * 200 OK and an array of tag names on success
+ * 500 INTERNAL SERVER ERROR on errors
+ */
 export const getInterests = async (req, res) => {
   try {
     const decodedUser = res.locals.decodedUser
-
-    if (!decodedUser.id) {
-      res.status(401).send({ 'Error message': 'Auth token invalid' })
-    }
 
     const userInterests = await models.userInterests.findAll({
       where: {
@@ -61,14 +75,21 @@ export const getInterests = async (req, res) => {
   }
 }
 
+/**
+ * Deletes an array of tags names from user interests
+ *
+ * Requires authentication.
+ *
+ * Request Body: an array of interests
+ *
+ * Reponse Codes:
+ * 200 OK on success
+ * 500 INTERNAL SERVER ERROR on errors
+ */
 export const deleteInterests = async (req, res) => {
   try {
     const { body } = req
     const decodedUser = res.locals.decodedUser
-
-    if (!decodedUser.id) {
-      res.status(401).send({ 'Error message': 'Auth token invalid' })
-    }
 
     const interests = body.interests
 

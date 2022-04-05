@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
@@ -21,7 +20,9 @@ const swaggerDocument = config.get('DEV')
   : null
 
 db.authenticate()
+  // eslint-disable-next-line no-console
   .then(() => console.log('Database connected...'))
+  // eslint-disable-next-line no-console
   .catch((err) => console.log('Error DB: => ', err))
 
 server.use(cors())
@@ -39,6 +40,9 @@ server.use(
   })
 )
 
+/**
+ * Access to swagger api documentation
+ */
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 server.use('/api', routes)
 

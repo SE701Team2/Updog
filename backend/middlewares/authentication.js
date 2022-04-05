@@ -1,10 +1,16 @@
 const jwt = require('jsonwebtoken')
 
+/**
+ * Authentication helper class to generate and decode auth token
+ */
 export default class Authentication {
   static privateKey() {
     return 'PRIVATE_KEY'
   }
 
+  /**
+   * Creates a new auth token for a given user
+   */
   static generateAuthToken(user) {
     const authToken = jwt.sign(
       { data: JSON.stringify(user) },
@@ -17,6 +23,9 @@ export default class Authentication {
     return authToken
   }
 
+  /**
+   * Extracts the user from a given auth token
+   */
   static extractUser(authToken) {
     // sent by frontend as 'Bearer <token>'
     if (authToken.startsWith('Bearer ')) {

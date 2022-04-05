@@ -12,9 +12,9 @@ import { auth } from '../../middlewares/auth'
 
 const router = Router()
 
-/*
-USERS
-*/
+/**
+ * USERS
+ */
 router
   .route('/users')
   .get(auth, user.getUserHandles)
@@ -23,9 +23,7 @@ router
   .delete(auth, user.deleteUser)
 
 router.route('/users/:username').get(auth, user.getUsersByUsername)
-
 router.route('/users/authenticate').post(user.authenticateUser)
-
 router.route('/users/:username/activity').get(auth, user.getUserActivity)
 
 router
@@ -34,22 +32,28 @@ router
   .delete(auth, user.unfollowUser)
   .get(auth, user.getFollow)
 
+/**
+ * FEED
+ */
 router.route('/feed').get(auth, user.getFeed)
 
+/**
+ * NOTIFICATIONS
+ */
 router.route('/notifications').get(auth, user.getNotifications)
 
-/*
-INTERESTS
-*/
+/**
+ * INTERESTS
+ */
 router
   .route('/interests')
   .get(auth, interests.getInterests)
   .post(auth, interests.addInterests)
   .delete(auth, interests.deleteInterests)
 
-/*
-POSTS
-*/
+/**
+ * POSTS
+ */
 router.route('/posts').post(auth, posts.createPost)
 
 router
@@ -70,26 +74,25 @@ router
 
 router.route('/posts/:id/interactions').get(auth, posts.getInteractedUsers)
 
-/*
-IMAGES
-*/
-
+/**
+ * IMAGES
+ */
 router.route('/images').post(image.uploadImage)
 router.route('/images/:filename').get(image.getImage)
 
-/*
-TAGS
-*/
+/**
+ * TAGS
+ */
 router.route('/tags').post(auth, tags.createTag).get(auth, tags.getTags)
 
-/*
-SEARCH
-*/
+/**
+ * SEARCH
+ */
 router.route('/search').get(auth, search.search)
 
-/*
-TESTING
-*/
+/**
+ * TESTING
+ */
 router.route('/test').get(test.helloWorld)
 
 export default router
