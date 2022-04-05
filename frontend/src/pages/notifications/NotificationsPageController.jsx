@@ -4,7 +4,6 @@ import useApi from '../../hooks/useApi'
 
 /**
  * This page renders a list of notifications for the user.
- * TODO: CHANGE PLACEHOLDER IMAGE TO IMAGE FROM NOTIFICATION
  */
 const NotificationsPageController = () => {
   const { data, loading, err } = useApi(`notifications`)
