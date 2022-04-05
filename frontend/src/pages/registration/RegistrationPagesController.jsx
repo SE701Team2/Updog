@@ -5,6 +5,9 @@ import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
 import { TagContext } from '../../contexts/TagProvider'
 
+/**
+ * RegistrationForm used to register a new user
+ */
 const RegistrationFormController = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,6 +18,9 @@ const RegistrationFormController = () => {
   const authContext = useContext(AuthContext)
   const { getTags } = useContext(TagContext)
 
+  /**
+   * Validate the user information before sending
+   */
   const validation = () => {
     if (!username) {
       setError('Username is required.')
@@ -39,6 +45,9 @@ const RegistrationFormController = () => {
     return true
   }
 
+  /**
+   * Submit the new user to the backend
+   */
   const submitForm = async () => {
     if (validation()) {
       setLoading(true)

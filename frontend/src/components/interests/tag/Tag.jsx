@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import { InterestsContext } from '../../../contexts/InterestsProvider'
 import classes from './tag.module.scss'
 
+/**
+ * Tag component that represents a single tag.
+ */
 export default function Tag({ label }) {
   // The initial select state of the tag is 'false'
   const [selectState, setSelectState] = useState(false)

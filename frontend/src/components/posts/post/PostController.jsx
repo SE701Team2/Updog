@@ -28,6 +28,8 @@ const PostController = ({
   let postData = data
   let parentPost
   let parentLoading
+
+  // Get parent if parent exist
   if (postData) {
     const { data: resData, loading } = useApi(`posts/${postData.parent}`)
     parentPost = resData
@@ -49,6 +51,7 @@ const PostController = ({
       return <div>Error: {err}</div>
     }
 
+    // Change activityText based on activity type
     switch (activity) {
       case 'POSTED':
         activityText = `${resData.author.nickname} posted`

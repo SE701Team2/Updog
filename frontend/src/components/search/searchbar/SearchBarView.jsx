@@ -4,11 +4,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import React, { useState } from 'react'
 
 /**
- * This is the search bar component
- * When 'Enter' key is pressed, the text entered by user is recieved.
- * TO DO: Send the recieved text to backend and retrieve results.
- *
- * Note: console.log() is temporary until implementation is added. ESLint won't allow empty method.
+ * SearchBarView, also includes the logic for handling the submission/onchange events
  */
 const SearchBarView = ({ initialText, handleSubmit }) => {
   const [text, setText] = useState(initialText)

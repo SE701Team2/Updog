@@ -1,13 +1,13 @@
 import SearchBarView from './SearchBarView'
-// import useApi from '../../../hooks/useApi'
+
 /**
- * TO DO: Search bar - waiting on backend implementation
+ * SearchBarController for handling the search element and handling as text is entered and submitted
  *
- * Note: console.log() is temporary until implementation is added. ESLint won't allow empty method.
+ * @param {string} initialText
+ * @param {function} handleSubmit
  */
-const SearchBarController = () => {
-  console.log('TO DO: Implement Search bar controller')
-  return <SearchBarView />
-}
+const SearchBarController = ({ initialText, handleSubmit }) => (
+  <SearchBarView initialText={initialText} handleSubmit={handleSubmit} />
+)
 
 export default SearchBarController

@@ -23,8 +23,6 @@ const ProfileSettingsController = () => {
 
   const navigate = useNavigate()
 
-  // const [bannerModalOpen, setBannerModalOpen] = useState(false)
-
   if (loading) {
     return <LoadingView />
   }
@@ -33,6 +31,9 @@ const ProfileSettingsController = () => {
     return <div>Error: {err.message}</div>
   }
 
+  /**
+   * Handle choosing the profile image
+   */
   const handleProfilePic = (e) => {
     const image = e.target.files[0]
     setSelectedPicture(image)
@@ -100,7 +101,7 @@ const ProfileSettingsController = () => {
   }
 
   /**
-   * update bio
+   * Update bio
    * @param {string} bio
    */
   const updateBio = async (bio) => {
@@ -115,15 +116,24 @@ const ProfileSettingsController = () => {
     })
   }
 
+  /**
+   * Logout the user and redirect to login screen
+   */
   const handleLogout = () => {
     logout()
     navigate('/')
   }
 
+  /**
+   * Open the edit avatar popup
+   */
   const handleAvatarOpen = () => {
     setAvatarModalOpen(true)
   }
 
+  /**
+   * Close the edit avatar popup
+   */
   const handleAvatarClose = () => {
     setAvatarModalOpen(false)
   }

@@ -7,6 +7,9 @@ import { request } from '../../functions'
 import { AuthContext } from '../../contexts/AuthProvider'
 import { TagContext } from '../../contexts/TagProvider'
 
+/**
+ * PostComposer, used to compose a post. Used when creating post on dashboard.
+ */
 const PostComposerController = () => {
   const [postText, setPostText] = useState('')
   const [postTags, setPostTags] = useState([])
@@ -20,6 +23,9 @@ const PostComposerController = () => {
 
   const navigate = useNavigate()
 
+  /**
+   * submit post to the server
+   */
   const submitForm = async () => {
     if (postText) {
       try {
@@ -31,6 +37,7 @@ const PostComposerController = () => {
           newTags,
         })
 
+        // Refetch tags for the newTags created
         getTags()
 
         // navigate to the newly made post

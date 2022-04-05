@@ -16,8 +16,9 @@ const InteractionsController = ({ postData }) => {
   const [hasLiked, setHasLiked] = useState(postData.hasLiked)
   const [hasShared, setHasShared] = useState(postData.hasShared)
 
-  // const username = localStorage.getItem('username')
-  // console.log(username)
+  /**
+   * onLike when the user likes a post
+   */
   const onLike = async () => {
     const response = await request(
       `posts/${postData.id}/like`,
@@ -29,6 +30,10 @@ const InteractionsController = ({ postData }) => {
       setUsersLiked((hasLiked ? -1 : 1) + usersLiked)
     }
   }
+
+  /**
+   * onShare when the user shares a post
+   */
   const onShare = async () => {
     const response = await request(
       `posts/${postData.id}/share`,
@@ -41,6 +46,9 @@ const InteractionsController = ({ postData }) => {
     }
   }
 
+  /**
+   * onComment show comment popup
+   */
   const onComment = () => {
     setShowComponent(!showComponent)
   }
